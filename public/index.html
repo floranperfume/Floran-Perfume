@@ -284,6 +284,31 @@ section{padding:76px 0}
 .price s{font-size:.8rem;color:var(--muted);font-weight:500;margin-inline-start:7px}
 .size{font-size:.78rem;color:var(--muted);border:1px solid var(--line);padding:2px 9px;border-radius:100px;white-space:nowrap;flex-shrink:0}
 
+/* اختيار الحجم */
+.sizes{display:flex;gap:7px;margin-bottom:11px}
+.size-btn{
+  flex:1;padding:7px 4px;border-radius:9px;
+  background:rgba(255,255,255,.03);border:1px solid var(--line);
+  color:var(--muted);font-weight:700;font-size:.86rem;
+  transition:all .22s;line-height:1.25;
+}
+.size-btn:hover{border-color:var(--gold);color:var(--gold-soft)}
+.size-btn.on{background:rgba(201,162,39,.16);border-color:var(--gold);color:var(--gold-soft)}
+.size-btn small{display:block;font-size:.72rem;opacity:.85;font-weight:600}
+
+/* تفاصيل المجموع */
+.sums{margin-bottom:8px}
+.sum-row{
+  display:flex;justify-content:space-between;align-items:baseline;
+  color:var(--muted);font-size:.9rem;padding:3px 0;
+}
+.sum-row span:last-child{color:var(--text);font-weight:700}
+.total{
+  display:flex;justify-content:space-between;align-items:baseline;
+  margin-bottom:6px;font-size:1.05rem;font-weight:800;
+  border-top:1px solid var(--line);padding-top:9px;
+}
+
 .add{
   width:100%;padding:11px;border-radius:10px;
   background:rgba(201,162,39,.1);border:1px solid var(--line);
@@ -302,6 +327,8 @@ section{padding:76px 0}
   .price s{display:block;margin:0}
   .size{font-size:.7rem;padding:1px 7px}
   .add{padding:9px;font-size:.85rem}
+  .size-btn{font-size:.78rem;padding:6px 2px}
+  .size-btn small{font-size:.66rem}
   .card-img{aspect-ratio:4/5}
 }
 
@@ -436,7 +463,6 @@ html[dir="rtl"] .field select{background-position:left 15px center}
 
 .drawer-foot{padding:16px 20px 22px;border-top:1px solid var(--line);background:var(--bg-soft)}
 .drawer-foot.hide{display:none}
-.total{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;font-size:1.05rem;font-weight:800}
 .total b{font-size:1.42rem;color:var(--gold-soft);font-weight:900}
 .note{color:var(--muted);font-size:.78rem;margin-bottom:13px;text-align:center}
 .btn-block{width:100%;padding:15px;font-size:1.02rem}
@@ -533,7 +559,6 @@ footer{background:rgba(11,10,9,.85);border-top:1px solid var(--line);padding:50p
       <p data-i18n="prodSub"></p>
       <div class="sec-line"></div>
     </div>
-    <div class="filters reveal" id="filters"></div>
     <div class="grid" id="grid"></div>
   </div>
 </section>
@@ -630,6 +655,12 @@ footer{background:rgba(11,10,9,.85);border-top:1px solid var(--line);padding:50p
         <div class="err" data-i18n="eProv"></div>
       </div>
 
+      <div class="field" id="fCity">
+        <label><span data-i18n="lCity"></span> <span class="req">*</span></label>
+        <select id="iCity" disabled></select>
+        <div class="err" data-i18n="eCity"></div>
+      </div>
+
       <div class="field" id="fAddr">
         <label><span data-i18n="lAddr"></span> <span class="req">*</span></label>
         <textarea id="iAddr" rows="2"></textarea>
@@ -668,6 +699,10 @@ footer{background:rgba(11,10,9,.85);border-top:1px solid var(--line);padding:50p
     </div>
   </div>
   <div class="drawer-foot" id="drawerFoot">
+    <div class="sums">
+      <div class="sum-row"><span data-i18n="subtotal"></span><span id="subtotal">0</span></div>
+      <div class="sum-row"><span data-i18n="deliveryFee"></span><span id="delivery">—</span></div>
+    </div>
     <div class="total"><span data-i18n="total"></span><b id="total">0</b></div>
     <p class="note" data-i18n="sendNote"></p>
     <button class="btn btn-wa btn-block" id="sendWa">
@@ -696,54 +731,45 @@ const CONFIG = {
   instagram: "https://www.instagram.com/floran.perfume",
 
   // ==========================================================================
-  //  المنتجات / PRODUCTS
-  //  كل عطر له اسم بالعربي والإنكليزي. إذا تركت en فارغاً يظهر العربي.
-  //  Each perfume has an Arabic and English name. Empty "en" falls back to Arabic.
+  //  أجور التوصيل / DELIVERY FEES
+  //  الأجرة الافتراضية لكل المدن، ما عدا المدن التي لها fee خاص في قائمة المناطق
+  //  Default fee for every city, except cities given their own fee in REGIONS
+  // ==========================================================================
+  delivery: { default: 6000 },
+
+  // ==========================================================================
+  //  العطور / PERFUMES
+  //  كل عطر له حجمان بسعرين. أضف أو احذف الأحجام كما تشاء.
+  //  Each perfume has two sizes with their own prices. Add or remove freely.
   //
-  //  image    : "images/oud.jpg"  أو  ""  لعرض القنينة الذهبية الافتراضية
-  //  oldPrice : 0 لإخفاء السعر القديم
-  //  inStock  : false إذا نفدت الكمية
+  //  image   : "images/coromandel.jpg"  أو "" لعرض القنينة الذهبية
+  //  tag     : ملصق على الصورة، أو "" لإخفائه
+  //  inStock : false إذا نفدت الكمية
   // ==========================================================================
   products: [
-    { id:1, inStock:true,  image:"", price:45000, oldPrice:55000, ml:100,
-      name:{ar:"عود ملكي",   en:"Royal Oud"},     cat:{ar:"شرقي",  en:"Oriental"},
-      notes:{ar:"عود · عنبر · مسك",      en:"Oud · Amber · Musk"},
-      tag:{ar:"الأكثر مبيعاً", en:"Best seller"} },
+    { id:1, inStock:true, image:"",
+      name:{ ar:"شانيل كورومندل", en:"Chanel Coromandel" },
+      notes:{ ar:"باتشولي · بخور · فانيليا", en:"Patchouli · Incense · Vanilla" },
+      tag:{ ar:"الأكثر مبيعاً", en:"Best seller" },
+      sizes:[ {ml:30, price:15000}, {ml:50, price:25000} ] },
 
-    { id:2, inStock:true,  image:"", price:25000, oldPrice:0, ml:50,
-      name:{ar:"مسك أبيض",   en:"White Musk"},    cat:{ar:"شرقي",  en:"Oriental"},
-      notes:{ar:"مسك · فانيليا · خشب",   en:"Musk · Vanilla · Wood"},
-      tag:{ar:"", en:""} },
+    { id:2, inStock:true, image:"",
+      name:{ ar:"إل في أومبر نوماد", en:"LV Ombre Nomade" },
+      notes:{ ar:"عود · بخور · توت", en:"Oud · Incense · Raspberry" },
+      tag:{ ar:"", en:"" },
+      sizes:[ {ml:30, price:15000}, {ml:50, price:25000} ] },
 
-    { id:3, inStock:true,  image:"", price:38000, oldPrice:0, ml:100,
-      name:{ar:"عنبر الشرق", en:"Orient Amber"},  cat:{ar:"شرقي",  en:"Oriental"},
-      notes:{ar:"عنبر · بخور · صندل",    en:"Amber · Incense · Sandalwood"},
-      tag:{ar:"جديد", en:"New"} },
+    { id:3, inStock:true, image:"",
+      name:{ ar:"ديور بوا دارجان", en:"Dior Bois d'Argent" },
+      notes:{ ar:"بخور · إيريس · عسل", en:"Incense · Iris · Honey" },
+      tag:{ ar:"", en:"" },
+      sizes:[ {ml:30, price:15000}, {ml:50, price:25000} ] },
 
-    { id:4, inStock:true,  image:"", price:42000, oldPrice:0, ml:75,
-      name:{ar:"ورد طائفي",  en:"Taif Rose"},     cat:{ar:"زهري",  en:"Floral"},
-      notes:{ar:"ورد · فاوانيا · مسك",   en:"Rose · Peony · Musk"},
-      tag:{ar:"", en:""} },
-
-    { id:5, inStock:true,  image:"", price:35000, oldPrice:40000, ml:100,
-      name:{ar:"بلو سيدرا",  en:"Blue Cedra"},    cat:{ar:"فرنسي", en:"French"},
-      notes:{ar:"حمضيات · أرز · عنبر",   en:"Citrus · Cedar · Amber"},
-      tag:{ar:"", en:""} },
-
-    { id:6, inStock:true,  image:"", price:48000, oldPrice:0, ml:90,
-      name:{ar:"نويرا",      en:"Noira"},         cat:{ar:"فرنسي", en:"French"},
-      notes:{ar:"ياسمين · لوز · فانيليا", en:"Jasmine · Almond · Vanilla"},
-      tag:{ar:"", en:""} },
-
-    { id:7, inStock:false, image:"", price:30000, oldPrice:0, ml:60,
-      name:{ar:"صندل هندي",  en:"Indian Sandal"}, cat:{ar:"شرقي",  en:"Oriental"},
-      notes:{ar:"صندل · جوزة الطيب",     en:"Sandalwood · Nutmeg"},
-      tag:{ar:"", en:""} },
-
-    { id:8, inStock:true,  image:"", price:33000, oldPrice:0, ml:75,
-      name:{ar:"ياسمين شامي",en:"Damask Jasmine"},cat:{ar:"زهري",  en:"Floral"},
-      notes:{ar:"ياسمين · برتقال · مسك", en:"Jasmine · Orange · Musk"},
-      tag:{ar:"", en:""} }
+    { id:4, inStock:true, image:"",
+      name:{ ar:"بكارات روج 540", en:"Baccarat Rouge 540" },
+      notes:{ ar:"زعفران · عنبر · خشب الأرز", en:"Saffron · Amber · Cedarwood" },
+      tag:{ ar:"", en:"" },
+      sizes:[ {ml:30, price:15000}, {ml:50, price:25000} ] }
   ]
 };
 /* ==========================================================================
@@ -751,27 +777,103 @@ const CONFIG = {
    ========================================================================== */
 
 
-/* ---------- محافظات العراق الـ18 / The 18 governorates of Iraq ---------- */
-const PROVINCES = [
-  {ar:"بغداد",            en:"Baghdad"},
-  {ar:"البصرة",           en:"Basra"},
-  {ar:"نينوى",            en:"Nineveh"},
-  {ar:"أربيل",            en:"Erbil"},
-  {ar:"السليمانية",       en:"Sulaymaniyah"},
-  {ar:"دهوك",             en:"Duhok"},
-  {ar:"كركوك",            en:"Kirkuk"},
-  {ar:"الأنبار",          en:"Anbar"},
-  {ar:"بابل",             en:"Babil"},
-  {ar:"كربلاء",           en:"Karbala"},
-  {ar:"النجف",            en:"Najaf"},
-  {ar:"الديوانية",        en:"Diwaniyah"},
-  {ar:"المثنى",           en:"Muthanna"},
-  {ar:"ذي قار",           en:"Dhi Qar"},
-  {ar:"ميسان",            en:"Maysan"},
-  {ar:"واسط",             en:"Wasit"},
-  {ar:"ديالى",            en:"Diyala"},
-  {ar:"صلاح الدين",       en:"Salah al-Din"}
+/* ---------- محافظات ومدن العراق / Iraqi governorates and their cities ----------
+   fee : أجرة توصيل خاصة بهذه المدينة. بدونها تُستخدم CONFIG.delivery.default
+         a delivery fee just for that city. Without it, CONFIG.delivery.default is used
+   ------------------------------------------------------------------------------- */
+const REGIONS = [
+  { ar:"بغداد", en:"Baghdad", cities:[
+    {ar:"الكرخ",en:"Karkh"},{ar:"الرصافة",en:"Rusafa"},{ar:"المنصور",en:"Mansour"},
+    {ar:"الكاظمية",en:"Kadhimiya"},{ar:"الأعظمية",en:"Adhamiya"},{ar:"الدورة",en:"Dora"},
+    {ar:"مدينة الصدر",en:"Sadr City"},{ar:"الشعلة",en:"Shula"},{ar:"الغزالية",en:"Ghazaliya"},
+    {ar:"البياع",en:"Bayaa"},{ar:"زيونة",en:"Zayouna"},{ar:"الجادرية",en:"Jadriya"},
+    {ar:"أبو غريب",en:"Abu Ghraib"},{ar:"التاجي",en:"Taji"},{ar:"الطارمية",en:"Tarmiya"},
+    {ar:"المحمودية",en:"Mahmudiyah"},{ar:"اللطيفية",en:"Latifiya"},{ar:"اليوسفية",en:"Yusufiya"},
+    {ar:"المدائن",en:"Madain"},{ar:"النهروان",en:"Nahrawan"}
+  ]},
+  { ar:"نينوى", en:"Nineveh", cities:[
+    {ar:"الموصل",en:"Mosul", fee:3000},
+    {ar:"تلعفر",en:"Tal Afar"},{ar:"سنجار",en:"Sinjar"},{ar:"الحمدانية",en:"Hamdaniya"},
+    {ar:"تلكيف",en:"Tilkaif"},{ar:"الشيخان",en:"Shekhan"},{ar:"البعاج",en:"Baaj"},
+    {ar:"الحضر",en:"Hatra"},{ar:"مخمور",en:"Makhmur"},{ar:"القيارة",en:"Qayyarah"},
+    {ar:"بعشيقة",en:"Bashiqa"},{ar:"برطلة",en:"Bartella"}
+  ]},
+  { ar:"البصرة", en:"Basra", cities:[
+    {ar:"البصرة المركز",en:"Basra Centre"},{ar:"الزبير",en:"Zubair"},{ar:"القرنة",en:"Qurna"},
+    {ar:"شط العرب",en:"Shatt al-Arab"},{ar:"أبو الخصيب",en:"Abu Al-Khaseeb"},{ar:"الفاو",en:"Faw"},
+    {ar:"المدينة",en:"Al-Madina"},{ar:"سفوان",en:"Safwan"},{ar:"الهارثة",en:"Hartha"}
+  ]},
+  { ar:"أربيل", en:"Erbil", cities:[
+    {ar:"أربيل",en:"Erbil"},{ar:"عنكاوة",en:"Ankawa"},{ar:"شقلاوة",en:"Shaqlawa"},
+    {ar:"سوران",en:"Soran"},{ar:"كويسنجق",en:"Koya"},{ar:"جومان",en:"Choman"},
+    {ar:"ميركه سور",en:"Mergasur"},{ar:"حرير",en:"Harir"}
+  ]},
+  { ar:"السليمانية", en:"Sulaymaniyah", cities:[
+    {ar:"السليمانية",en:"Sulaymaniyah"},{ar:"رانية",en:"Raniya"},{ar:"دوكان",en:"Dukan"},
+    {ar:"جمجمال",en:"Chamchamal"},{ar:"دربندخان",en:"Darbandikhan"},{ar:"كلار",en:"Kalar"},
+    {ar:"حلبجة",en:"Halabja"},{ar:"بنجوين",en:"Penjwen"},{ar:"سيد صادق",en:"Said Sadiq"},
+    {ar:"شاربازير",en:"Sharbazher"}
+  ]},
+  { ar:"دهوك", en:"Duhok", cities:[
+    {ar:"دهوك",en:"Duhok"},{ar:"زاخو",en:"Zakho"},{ar:"العمادية",en:"Amedi"},
+    {ar:"سميل",en:"Semel"},{ar:"عقرة",en:"Akre"},{ar:"بردرش",en:"Bardarash"}
+  ]},
+  { ar:"كركوك", en:"Kirkuk", cities:[
+    {ar:"كركوك",en:"Kirkuk"},{ar:"الحويجة",en:"Hawija"},{ar:"داقوق",en:"Daquq"},
+    {ar:"الدبس",en:"Dibis"},{ar:"الرياض",en:"Riyadh"}
+  ]},
+  { ar:"الأنبار", en:"Anbar", cities:[
+    {ar:"الرمادي",en:"Ramadi"},{ar:"الفلوجة",en:"Fallujah"},{ar:"هيت",en:"Hit"},
+    {ar:"حديثة",en:"Haditha"},{ar:"القائم",en:"Al-Qaim"},{ar:"راوة",en:"Rawa"},
+    {ar:"عانة",en:"Anah"},{ar:"الرطبة",en:"Rutba"},{ar:"الخالدية",en:"Khalidiya"},
+    {ar:"الكرمة",en:"Karma"},{ar:"عامرية الفلوجة",en:"Amiriyat al-Fallujah"}
+  ]},
+  { ar:"بابل", en:"Babil", cities:[
+    {ar:"الحلة",en:"Hilla"},{ar:"المحاويل",en:"Mahawil"},{ar:"المسيب",en:"Musayyib"},
+    {ar:"الهاشمية",en:"Hashimiya"},{ar:"القاسم",en:"Qasim"},{ar:"جرف الصخر",en:"Jurf al-Sakhar"}
+  ]},
+  { ar:"كربلاء", en:"Karbala", cities:[
+    {ar:"كربلاء",en:"Karbala"},{ar:"الهندية",en:"Hindiya"},{ar:"عين التمر",en:"Ain al-Tamr"},
+    {ar:"الحر",en:"Al-Hurr"}
+  ]},
+  { ar:"النجف", en:"Najaf", cities:[
+    {ar:"النجف",en:"Najaf"},{ar:"الكوفة",en:"Kufa"},{ar:"المناذرة",en:"Manathera"},
+    {ar:"المشخاب",en:"Mishkhab"},{ar:"الحيدرية",en:"Haidariya"}
+  ]},
+  { ar:"الديوانية", en:"Diwaniyah", cities:[
+    {ar:"الديوانية",en:"Diwaniyah"},{ar:"عفك",en:"Afak"},{ar:"الشامية",en:"Shamiya"},
+    {ar:"الحمزة",en:"Hamza"},{ar:"غماس",en:"Ghammas"}
+  ]},
+  { ar:"المثنى", en:"Muthanna", cities:[
+    {ar:"السماوة",en:"Samawah"},{ar:"الرميثة",en:"Rumaitha"},{ar:"الخضر",en:"Khidhir"},
+    {ar:"السلمان",en:"Salman"},{ar:"الوركاء",en:"Warka"}
+  ]},
+  { ar:"ذي قار", en:"Dhi Qar", cities:[
+    {ar:"الناصرية",en:"Nasiriyah"},{ar:"الشطرة",en:"Shatrah"},{ar:"سوق الشيوخ",en:"Suq al-Shuyukh"},
+    {ar:"الرفاعي",en:"Rifai"},{ar:"الجبايش",en:"Chibayish"},{ar:"قلعة سكر",en:"Qalat Sukkar"},
+    {ar:"النصر",en:"Nasr"}
+  ]},
+  { ar:"ميسان", en:"Maysan", cities:[
+    {ar:"العمارة",en:"Amarah"},{ar:"المجر الكبير",en:"Majar al-Kabir"},{ar:"قلعة صالح",en:"Qalat Salih"},
+    {ar:"علي الغربي",en:"Ali al-Gharbi"},{ar:"الميمونة",en:"Maimouna"},{ar:"الكحلاء",en:"Kahla"}
+  ]},
+  { ar:"واسط", en:"Wasit", cities:[
+    {ar:"الكوت",en:"Kut"},{ar:"النعمانية",en:"Numaniya"},{ar:"الصويرة",en:"Suwaira"},
+    {ar:"العزيزية",en:"Aziziyah"},{ar:"بدرة",en:"Badra"},{ar:"الحي",en:"Hai"},
+    {ar:"الزبيدية",en:"Zubaidiya"}
+  ]},
+  { ar:"ديالى", en:"Diyala", cities:[
+    {ar:"بعقوبة",en:"Baqubah"},{ar:"المقدادية",en:"Muqdadiyah"},{ar:"خانقين",en:"Khanaqin"},
+    {ar:"بلدروز",en:"Baladruz"},{ar:"الخالص",en:"Khalis"},{ar:"كفري",en:"Kifri"},
+    {ar:"جلولاء",en:"Jalawla"},{ar:"المنصورية",en:"Mansuriya"}
+  ]},
+  { ar:"صلاح الدين", en:"Salah al-Din", cities:[
+    {ar:"تكريت",en:"Tikrit"},{ar:"سامراء",en:"Samarra"},{ar:"بلد",en:"Balad"},
+    {ar:"الدجيل",en:"Dujail"},{ar:"الشرقاط",en:"Shirqat"},{ar:"بيجي",en:"Baiji"},
+    {ar:"الدور",en:"Dour"},{ar:"طوزخورماتو",en:"Tuz Khurmatu"},{ar:"الضلوعية",en:"Dhuluiya"}
+  ]}
 ];
+
 
 /* ---------- النصوص / Translations ---------- */
 const T = {
@@ -787,7 +889,11 @@ const T = {
     f3t:"ضمان الأصلية",        f3s:"استبدال خلال ٣ أيام",
     prodTitle:"تشكيلة العطور",
     prodSub:"اختر عطرك واضغط «أضف للطلب» — يوصلنا الطلب على واتساب مباشرة",
-    all:"الكل", ml:"مل",
+    ml:"مل",
+    lCity:"المدينة / القضاء", eCity:"الرجاء اختيار المدينة",
+    cityPick:"— اختر المدينة —", cityFirst:"— اختر المحافظة أولاً —",
+    subtotal:"المجموع الفرعي", deliveryFee:"أجرة التوصيل",
+    pickCity:"تُحدد حسب المدينة", mCity:"المدينة", mDelivery:"أجرة التوصيل", mSub:"المجموع الفرعي",
     addBtn:"أضف للطلب", added:"تمت الإضافة ✓", outBtn:"غير متوفر", outBadge:"نفدت الكمية",
     aboutTitle:"لماذا تشتري منّا؟",
     aboutP1:"نوفر عطوراً أصلية مختارة بعناية، مع إمكانية الشم والتجربة قبل الشراء عند التوصيل داخل بغداد. كل عطر يأتي بعبوته الأصلية المغلقة.",
@@ -831,7 +937,11 @@ const T = {
     f3t:"Authenticity guarantee", f3s:"Exchange within 3 days",
     prodTitle:"Our Collection",
     prodSub:"Pick a perfume and tap “Add to order” — it reaches us on WhatsApp",
-    all:"All", ml:"ml",
+    ml:"ml",
+    lCity:"City / District", eCity:"Please select a city",
+    cityPick:"— Select city —", cityFirst:"— Select a governorate first —",
+    subtotal:"Subtotal", deliveryFee:"Delivery",
+    pickCity:"set by city", mCity:"City", mDelivery:"Delivery", mSub:"Subtotal",
     addBtn:"Add to order", added:"Added ✓", outBtn:"Unavailable", outBadge:"Out of stock",
     aboutTitle:"Why buy from us?",
     aboutP1:"Carefully selected authentic perfumes, with the option to smell and try before you buy on delivery inside Baghdad. Every bottle arrives sealed in its original packaging.",
@@ -938,48 +1048,61 @@ function applyLang(next){
   }
 
   buildProvinces();
-  renderFilters();
+  buildCities();
   renderGrid();
   sync();
 }
 $("btnAr").onclick = () => applyLang("ar");
 $("btnEn").onclick = () => applyLang("en");
 
-/* ---------- المحافظات ---------- */
+/* ---------- المحافظات والمدن ---------- */
 function buildProvinces(){
-  const sel = $("iProv");
-  const cur = sel.value;
+  const sel = $("iProv"), cur = sel.value;
   sel.innerHTML = `<option value="">${t("provPick")}</option>` +
-    PROVINCES.map((p,i) => `<option value="${i}">${L(p)}</option>`).join("");
-  if (cur) sel.value = cur;
+    REGIONS.map((r,i) => `<option value="${i}">${L(r)}</option>`).join("");
+  if (cur !== "") sel.value = cur;
 }
 
-/* ---------- الفلاتر ---------- */
-let activeCat = "__all__";
-function catKeys(){
-  const seen = [];
-  CONFIG.products.forEach(p => { if (!seen.includes(p.cat.ar)) seen.push(p.cat.ar); });
-  return seen;
+function buildCities(){
+  const sel = $("iCity"), pi = $("iProv").value, cur = sel.value;
+  if (pi === ""){
+    sel.innerHTML = `<option value="">${t("cityFirst")}</option>`;
+    sel.disabled = true;
+    sel.value = "";
+    return;
+  }
+  sel.disabled = false;
+  sel.innerHTML = `<option value="">${t("cityPick")}</option>` +
+    REGIONS[+pi].cities.map((c,i) => `<option value="${i}">${L(c)}</option>`).join("");
+  if (cur !== "") sel.value = cur;
 }
-function catLabel(key){
-  const p = CONFIG.products.find(x => x.cat.ar === key);
-  return p ? L(p.cat) : key;
-}
-function renderFilters(){
-  const keys = catKeys();
-  $("filters").innerHTML =
-    `<button class="chip${activeCat==="__all__"?" on":""}" data-cat="__all__">${t("all")}</button>` +
-    keys.map(k => `<button class="chip${activeCat===k?" on":""}" data-cat="${k}">${catLabel(k)}</button>`).join("");
-  document.querySelectorAll(".chip").forEach(b =>
-    b.onclick = () => { activeCat = b.dataset.cat; renderFilters(); renderGrid(); }
-  );
+
+$("iProv").addEventListener("change", () => {
+  $("iCity").value = "";
+  buildCities();
+  sync();
+});
+$("iCity").addEventListener("change", sync);
+
+/* أجرة التوصيل للمدينة المختارة — null إذا لم تُختر مدينة بعد */
+function deliveryFee(){
+  const pi = $("iProv").value, ci = $("iCity").value;
+  if (pi === "" || ci === "") return null;
+  const city = REGIONS[+pi].cities[+ci];
+  return city.fee != null ? city.fee : CONFIG.delivery.default;
 }
 
 /* ---------- المنتجات ---------- */
+// الحجم المختار حالياً لكل عطر / currently selected size per perfume
+const chosen = {};
+CONFIG.products.forEach(p => chosen[p.id] = p.sizes[0].ml);
+
+const sizeOf = (p, ml) => p.sizes.find(s => s.ml === ml) || p.sizes[0];
+const priceOf = p => sizeOf(p, chosen[p.id]).price;
+
 function renderGrid(){
-  const list = CONFIG.products.filter(p => activeCat === "__all__" || p.cat.ar === activeCat);
-  $("grid").innerHTML = list.map((p,i) => `
-    <article class="card reveal${i%4===1?" d1":i%4===2?" d2":i%4===3?" d3":""}">
+  $("grid").innerHTML = CONFIG.products.map((p,i) => `
+    <article class="card reveal${i%4===1?" d1":i%4===2?" d2":i%4===3?" d3":""}" data-card="${p.id}">
       <div class="card-img">
         ${p.image ? `<img src="${p.image}" alt="${L(p.name)}" loading="lazy">` : BOTTLE}
         ${!p.inStock ? `<span class="badge out">${t("outBadge")}</span>`
@@ -988,66 +1111,103 @@ function renderGrid(){
       <div class="card-body">
         <h3>${L(p.name)}</h3>
         <p class="notes">${L(p.notes)}</p>
-        <div class="card-meta">
-          <div class="price">${fmt(p.price)}${p.oldPrice?`<s>${p.oldPrice.toLocaleString("en-US")}</s>`:""}</div>
-          <span class="size">${p.ml} ${t("ml")}</span>
+
+        <div class="sizes">
+          ${p.sizes.map(sz => `
+            <button class="size-btn${chosen[p.id]===sz.ml?" on":""}"
+                    data-size="${p.id}" data-ml="${sz.ml}">
+              ${sz.ml} ${t("ml")}
+              <small>${sz.price.toLocaleString("en-US")}</small>
+            </button>`).join("")}
         </div>
+
+        <div class="card-meta">
+          <div class="price" data-price="${p.id}">${fmt(priceOf(p))}</div>
+        </div>
+
         <button class="add" data-id="${p.id}" ${p.inStock?"":"disabled"}>
           ${p.inStock ? t("addBtn") : t("outBtn")}
         </button>
       </div>
     </article>`).join("");
 
+  // اختيار الحجم
+  document.querySelectorAll("[data-size]").forEach(b => {
+    b.onclick = () => {
+      const id = +b.dataset.size;
+      chosen[id] = +b.dataset.ml;
+      const card = document.querySelector(`[data-card="${id}"]`);
+      card.querySelectorAll("[data-size]").forEach(x =>
+        x.classList.toggle("on", +x.dataset.ml === chosen[id]));
+      card.querySelector(`[data-price="${id}"]`).textContent =
+        fmt(priceOf(CONFIG.products.find(p => p.id === id)));
+    };
+  });
+
+  // إضافة للطلب
   document.querySelectorAll(".add").forEach(b => {
     if (b.disabled) return;
     b.onclick = () => {
-      add(+b.dataset.id);
+      add(+b.dataset.id, chosen[+b.dataset.id]);
       b.textContent = t("added"); b.classList.add("added");
       setTimeout(() => { b.textContent = t("addBtn"); b.classList.remove("added"); }, 1300);
     };
   });
+
   observeReveals();
 }
 
 /* ---------- السلة ---------- */
+// كل سطر = عطر + حجم / each line = perfume + size
 let cart = [];
 const product = id => CONFIG.products.find(p => p.id === id);
-const total   = () => cart.reduce((s,l) => s + product(l.id).price * l.qty, 0);
-const count   = () => cart.reduce((s,l) => s + l.qty, 0);
+const lineOf  = (id, ml) => cart.find(l => l.id === id && l.ml === ml);
+const linePrice = l => sizeOf(product(l.id), l.ml).price;
 
-function add(id){
-  const line = cart.find(l => l.id === id);
-  line ? line.qty++ : cart.push({ id, qty:1 });
+const subtotal = () => cart.reduce((s,l) => s + linePrice(l) * l.qty, 0);
+const count    = () => cart.reduce((s,l) => s + l.qty, 0);
+const grandTotal = () => subtotal() + (deliveryFee() || 0);
+
+function add(id, ml){
+  const l = lineOf(id, ml);
+  l ? l.qty++ : cart.push({ id, ml, qty:1 });
   sync(); showToast(t("toastAdd"), true);
 }
-function setQty(id, d){
-  const line = cart.find(l => l.id === id);
-  if (!line) return;
-  line.qty += d;
-  if (line.qty <= 0) cart = cart.filter(l => l.id !== id);
+function setQty(id, ml, d){
+  const l = lineOf(id, ml);
+  if (!l) return;
+  l.qty += d;
+  if (l.qty <= 0) cart = cart.filter(x => !(x.id === id && x.ml === ml));
   sync();
   if (!cart.length) closeDrawer();
 }
 
 function sync(){
+  const fee = deliveryFee();
   $("fabCount").textContent = count();
   $("fab").classList.toggle("show", cart.length > 0);
-  $("total").textContent = fmt(total());
-  $("form").style.display = cart.length ? "block" : "none";
+  $("subtotal").textContent = fmt(subtotal());
+  $("delivery").textContent = fee === null ? t("pickCity") : fmt(fee);
+  $("total").textContent    = fmt(grandTotal());
+  $("form").style.display   = cart.length ? "block" : "none";
 
   $("lines").innerHTML = cart.length ? cart.map(l => {
     const p = product(l.id);
     return `<div class="line">
       <div class="line-img">${p.image?`<img src="${p.image}" alt="">`:BOTTLE.replace('class="bottle"','style="width:60%"')}</div>
-      <div class="line-info"><b>${L(p.name)}</b><small>${p.ml} ${t("ml")} · ${fmt(p.price)}</small></div>
+      <div class="line-info"><b>${L(p.name)}</b><small>${l.ml} ${t("ml")} · ${fmt(linePrice(l))}</small></div>
       <div class="qty">
-        <button data-m="${p.id}">−</button><span>${l.qty}</span><button data-p="${p.id}">+</button>
+        <button data-m="${p.id}" data-ml="${l.ml}">−</button>
+        <span>${l.qty}</span>
+        <button data-p="${p.id}" data-ml="${l.ml}">+</button>
       </div>
     </div>`;
   }).join("") : `<div class="empty"><div>🧴</div>${t("emptyCart")}<br><small>${t("emptyHint")}</small></div>`;
 
-  document.querySelectorAll("[data-p]").forEach(b => b.onclick = () => setQty(+b.dataset.p, 1));
-  document.querySelectorAll("[data-m]").forEach(b => b.onclick = () => setQty(+b.dataset.m, -1));
+  document.querySelectorAll("[data-p]").forEach(b =>
+    b.onclick = () => setQty(+b.dataset.p, +b.dataset.ml, 1));
+  document.querySelectorAll("[data-m]").forEach(b =>
+    b.onclick = () => setQty(+b.dataset.m, +b.dataset.ml, -1));
 }
 
 /* ---------- الدرج ---------- */
@@ -1087,19 +1247,28 @@ function mark(fieldId, bad){ $(fieldId).classList.toggle("bad", bad); }
 function validate(){
   const name  = $("iName").value.trim();
   const phone = normalisePhone($("iPhone").value);
-  const prov  = $("iProv").value;
+  const pi    = $("iProv").value;
+  const ci    = $("iCity").value;
   const addr  = $("iAddr").value.trim();
 
   mark("fName",  !name);
   mark("fPhone", !phone);
-  mark("fProv",  prov === "");
+  mark("fProv",  pi === "");
+  mark("fCity",  ci === "");
   mark("fAddr",  addr.length < 5);
 
-  if (!name || !phone || prov === "" || addr.length < 5) return null;
-  return { name, phone, prov:L(PROVINCES[+prov]), addr, notes:$("iNotes").value.trim() };
+  if (!name || !phone || pi === "" || ci === "" || addr.length < 5) return null;
+
+  return {
+    name, phone, addr,
+    prov: L(REGIONS[+pi]),
+    city: L(REGIONS[+pi].cities[+ci]),
+    fee:  deliveryFee(),
+    notes: $("iNotes").value.trim()
+  };
 }
 
-["iName","iPhone","iProv","iAddr"].forEach(id => {
+["iName","iPhone","iProv","iCity","iAddr"].forEach(id => {
   $(id).addEventListener("input",  () => $(id).closest(".field").classList.remove("bad"));
   $(id).addEventListener("change", () => $(id).closest(".field").classList.remove("bad"));
 });
@@ -1118,12 +1287,15 @@ function orderText(d, ref){
   let m = `*${t("mOrder")} — ${L(CONFIG.brand)}*\n${ref}\n\n`;
   cart.forEach(l => {
     const p = product(l.id);
-    m += `• ${L(p.name)} (${p.ml} ${t("ml")}) × ${l.qty} — ${fmt(p.price * l.qty)}\n`;
+    m += `• ${L(p.name)} (${l.ml} ${t("ml")}) × ${l.qty} — ${fmt(linePrice(l) * l.qty)}\n`;
   });
-  m += `\n*${t("mTotal")}: ${fmt(total())}*\n`;
+  m += `\n${t("mSub")}: ${fmt(subtotal())}\n`;
+  m += `${t("mDelivery")}: ${fmt(d.fee)}\n`;
+  m += `*${t("mTotal")}: ${fmt(subtotal() + d.fee)}*\n`;
   m += `\n———————————\n*${t("mCustomer")}*\n`;
   m += `${t("mName")}: ${d.name}\n${t("mPhone")}: ${d.phone}\n`;
-  m += `${t("mProv")}: ${d.prov}\n${t("mAddr")}: ${d.addr}\n`;
+  m += `${t("mProv")}: ${d.prov}\n${t("mCity")}: ${d.city}\n`;
+  m += `${t("mAddr")}: ${d.addr}\n`;
   if (d.notes) m += `${t("mNotes")}: ${d.notes}\n`;
   return m;
 }
@@ -1145,7 +1317,8 @@ function resetDrawer(){
   $("success").classList.remove("show");
   $("lines").style.display = "";
   $("drawerFoot").classList.remove("hide");
-  ["iName","iPhone","iProv","iAddr","iNotes"].forEach(id => $(id).value = "");
+  ["iName","iPhone","iProv","iCity","iAddr","iNotes"].forEach(id => $(id).value = "");
+  buildCities();
   document.querySelectorAll(".field.bad").forEach(f => f.classList.remove("bad"));
   sync();
 }
@@ -1171,12 +1344,15 @@ $("sendWa").onclick = async () => {
 
   const payload = {
     ref, lang,
-    name:d.name, phone:d.phone, province:d.prov, address:d.addr, notes:d.notes,
+    name:d.name, phone:d.phone, province:d.prov, city:d.city,
+    address:d.addr, notes:d.notes, delivery:d.fee,
     hp: $("iHp").value,
-    items: cart.map(l => {
-      const p = product(l.id);
-      return { name:L(p.name), ml:p.ml, qty:l.qty, sub:p.price * l.qty };
-    })
+    items: cart.map(l => ({
+      name: L(product(l.id).name),
+      ml:   l.ml,
+      qty:  l.qty,
+      sub:  linePrice(l) * l.qty
+    }))
   };
 
   let ok = false;

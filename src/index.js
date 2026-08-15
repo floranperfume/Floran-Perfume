@@ -18,7 +18,8 @@ const LIMITS = {
   notes:   { min: 0,  max: 400 },
   items:   { max: 40 },
   qty:     { max: 99 },
-  price:   { max: 100000000 }
+  price:   { max: 100000000 },
+  delivery:{ max: 50000 }
 };
 
 const PROVINCES = [
@@ -51,12 +52,17 @@ function validate(body) {
   const address = clean(body.address, LIMITS.address.max);
   const notes   = clean(body.notes, LIMITS.notes.max);
   const prov    = clean(body.province, 40);
+  const city    = clean(body.city, 60);
   const phoneD  = String(body.phone || "").replace(/\D/g, "");
+  const delivery = Number(body.delivery);
 
   if (name.length    < LIMITS.name.min)    return "name";
   if (address.length < LIMITS.address.min) return "address";
   if (!/^07\d{9}$/.test(phoneD))           return "phone";
   if (!PROVINCES.includes(prov))            return "province";
+  if (!city)                               return "city";
+  if (!Number.isFinite(delivery) || delivery < 0 || delivery > LIMITS.delivery.max)
+    return "delivery";
 
   if (!Array.isArray(body.items) || !body.items.length) return "items";
   if (body.items.length > LIMITS.items.max)             return "items";
@@ -73,14 +79,16 @@ function validate(body) {
     items.push({ name: n, qty, ml: Number.isFinite(ml) ? ml : 0, sub });
   }
 
-  const total = items.reduce((s, i) => s + i.sub, 0);
+  // المجموع يُحسب هنا من جديد، لا نثق بالرقم القادم من المتصفح
+  const sub   = items.reduce((s, i) => s + i.sub, 0);
+  const total = sub + delivery;
 
   return {
     ok: true,
     ref: clean(body.ref, 16) || "—",
     lang: body.lang === "en" ? "en" : "ar",
-    name, phone: phoneD, province: prov, address, notes,
-    items, total
+    name, phone: phoneD, province: prov, city, address, notes,
+    items, sub, delivery, total
   };
 }
 
@@ -97,11 +105,13 @@ function buildMessage(o) {
     m += ` × ${i.qty} — ${money(i.sub)}\n`;
   }
 
-  m += `\n💰 <b>المجموع: ${money(o.total)}</b>\n`;
+  m += `\nالمجموع الفرعي: ${money(o.sub)}\n`;
+  m += `أجرة التوصيل: ${money(o.delivery)}\n`;
+  m += `💰 <b>الإجمالي: ${money(o.total)}</b>\n`;
   m += `\n👤 <b>الزبون</b>\n`;
   m += `الاسم: ${esc(o.name)}\n`;
   m += `الهاتف: <code>${esc(o.phone)}</code>\n`;
-  m += `المحافظة: ${esc(o.province)}\n`;
+  m += `المحافظة: ${esc(o.province)} — ${esc(o.city)}\n`;
   m += `العنوان: ${esc(o.address)}\n`;
   if (o.notes) m += `ملاحظات: ${esc(o.notes)}\n`;
 
