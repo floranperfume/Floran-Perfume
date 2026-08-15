@@ -121,14 +121,27 @@ saving, and never stored in your public GitHub repo.
 In Cloudflare: **Compute** → your `shop` Worker → **Settings** → find
 **Variables and Secrets** → **Add**.
 
-Add two, each with **Type: Secret** (not "Text"):
+Add these, each with **Type: Secret** (not "Text"):
 
 | Name | Value |
 |---|---|
 | `TELEGRAM_TOKEN` | the token from BotFather |
-| `TELEGRAM_CHAT_ID` | the number from userinfobot |
+| `TELEGRAM_CHAT_ID` | first person's chat id |
+| `TELEGRAM_CHAT_ID2` | second person's chat id (optional) |
+| `TELEGRAM_CHAT_ID3` | third person's chat id (optional) |
 
 The names must match exactly — capitals and underscores included.
+
+**Every order goes to everyone listed.** To add a person: they open the bot,
+press **START**, send `hi` to @userinfobot to get their id, and you add it as the
+next `TELEGRAM_CHAT_ID…`.
+
+⚠️ **Each person must press START on the bot themselves.** Telegram will not deliver
+to someone who hasn't. If one of you gets orders and the other doesn't, that's why —
+and it's always the fix.
+
+Good news: if one recipient is broken, the others still receive the order. A partial
+failure never loses the sale.
 
 Save. Cloudflare redeploys automatically.
 

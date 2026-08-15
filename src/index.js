@@ -7,8 +7,13 @@
  * Two secrets must be set in Cloudflare (Worker → Settings → Variables
  * and Secrets). They are NEVER written in this file or in the website:
  *
- *   TELEGRAM_TOKEN    the token BotFather gave you
- *   TELEGRAM_CHAT_ID  your own chat id
+ *   TELEGRAM_TOKEN     the token BotFather gave you
+ *   TELEGRAM_CHAT_ID   first person who gets the orders
+ *   TELEGRAM_CHAT_ID2  second person (optional)
+ *   TELEGRAM_CHAT_ID3  third person (optional)
+ *
+ * Everyone listed must press START on the bot, or Telegram refuses to
+ * deliver to them.
  * ------------------------------------------------------------------
  */
 
@@ -120,14 +125,20 @@ function buildMessage(o) {
   return m;
 }
 
-async function sendTelegram(env, text) {
+/* كل من يستلم الطلب — أضف TELEGRAM_CHAT_ID3 وهكذا إذا احتجت المزيد
+   Everyone who receives the order — add TELEGRAM_CHAT_ID3 etc. if you need more */
+const recipients = env =>
+  [env.TELEGRAM_CHAT_ID, env.TELEGRAM_CHAT_ID2, env.TELEGRAM_CHAT_ID3]
+    .filter(id => id && String(id).trim());
+
+async function sendToChat(env, chatId, text) {
   const res = await fetch(
     `https://api.telegram.org/bot${env.TELEGRAM_TOKEN}/sendMessage`,
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        chat_id: env.TELEGRAM_CHAT_ID,
+        chat_id: String(chatId).trim(),
         text,
         parse_mode: "HTML",
         disable_web_page_preview: true
@@ -136,12 +147,36 @@ async function sendTelegram(env, text) {
   );
   if (!res.ok) {
     const detail = await res.text().catch(() => "");
-    throw new Error(`telegram ${res.status}: ${detail.slice(0, 300)}`);
+    throw new Error(`chat ${chatId}: ${res.status} ${detail.slice(0, 200)}`);
   }
 }
 
+/**
+ * يُرسل لكل الأرقام. ينجح إذا وصل لواحد على الأقل، حتى لا يضيع الطلب
+ * لو كان أحد المستلمين لم يضغط START على البوت.
+ *
+ * Sends to everyone. Succeeds if at least one delivery works, so an order is
+ * never lost just because one recipient hasn't pressed START on the bot.
+ */
+async function sendTelegram(env, text) {
+  const ids = recipients(env);
+  const results = await Promise.allSettled(
+    ids.map(id => sendToChat(env, id, text))
+  );
+
+  const failed = results.filter(r => r.status === "rejected");
+  if (failed.length === ids.length) {
+    throw new Error(failed.map(f => f.reason.message).join(" | "));
+  }
+  if (failed.length) {
+    // وصل لواحد على الأقل — نسجّل الباقي في سجل Cloudflare فقط
+    console.warn("partial delivery:", failed.map(f => f.reason.message).join(" | "));
+  }
+  return { sent: ids.length - failed.length, total: ids.length };
+}
+
 async function handleOrder(request, env) {
-  if (!env.TELEGRAM_TOKEN || !env.TELEGRAM_CHAT_ID) {
+  if (!env.TELEGRAM_TOKEN || !recipients(env).length) {
     return json({ ok: false, error: "not_configured" }, 503);
   }
 

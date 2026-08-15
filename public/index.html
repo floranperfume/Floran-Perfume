@@ -340,18 +340,54 @@ section{padding:76px 0}
 @media(max-width:860px){.about-grid{grid-template-columns:1fr;gap:30px}}
 .about h2{font-size:clamp(1.6rem,4.2vw,2.2rem);font-weight:900;margin-bottom:14px}
 .about p{color:var(--muted);margin-bottom:14px}
-.about-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:26px}
-.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 12px;text-align:center;transition:border-color .3s,transform .3s}
-.stat:hover{border-color:var(--line-2);transform:translateY(-3px)}
-.stat b{display:block;font-size:1.5rem;color:var(--gold-soft);font-weight:900}
-.stat small{color:var(--muted);font-size:.8rem}
 .about-visual{
   aspect-ratio:4/3;border-radius:var(--radius);border:1px solid var(--line);
   background:radial-gradient(circle at 30% 30%,rgba(201,162,39,.17),transparent 62%),linear-gradient(160deg,#241f18,#0f0d0b);
   display:grid;place-items:center;
 }
-.about-visual svg{animation:float 7s ease-in-out infinite}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+
+/* نقاط المميزات */
+.points{list-style:none;margin-top:6px}
+.points li{
+  display:flex;align-items:flex-start;gap:12px;
+  padding:13px 0;border-bottom:1px solid var(--line);
+  color:var(--muted);font-size:.97rem;line-height:1.75;
+}
+.points li:last-child{border-bottom:none}
+.points .dot{
+  flex-shrink:0;width:9px;height:9px;border-radius:50%;margin-top:.62em;
+  background:linear-gradient(135deg,var(--gold-soft),var(--gold));
+  box-shadow:0 0 0 4px rgba(201,162,39,.12),0 0 14px rgba(201,162,39,.5);
+  animation:dotPulse 2.6s ease-in-out infinite;
+}
+.points li:nth-child(2) .dot{animation-delay:.35s}
+.points li:nth-child(3) .dot{animation-delay:.7s}
+.points li:nth-child(4) .dot{animation-delay:1.05s}
+@keyframes dotPulse{
+  0%,100%{box-shadow:0 0 0 4px rgba(201,162,39,.10),0 0 10px rgba(201,162,39,.35)}
+  50%{box-shadow:0 0 0 6px rgba(201,162,39,.05),0 0 20px rgba(201,162,39,.75)}
+}
+.about-visual img{width:70%;height:auto;animation:float 7s ease-in-out infinite}
+
+/* فيديو */
+.vid-sec{padding-top:0}
+.vid-box{
+  position:relative;max-width:390px;margin:0 auto;
+  border-radius:var(--radius);overflow:hidden;
+  border:1px solid var(--line-2);
+  box-shadow:0 22px 60px rgba(0,0,0,.6),0 0 40px rgba(201,162,39,.10);
+  background:#0f0d0b;line-height:0;
+}
+.vid-box video{width:100%;height:auto;display:block}
+.vid-sound{
+  position:absolute;inset-inline-end:12px;bottom:12px;
+  width:40px;height:40px;border-radius:50%;
+  background:rgba(11,10,9,.62);backdrop-filter:blur(8px);
+  border:1px solid var(--line-2);color:var(--gold-soft);
+  display:grid;place-items:center;transition:all .25s;
+}
+.vid-sound:hover{background:var(--gold);color:#17120a;border-color:var(--gold)}
 
 /* ============================================================
    السلة
@@ -565,23 +601,34 @@ footer{background:rgba(11,10,9,.85);border-top:1px solid var(--line);padding:50p
 
 <section class="about" id="about">
   <div class="wrap about-grid">
-    <div class="reveal">
-      <h2 data-i18n="aboutTitle"></h2>
-      <p data-i18n="aboutP1"></p>
-      <p data-i18n="aboutP2"></p>
-      <div class="about-stats">
-        <div class="stat"><b data-i18n="s1n"></b><small data-i18n="s1l"></small></div>
-        <div class="stat"><b data-i18n="s2n"></b><small data-i18n="s2l"></small></div>
-        <div class="stat"><b data-i18n="s3n"></b><small data-i18n="s3l"></small></div>
-      </div>
+    <div>
+      <h2 class="reveal" data-i18n="aboutTitle"></h2>
+      <ul class="points">
+        <li class="reveal"><span class="dot"></span><span data-i18n="pt1"></span></li>
+        <li class="reveal d1"><span class="dot"></span><span data-i18n="pt2"></span></li>
+        <li class="reveal d2"><span class="dot"></span><span data-i18n="pt3"></span></li>
+        <li class="reveal d3"><span class="dot"></span><span data-i18n="pt4"></span></li>
+      </ul>
     </div>
     <div class="about-visual reveal d2">
-      <svg style="width:38%" viewBox="0 0 100 150" fill="none">
-        <rect x="38" y="4" width="24" height="18" rx="3" fill="#c9a227" opacity=".85"/>
-        <rect x="43" y="20" width="14" height="14" fill="#c9a227" opacity=".45"/>
-        <rect x="22" y="32" width="56" height="112" rx="12" fill="#c9a227" opacity=".16" stroke="#c9a227" stroke-opacity=".5"/>
-        <rect x="33" y="70" width="34" height="46" rx="5" fill="#c9a227" opacity=".22"/>
-      </svg>
+      <img src="images/emblem.png" alt="" width="300" height="156">
+    </div>
+  </div>
+</section>
+
+<!-- فيديو المنتج — يظهر فقط إذا وضعت ملفاً في CONFIG.video -->
+<section class="vid-sec" id="vidSec" hidden>
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2 data-i18n="vidTitle"></h2>
+      <div class="sec-line"></div>
+    </div>
+    <div class="vid-box reveal">
+      <video id="vid" muted loop autoplay playsinline preload="metadata"></video>
+      <button class="vid-sound" id="vidSound" aria-label="sound">
+        <svg id="icoMute" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="m23 9-6 6M17 9l6 6"/></svg>
+        <svg id="icoLoud" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="display:none"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg>
+      </button>
     </div>
   </div>
 </section>
@@ -738,6 +785,15 @@ const CONFIG = {
   delivery: { default: 6000 },
 
   // ==========================================================================
+  //  فيديو المنتج (اختياري) / PRODUCT VIDEO (optional)
+  //  ضع ملف mp4 في مجلد images ثم اكتب اسمه هنا، مثال: "images/reel.mp4"
+  //  اتركه "" لإخفاء قسم الفيديو تماماً.
+  //  Put an mp4 in the images folder and name it here, e.g. "images/reel.mp4".
+  //  Leave "" to hide the video section entirely.
+  // ==========================================================================
+  video: "",
+
+  // ==========================================================================
   //  العطور / PERFUMES
   //  كل عطر له حجمان بسعرين. أضف أو احذف الأحجام كما تشاء.
   //  Each perfume has two sizes with their own prices. Add or remove freely.
@@ -753,7 +809,7 @@ const CONFIG = {
       tag:{ ar:"الأكثر مبيعاً", en:"Best seller" },
       sizes:[ {ml:30, price:15000}, {ml:50, price:25000} ] },
 
-    { id:2, inStock:true, image:"",
+    { id:2, inStock:true, image:"images/ombre-nomade.jpg",
       name:{ ar:"إل في أومبر نوماد", en:"LV Ombre Nomade" },
       notes:{ ar:"عود · بخور · توت", en:"Oud · Incense · Raspberry" },
       tag:{ ar:"", en:"" },
@@ -896,9 +952,11 @@ const T = {
     pickCity:"تُحدد حسب المدينة", mCity:"المدينة", mDelivery:"أجرة التوصيل", mSub:"المجموع الفرعي",
     addBtn:"أضف للطلب", added:"تمت الإضافة ✓", outBtn:"غير متوفر", outBadge:"نفدت الكمية",
     aboutTitle:"لماذا تشتري منّا؟",
-    aboutP1:"نوفر عطوراً أصلية مختارة بعناية، مع إمكانية الشم والتجربة قبل الشراء عند التوصيل داخل بغداد. كل عطر يأتي بعبوته الأصلية المغلقة.",
-    aboutP2:"إذا ما عجبك العطر عند الاستلام، ترجعه بدون أي التزام — راحتك أهم من البيعة.",
-    s1n:"+٥٠٠", s1l:"زبون سعيد", s2n:"١٨", s2l:"محافظة", s3n:"٤.٩", s3l:"تقييم الزبائن",
+    pt1:"نبتكر عطوراً فاخرة تُصمَّم بأعلى درجات الدقة لتطابق النوتات العطرية الأصلية بكفاءة استثنائية.",
+    pt2:"نستورد أرقى المكونات والزيوت العطرية من المورّد العالمي الشهير Fraterworks\u200F.",
+    pt3:"نعتمد نسباً مرتفعة من الزيوت الطبيعية النقية، لنضمن لك فوحاناً غنياً وشذىً يدوم طويلاً.",
+    pt4:"وبأسعار مناسبة في متناول الجميع.",
+    vidTitle:"من داخل فلوران",
     footAbout:"عطور أصلية بأسعار مناسبة، توصيل لجميع محافظات العراق مع الدفع عند الاستلام.",
     footLinks:"روابط", footOrder:"اطلب عبر واتساب", footIg:"صفحتنا على انستغرام", footHours:"أوقات الدوام",
     hours1:"السبت — الخميس", hours2:"١٠:٠٠ صباحاً — ١٠:٠٠ مساءً", hours3:"الجمعة: ٤:٠٠ — ١٠:٠٠ مساءً",
@@ -944,9 +1002,11 @@ const T = {
     pickCity:"set by city", mCity:"City", mDelivery:"Delivery", mSub:"Subtotal",
     addBtn:"Add to order", added:"Added ✓", outBtn:"Unavailable", outBadge:"Out of stock",
     aboutTitle:"Why buy from us?",
-    aboutP1:"Carefully selected authentic perfumes, with the option to smell and try before you buy on delivery inside Baghdad. Every bottle arrives sealed in its original packaging.",
-    aboutP2:"If you don't like it when it arrives, send it back — no obligation. Your comfort matters more than the sale.",
-    s1n:"500+", s1l:"Happy customers", s2n:"18", s2l:"Governorates", s3n:"4.9", s3l:"Customer rating",
+    pt1:"We craft luxury fragrances engineered with exceptional precision to match the original scent notes.",
+    pt2:"Our ingredients and fragrance oils are imported from the renowned global supplier Fraterworks.",
+    pt3:"High concentrations of pure natural oils give a rich projection and a scent that lasts all day.",
+    pt4:"At prices that stay within everyone's reach.",
+    vidTitle:"Inside Florane",
     footAbout:"Authentic perfumes at fair prices, delivered across Iraq with cash on delivery.",
     footLinks:"Links", footOrder:"Order on WhatsApp", footIg:"Our Instagram", footHours:"Opening hours",
     hours1:"Saturday — Thursday", hours2:"10:00 AM — 10:00 PM", hours3:"Friday: 4:00 — 10:00 PM",
@@ -1404,6 +1464,20 @@ setTimeout(() => {
   });
 }, 3000);
 window.addEventListener("load", () => setTimeout(observeReveals, 200));
+
+/* ---------- الفيديو ---------- */
+if (CONFIG.video){
+  const v = $("vid");
+  v.src = CONFIG.video;
+  $("vidSec").hidden = false;
+  v.play().catch(() => {});          // بعض المتصفحات ترفض التشغيل التلقائي
+  $("vidSound").onclick = () => {
+    v.muted = !v.muted;
+    if (v.muted) v.play().catch(() => {});
+    $("icoMute").style.display = v.muted ? "" : "none";
+    $("icoLoud").style.display = v.muted ? "none" : "";
+  };
+}
 
 /* ---------- التشغيل ---------- */
 applyLang("ar");

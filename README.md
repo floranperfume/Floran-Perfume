@@ -17,6 +17,7 @@ Orders arrive in your Telegram; WhatsApp stays as a second contact option.
 | Delivery | 6,000 IQD everywhere · **3,000 IQD to Mosul** |
 | Coverage | 18 governorates, 143 cities and districts |
 | WhatsApp | 9647508274568 |
+| Order alerts | Telegram, to two people |
 | Instagram | instagram.com/floran.perfume |
 
 ---
@@ -109,6 +110,28 @@ Add `fee:` only if it needs a rate different from the default.
 
 ---
 
+## Product video (optional)
+
+Instagram embeds will not autoplay or loop — that's an Instagram restriction, not
+something the site can override. To get a silent looping video you host the file
+yourself:
+
+1. Download the video from your Instagram post as `.mp4`
+2. Upload it into `public/images/` on GitHub
+3. Point the settings block at it:
+
+```js
+video: "images/reel.mp4",
+```
+
+The section appears by itself, plays muted on loop, and has a small speaker button so
+customers can turn sound on. Leave `video: ""` and the whole section stays hidden.
+
+**Keep it under about 8 MB.** Your customers are on mobile data, and a heavy video is
+worse than no video. Trim to 10–15 seconds and export at 720p.
+
+---
+
 ## Photos
 
 Put them in `public/images/` on GitHub, then point the perfume at one:
@@ -124,6 +147,10 @@ image:"images/coromandel.jpg"
 
 Without photos the gold bottle placeholder shows, which looks fine but sells less.
 Real photos are the single biggest thing you can add now.
+
+Ombre Nomade already has its photo. It was cut out of its original background and
+placed on the same gradient the cards use, so it sits flush with the design. Do the
+same for the others: shoot on any background, and the cutout is what makes them match.
 
 ---
 
