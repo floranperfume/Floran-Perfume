@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>فلوران للعطور — عطور أصلية</title>
+<meta name="description" content="فلوران للعطور — عطور أصلية، توصيل لجميع محافظات العراق، الدفع عند الاستلام.">
+<meta name="theme-color" content="#0b0a09">
+
+<!-- أيقونة التبويب -->
+<link rel="icon" href="images/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="images/favicon-64.png">
+<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+
+<!-- صورة المشاركة على واتساب وفيسبوك وانستغرام -->
+<meta property="og:title" content="فلوران للعطور | Florane Perfumes">
+<meta property="og:description" content="عطور أصلية · توصيل لجميع المحافظات · الدفع عند الاستلام">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://shop.floranperfume.workers.dev/">
+<meta property="og:image" content="https://shop.floranperfume.workers.dev/images/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://shop.floranperfume.workers.dev/images/og.jpg">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#0b0a09;
+  --bg-soft:#131110;
+  --card:#191614;
+  --line:rgba(201,162,39,.16);
+  --line-2:rgba(201,162,39,.34);
+  --gold:#c9a227;
+  --gold-soft:#e8cf7a;
+  --gold-dim:#8a6f1c;
+  --text:#f4efe4;
+  --muted:#a69c8b;
+  --green:#25d366;
+  --danger:#e2574c;
+  --radius:16px;
+  --ease:cubic-bezier(.22,.9,.28,1);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Tajawal',system-ui,'Segoe UI',sans-serif;
+  background:var(--bg);color:var(--text);
+  line-height:1.7;-webkit-font-smoothing:antialiased;
+  overflow-x:hidden;position:relative;
+}
+img{max-width:100%;display:block}
+button{font-family:inherit;cursor:pointer;border:none;color:inherit}
+input,select,textarea{font-family:inherit}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+
+/* ============================================================
+   الخلفية المتحركة — نقاط ذهبية
+   ============================================================ */
+#orbs{
+  position:fixed;inset:0;z-index:0;
+  pointer-events:none;overflow:hidden;
+  contain:strict;
+}
+.orb{
+  position:absolute;border-radius:50%;
+  background:radial-gradient(circle at 32% 32%,var(--gold-soft),var(--gold) 42%,transparent 72%);
+  filter:blur(var(--b));
+  opacity:0;
+  will-change:transform,opacity;
+  animation:drift var(--dur) var(--ease) var(--delay) infinite alternate,
+            breathe calc(var(--dur)/1.7) ease-in-out var(--delay) infinite alternate;
+}
+@keyframes drift{
+  from{transform:translate3d(0,0,0) scale(1)}
+  to{transform:translate3d(var(--dx),var(--dy),0) scale(var(--sc))}
+}
+@keyframes breathe{
+  from{opacity:var(--o1)}
+  to{opacity:var(--o2)}
+}
+/* طبقة تعتيم فوق النقاط حتى يبقى النص واضحاً */
+#orbVeil{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 0%,transparent 0%,rgba(11,10,9,.55) 70%,rgba(11,10,9,.8) 100%);
+}
+/* المحتوى فوق الخلفية المتحركة — بدون المساس بالعناصر الثابتة (الدرج/السلة) */
+.topbar,.hero,.features,section,footer{position:relative;z-index:1}
+
+/* ============================================================
+   حركات الظهور
+   ============================================================ */
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+.reveal.d1{transition-delay:.07s}
+.reveal.d2{transition-delay:.14s}
+.reveal.d3{transition-delay:.21s}
+
+@keyframes riseIn{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+@keyframes glowPulse{
+  0%,100%{text-shadow:0 0 22px rgba(201,162,39,.18)}
+  50%{text-shadow:0 0 40px rgba(201,162,39,.45)}
+}
+@keyframes sheen{
+  0%{background-position:-160% 0}
+  60%,100%{background-position:260% 0}
+}
+
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+  .reveal{opacity:1;transform:none}
+}
+
+/* ============================================================
+   الشريط العلوي
+   ============================================================ */
+.topbar{
+  background:linear-gradient(90deg,var(--gold-dim),var(--gold),var(--gold-dim));
+  background-size:200% 100%;
+  animation:sheen 9s linear infinite;
+  color:#17120a;text-align:center;
+  font-size:.82rem;font-weight:800;padding:9px 16px;
+}
+
+header{
+  position:sticky;top:0;z-index:50;
+  background:rgba(11,10,9,.78);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--line);
+}
+.nav{display:flex;align-items:center;justify-content:space-between;height:70px;gap:14px}
+.brand{display:flex;align-items:center;gap:11px;min-width:0}
+.brand-mark{
+  width:40px;height:40px;border-radius:50%;
+  border:1.5px solid var(--gold);
+  display:grid;place-items:center;
+  color:var(--gold);font-weight:900;font-size:1.05rem;flex-shrink:0;
+  box-shadow:0 0 0 4px rgba(201,162,39,.06),0 0 20px rgba(201,162,39,.18) inset;
+  overflow:hidden;
+}
+.brand-mark img{width:78%;height:78%;object-fit:contain}
+.brand-name{font-size:1.18rem;font-weight:900;letter-spacing:.3px;white-space:nowrap}
+@media(max-width:420px){
+  .brand-name{font-size:.98rem}
+  .brand-mark{width:36px;height:36px}
+  .nav{gap:8px}
+  .lang button{padding:6px 11px}
+}
+.brand-sub{font-size:.68rem;color:var(--muted);font-weight:500;margin-top:-5px;white-space:nowrap}
+
+.nav-right{display:flex;align-items:center;gap:22px}
+.nav-links{display:flex;gap:24px;font-size:.94rem;font-weight:600}
+.nav-links a{color:var(--muted);transition:color .25s}
+.nav-links a:hover{color:var(--gold-soft)}
+@media(max-width:860px){.nav-links{display:none}}
+
+.lang{
+  display:flex;border:1px solid var(--line);border-radius:100px;overflow:hidden;flex-shrink:0;
+}
+.lang button{
+  background:transparent;color:var(--muted);
+  padding:6px 15px;font-size:.82rem;font-weight:800;
+  transition:all .25s;
+}
+.lang button.on{background:var(--gold);color:#17120a}
+
+/* ============================================================
+   الواجهة
+   ============================================================ */
+.hero{padding:90px 0 78px;text-align:center;position:relative}
+.hero-inner>*{animation:riseIn .85s var(--ease) both}
+.hero-inner>*:nth-child(1){animation-delay:.02s}
+.hero-inner>*:nth-child(2){animation-delay:.14s}
+.hero-inner>*:nth-child(3){animation-delay:.26s}
+.hero-inner>*:nth-child(4){animation-delay:.38s}
+.hero-inner>*:nth-child(5){animation-delay:.5s}
+
+.hero-emblem{
+  width:min(320px,64vw);height:auto;margin:0 auto 20px;
+  filter:drop-shadow(0 8px 34px rgba(201,162,39,.28));
+  animation:riseIn .9s var(--ease) both,floatSlow 8s ease-in-out 1s infinite;
+}
+@keyframes floatSlow{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@media(max-width:640px){.hero{padding:56px 0 62px}.hero-emblem{margin-bottom:14px}}
+
+.eyebrow{
+  display:inline-block;font-size:.73rem;font-weight:800;letter-spacing:2.5px;
+  color:var(--gold);border:1px solid var(--line-2);border-radius:100px;
+  padding:6px 20px;margin-bottom:22px;
+  background:rgba(201,162,39,.05);
+}
+.hero h1{font-size:clamp(2.15rem,6.4vw,3.9rem);font-weight:900;line-height:1.24;margin-bottom:16px}
+.hero h1 .g{
+  background:linear-gradient(100deg,var(--gold-soft),var(--gold) 45%,var(--gold-soft));
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  animation:glowPulse 5s ease-in-out infinite;
+}
+.hero p{color:var(--muted);font-size:clamp(1rem,2.4vw,1.16rem);max-width:570px;margin:0 auto 34px}
+.hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  padding:14px 32px;border-radius:100px;font-weight:800;font-size:1rem;
+  transition:transform .2s var(--ease),box-shadow .25s,background .25s,color .25s,border-color .25s;
+}
+.btn:active{transform:scale(.96)}
+.btn-gold{
+  background:linear-gradient(135deg,var(--gold-soft),var(--gold));
+  color:#17120a;box-shadow:0 10px 30px rgba(201,162,39,.26);
+}
+.btn-gold:hover{box-shadow:0 14px 40px rgba(201,162,39,.42);transform:translateY(-2px)}
+.btn-ghost{border:1px solid var(--line-2);background:rgba(255,255,255,.02)}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold-soft)}
+.btn-wa{background:var(--green);color:#04310f}
+.btn-wa:hover{box-shadow:0 12px 32px rgba(37,211,102,.34)}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none!important;box-shadow:none}
+
+/* ============================================================
+   المميزات
+   ============================================================ */
+.features{border-block:1px solid var(--line);background:rgba(19,17,16,.72);backdrop-filter:blur(6px)}
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr)}
+.feature{padding:28px 18px;text-align:center;border-inline-start:1px solid var(--line);transition:background .3s}
+.feature:first-child{border-inline-start:none}
+.feature:hover{background:rgba(201,162,39,.04)}
+.feature-ico{font-size:1.55rem;margin-bottom:6px}
+.feature b{display:block;font-size:.98rem;margin-bottom:2px}
+.feature small{color:var(--muted);font-size:.81rem}
+@media(max-width:680px){
+  .features-grid{grid-template-columns:1fr}
+  .feature{border-inline-start:none;border-top:1px solid var(--line);padding:18px}
+  .feature:first-child{border-top:none}
+}
+
+/* ============================================================
+   المنتجات
+   ============================================================ */
+section{padding:76px 0}
+.sec-head{text-align:center;margin-bottom:40px}
+.sec-head h2{font-size:clamp(1.7rem,4.6vw,2.35rem);font-weight:900;margin-bottom:8px}
+.sec-head p{color:var(--muted);font-size:.98rem}
+.sec-line{width:60px;height:2px;margin:16px auto 0;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+
+.filters{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin-bottom:34px}
+.chip{
+  background:transparent;border:1px solid var(--line);color:var(--muted);
+  padding:8px 21px;border-radius:100px;font-size:.9rem;font-weight:700;transition:all .25s;
+}
+.chip:hover{color:var(--gold-soft);border-color:var(--gold)}
+.chip.on{background:var(--gold);border-color:var(--gold);color:#17120a}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:22px}
+
+.card{
+  background:rgba(25,22,20,.78);backdrop-filter:blur(6px);
+  border:1px solid var(--line);border-radius:var(--radius);
+  overflow:hidden;display:flex;flex-direction:column;
+  transition:transform .3s var(--ease),border-color .3s,box-shadow .3s;
+}
+.card:hover{transform:translateY(-6px);border-color:var(--line-2);box-shadow:0 20px 46px rgba(0,0,0,.55)}
+.card-img{position:relative;aspect-ratio:1/1;background:linear-gradient(160deg,#241f18,#100e0c);display:grid;place-items:center;overflow:hidden}
+.card-img img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease)}
+.card:hover .card-img img{transform:scale(1.06)}
+.bottle{width:44%;max-width:118px;opacity:.9;transition:transform .5s var(--ease)}
+.card:hover .bottle{transform:translateY(-5px)}
+
+.badge{
+  position:absolute;top:12px;inset-inline-start:12px;
+  background:var(--gold);color:#17120a;font-size:.7rem;font-weight:900;
+  padding:4px 11px;border-radius:100px;
+}
+.badge.out{background:#4a4238;color:#cfc7ba}
+
+.card-body{padding:16px 16px 18px;display:flex;flex-direction:column;flex:1}
+.card-body h3{font-size:1.08rem;font-weight:800;margin-bottom:3px}
+.notes{color:var(--muted);font-size:.83rem;margin-bottom:12px;flex:1}
+.card-meta{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:13px}
+.price{font-size:1.16rem;font-weight:900;color:var(--gold-soft);white-space:nowrap}
+.price s{font-size:.8rem;color:var(--muted);font-weight:500;margin-inline-start:7px}
+.size{font-size:.78rem;color:var(--muted);border:1px solid var(--line);padding:2px 9px;border-radius:100px;white-space:nowrap;flex-shrink:0}
+
+.add{
+  width:100%;padding:11px;border-radius:10px;
+  background:rgba(201,162,39,.1);border:1px solid var(--line);
+  color:var(--gold-soft);font-weight:800;font-size:.93rem;transition:all .25s;
+}
+.add:hover:not(:disabled){background:var(--gold);color:#17120a;border-color:var(--gold)}
+.add:disabled{opacity:.38;cursor:not-allowed}
+.add.added{background:var(--green);color:#04310f;border-color:var(--green)}
+
+@media(max-width:640px){
+  .grid{grid-template-columns:1fr 1fr;gap:13px}
+  .card-body{padding:12px 12px 14px}
+  .card-body h3{font-size:.95rem}
+  .notes{font-size:.74rem;margin-bottom:9px}
+  .price{font-size:.98rem}
+  .price s{display:block;margin:0}
+  .size{font-size:.7rem;padding:1px 7px}
+  .add{padding:9px;font-size:.85rem}
+  .card-img{aspect-ratio:4/5}
+}
+
+/* ============================================================
+   من نحن
+   ============================================================ */
+.about{background:rgba(19,17,16,.72);backdrop-filter:blur(6px);border-block:1px solid var(--line)}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+@media(max-width:860px){.about-grid{grid-template-columns:1fr;gap:30px}}
+.about h2{font-size:clamp(1.6rem,4.2vw,2.2rem);font-weight:900;margin-bottom:14px}
+.about p{color:var(--muted);margin-bottom:14px}
+.about-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:26px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 12px;text-align:center;transition:border-color .3s,transform .3s}
+.stat:hover{border-color:var(--line-2);transform:translateY(-3px)}
+.stat b{display:block;font-size:1.5rem;color:var(--gold-soft);font-weight:900}
+.stat small{color:var(--muted);font-size:.8rem}
+.about-visual{
+  aspect-ratio:4/3;border-radius:var(--radius);border:1px solid var(--line);
+  background:radial-gradient(circle at 30% 30%,rgba(201,162,39,.17),transparent 62%),linear-gradient(160deg,#241f18,#0f0d0b);
+  display:grid;place-items:center;
+}
+.about-visual svg{animation:float 7s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+
+/* ============================================================
+   السلة
+   ============================================================ */
+.cart-fab{
+  position:fixed;inset-inline-end:20px;bottom:20px;z-index:60;
+  background:linear-gradient(135deg,var(--gold-soft),var(--gold));color:#17120a;
+  border-radius:100px;padding:14px 24px;font-weight:900;font-size:.97rem;
+  display:flex;align-items:center;gap:9px;
+  box-shadow:0 12px 34px rgba(201,162,39,.42);
+  transform:translateY(130px);transition:transform .4s var(--ease);
+}
+.cart-fab.show{transform:translateY(0)}
+.cart-count{background:#17120a;color:var(--gold-soft);min-width:23px;height:23px;border-radius:50%;display:grid;place-items:center;font-size:.8rem}
+
+.overlay{position:fixed;inset:0;z-index:70;background:rgba(0,0,0,.68);backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity .32s}
+.overlay.show{opacity:1;pointer-events:auto}
+
+.drawer{
+  position:fixed;top:0;bottom:0;inset-inline-end:0;z-index:80;
+  width:min(430px,100%);background:var(--bg-soft);
+  border-inline-start:1px solid var(--line);
+  display:flex;flex-direction:column;
+  transform:translateX(110%);transition:transform .38s var(--ease);
+}
+html[dir="rtl"] .drawer{transform:translateX(-110%)}
+.drawer.show{transform:translateX(0)!important}
+
+.drawer-head{padding:20px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
+.drawer-head h3{font-size:1.15rem;font-weight:900}
+.close{background:transparent;color:var(--muted);font-size:1.7rem;line-height:1;width:34px;height:34px;border-radius:50%;transition:all .25s}
+.close:hover{background:rgba(255,255,255,.06);color:var(--text)}
+
+.drawer-body{flex:1;overflow-y:auto;padding:16px 20px 20px}
+.empty{text-align:center;color:var(--muted);padding:60px 20px}
+.empty div{font-size:2.6rem;margin-bottom:10px;opacity:.5}
+
+.line{display:flex;gap:12px;align-items:center;padding:13px 0;border-bottom:1px solid var(--line)}
+.line-img{width:56px;height:56px;border-radius:10px;flex-shrink:0;background:linear-gradient(160deg,#241f18,#12100d);display:grid;place-items:center;overflow:hidden}
+.line-img img{width:100%;height:100%;object-fit:cover}
+.line-info{flex:1;min-width:0}
+.line-info b{display:block;font-size:.95rem;font-weight:800}
+.line-info small{color:var(--muted);font-size:.8rem}
+.qty{display:flex;align-items:center;gap:6px}
+.qty button{width:28px;height:28px;border-radius:8px;background:rgba(255,255,255,.05);font-size:1rem;font-weight:800;line-height:1;transition:all .2s}
+.qty button:hover{background:var(--gold);color:#17120a}
+.qty span{min-width:20px;text-align:center;font-weight:800;font-size:.92rem}
+
+/* ---------- نموذج بيانات الزبون ---------- */
+.form{margin-top:22px}
+.form-title{font-size:1rem;font-weight:900;margin-bottom:4px}
+.form-hint{color:var(--muted);font-size:.8rem;margin-bottom:14px}
+.field{margin-bottom:13px}
+.field label{display:block;font-size:.85rem;font-weight:700;margin-bottom:5px}
+.field label .req{color:var(--gold)}
+.field input,.field select,.field textarea{
+  width:100%;padding:11px 13px;border-radius:10px;
+  background:rgba(255,255,255,.035);
+  border:1px solid var(--line);color:var(--text);
+  font-size:.94rem;transition:border-color .25s,background .25s;
+}
+.field textarea{resize:vertical;min-height:62px}
+.field input:focus,.field select:focus,.field textarea:focus{
+  outline:none;border-color:var(--gold);background:rgba(201,162,39,.06);
+}
+.field input::placeholder,.field textarea::placeholder{color:#6d6558}
+.field select{
+  appearance:none;-webkit-appearance:none;cursor:pointer;
+  padding-inline-end:38px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5' stroke='%23a69c8b' stroke-width='1.8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-size:12px 8px;
+  background-position:right 15px center;
+}
+html[dir="rtl"] .field select{background-position:left 15px center}
+.field select option{background:#1a1713;color:var(--text)}
+.field.bad input,.field.bad select,.field.bad textarea{border-color:var(--danger);background:rgba(226,87,76,.07)}
+.err{color:var(--danger);font-size:.76rem;margin-top:4px;display:none}
+.field.bad .err{display:block}
+
+/* فخ البوتات — مخفي تماماً */
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+
+/* شاشة التأكيد */
+.success{display:none;text-align:center;padding:26px 4px 8px}
+.success.show{display:block;animation:riseIn .5s var(--ease) both}
+.success .tick{margin-bottom:14px}
+.success .tick svg circle,.success .tick svg path{
+  stroke-dasharray:200;stroke-dashoffset:200;
+  animation:draw .7s var(--ease) .15s forwards;
+}
+.success .tick svg path{animation-delay:.5s}
+@keyframes draw{to{stroke-dashoffset:0}}
+.success h4{font-size:1.2rem;font-weight:900;margin-bottom:8px}
+.success p{color:var(--muted);font-size:.92rem;margin-bottom:14px}
+.ref{
+  display:inline-block;font-family:ui-monospace,monospace;
+  background:rgba(201,162,39,.1);border:1px solid var(--line-2);
+  color:var(--gold-soft);border-radius:10px;padding:7px 16px;
+  font-size:1rem;font-weight:700;letter-spacing:1px;margin-bottom:20px;
+}
+/* زر الإرسال أثناء المعالجة */
+.btn.loading{position:relative;color:transparent!important}
+.btn.loading::after{
+  content:"";position:absolute;width:19px;height:19px;
+  border:2.5px solid rgba(4,49,15,.25);border-top-color:#04310f;
+  border-radius:50%;animation:spin .7s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.drawer-foot{padding:16px 20px 22px;border-top:1px solid var(--line);background:var(--bg-soft)}
+.drawer-foot.hide{display:none}
+.total{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;font-size:1.05rem;font-weight:800}
+.total b{font-size:1.42rem;color:var(--gold-soft);font-weight:900}
+.note{color:var(--muted);font-size:.78rem;margin-bottom:13px;text-align:center}
+.btn-block{width:100%;padding:15px;font-size:1.02rem}
+
+/* ============================================================
+   التذييل
+   ============================================================ */
+footer{background:rgba(11,10,9,.85);border-top:1px solid var(--line);padding:50px 0 30px}
+.foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:32px;margin-bottom:34px}
+@media(max-width:760px){.foot-grid{grid-template-columns:1fr;gap:26px}}
+.foot h4{font-size:.98rem;font-weight:800;margin-bottom:13px;color:var(--gold-soft)}
+.foot p,.foot a{color:var(--muted);font-size:.9rem;display:block;margin-bottom:8px}
+.foot a:hover{color:var(--gold-soft)}
+.socials{display:flex;gap:10px;margin-top:6px}
+.socials a{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;margin:0;transition:all .25s}
+.socials a:hover{border-color:var(--gold);background:rgba(201,162,39,.1);transform:translateY(-3px)}
+.copy{text-align:center;color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padding-top:22px}
+
+/* التنبيه في الأعلى حتى لا يغطي زر الإرسال */
+.toast{
+  position:fixed;top:88px;left:50%;transform:translate(-50%,-18px);z-index:95;
+  background:var(--green);color:#04310f;padding:11px 22px;border-radius:100px;
+  font-weight:800;font-size:.9rem;opacity:0;max-width:calc(100% - 32px);text-align:center;
+  box-shadow:0 10px 30px rgba(0,0,0,.4);
+  transition:opacity .3s,transform .3s var(--ease);pointer-events:none;
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+</style>
+</head>
+<body>
+
+<div id="orbs"></div>
+<div id="orbVeil"></div>
+
+<div class="topbar" data-i18n="topbar"></div>
+
+<header>
+  <div class="wrap nav">
+    <div class="brand">
+      <div class="brand-mark"><img src="images/mark.png" alt="" width="40" height="40"></div>
+      <div>
+        <div class="brand-name" id="brandName"></div>
+        <div class="brand-sub" id="brandSub"></div>
+      </div>
+    </div>
+    <div class="nav-right">
+      <nav class="nav-links">
+        <a href="#products" data-i18n="navProducts"></a>
+        <a href="#about" data-i18n="navAbout"></a>
+        <a href="#contact" data-i18n="navContact"></a>
+      </nav>
+      <div class="lang">
+        <button id="btnAr" class="on">ع</button>
+        <button id="btnEn">EN</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="wrap hero-inner">
+    <img class="hero-emblem" src="images/emblem.png" alt="" width="320" height="166">
+    <span class="eyebrow" data-i18n="eyebrow"></span>
+    <h1><span data-i18n="heroLine1"></span><br><span class="g" data-i18n="heroLine2"></span></h1>
+    <p data-i18n="heroSub"></p>
+    <div class="hero-btns">
+      <a href="#products" class="btn btn-gold" data-i18n="heroBtn1"></a>
+      <a href="#" class="btn btn-ghost" id="heroWa" data-i18n="heroBtn2"></a>
+    </div>
+  </div>
+</div>
+
+<div class="features">
+  <div class="wrap features-grid">
+    <div class="feature reveal">
+      <div class="feature-ico">🚚</div>
+      <b data-i18n="f1t"></b><small data-i18n="f1s"></small>
+    </div>
+    <div class="feature reveal d1">
+      <div class="feature-ico">💵</div>
+      <b data-i18n="f2t"></b><small data-i18n="f2s"></small>
+    </div>
+    <div class="feature reveal d2">
+      <div class="feature-ico">✅</div>
+      <b data-i18n="f3t"></b><small data-i18n="f3s"></small>
+    </div>
+  </div>
+</div>
+
+<section id="products">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2 data-i18n="prodTitle"></h2>
+      <p data-i18n="prodSub"></p>
+      <div class="sec-line"></div>
+    </div>
+    <div class="filters reveal" id="filters"></div>
+    <div class="grid" id="grid"></div>
+  </div>
+</section>
+
+<section class="about" id="about">
+  <div class="wrap about-grid">
+    <div class="reveal">
+      <h2 data-i18n="aboutTitle"></h2>
+      <p data-i18n="aboutP1"></p>
+      <p data-i18n="aboutP2"></p>
+      <div class="about-stats">
+        <div class="stat"><b data-i18n="s1n"></b><small data-i18n="s1l"></small></div>
+        <div class="stat"><b data-i18n="s2n"></b><small data-i18n="s2l"></small></div>
+        <div class="stat"><b data-i18n="s3n"></b><small data-i18n="s3l"></small></div>
+      </div>
+    </div>
+    <div class="about-visual reveal d2">
+      <svg style="width:38%" viewBox="0 0 100 150" fill="none">
+        <rect x="38" y="4" width="24" height="18" rx="3" fill="#c9a227" opacity=".85"/>
+        <rect x="43" y="20" width="14" height="14" fill="#c9a227" opacity=".45"/>
+        <rect x="22" y="32" width="56" height="112" rx="12" fill="#c9a227" opacity=".16" stroke="#c9a227" stroke-opacity=".5"/>
+        <rect x="33" y="70" width="34" height="46" rx="5" fill="#c9a227" opacity=".22"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot">
+        <h4 id="footName"></h4>
+        <p data-i18n="footAbout"></p>
+        <div class="socials">
+          <a href="#" id="waIcon" aria-label="WhatsApp">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="#c9a227"><path d="M17.5 14.4c-.3-.2-1.7-.9-2-1-.3-.1-.4-.2-.6.1s-.7.9-.9 1.1c-.2.2-.3.2-.6.1-.3-.2-1.2-.5-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6l.5-.5c.1-.2.2-.3.3-.5 0-.2 0-.4 0-.5 0-.2-.6-1.5-.9-2.1-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.2.3-.9.9-.9 2.2s1 2.6 1.1 2.7c.1.2 1.9 3 4.7 4.2.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3zM12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.4 1.3 4.9L2 22l5.2-1.3c1.4.8 3 1.2 4.8 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2z"/></svg>
+          </a>
+          <a href="#" id="igIcon" aria-label="Instagram">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c9a227" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="3.8"/><circle cx="17.2" cy="6.8" r="1" fill="#c9a227" stroke="none"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="foot">
+        <h4 data-i18n="footLinks"></h4>
+        <a href="#products" data-i18n="navProducts"></a>
+        <a href="#about" data-i18n="navAbout"></a>
+        <a href="#" id="footWa" data-i18n="footOrder"></a>
+        <a href="#" id="footIg" target="_blank" rel="noopener" data-i18n="footIg"></a>
+      </div>
+      <div class="foot">
+        <h4 data-i18n="footHours"></h4>
+        <p data-i18n="hours1"></p>
+        <p data-i18n="hours2"></p>
+        <p data-i18n="hours3"></p>
+      </div>
+    </div>
+    <div class="copy">© <span id="year"></span> <span id="copyName"></span> — <span data-i18n="rights"></span></div>
+  </div>
+</footer>
+
+<button class="cart-fab" id="fab">
+  <span data-i18n="checkout"></span>
+  <span class="cart-count" id="fabCount">0</span>
+</button>
+
+<div class="overlay" id="overlay"></div>
+
+<aside class="drawer" id="drawer">
+  <div class="drawer-head">
+    <h3 data-i18n="yourOrder"></h3>
+    <button class="close" id="closeDrawer">&times;</button>
+  </div>
+  <div class="drawer-body">
+    <div id="lines"></div>
+    <div class="form" id="form">
+      <div class="form-title" data-i18n="formTitle"></div>
+      <div class="form-hint" data-i18n="formHint"></div>
+
+      <div class="field" id="fName">
+        <label><span data-i18n="lName"></span> <span class="req">*</span></label>
+        <input id="iName" type="text" autocomplete="name">
+        <div class="err" data-i18n="eName"></div>
+      </div>
+
+      <div class="field" id="fPhone">
+        <label><span data-i18n="lPhone"></span> <span class="req">*</span></label>
+        <input id="iPhone" type="tel" inputmode="tel" dir="ltr" placeholder="07XX XXX XXXX" autocomplete="tel">
+        <div class="err" data-i18n="ePhone"></div>
+      </div>
+
+      <div class="field" id="fProv">
+        <label><span data-i18n="lProv"></span> <span class="req">*</span></label>
+        <select id="iProv"></select>
+        <div class="err" data-i18n="eProv"></div>
+      </div>
+
+      <div class="field" id="fAddr">
+        <label><span data-i18n="lAddr"></span> <span class="req">*</span></label>
+        <textarea id="iAddr" rows="2"></textarea>
+        <div class="err" data-i18n="eAddr"></div>
+      </div>
+
+      <div class="field">
+        <label data-i18n="lNotes"></label>
+        <textarea id="iNotes" rows="2"></textarea>
+      </div>
+
+      <!-- فخ للبوتات — مخفي عن الزبائن / bot trap, hidden from humans -->
+      <div class="hp" aria-hidden="true">
+        <label>Company</label>
+        <input id="iHp" type="text" tabindex="-1" autocomplete="off">
+      </div>
+    </div>
+
+    <!-- شاشة التأكيد بعد إرسال الطلب -->
+    <div class="success" id="success">
+      <div class="tick">
+        <svg viewBox="0 0 52 52" width="46" height="46">
+          <circle cx="26" cy="26" r="24" fill="none" stroke="#25d366" stroke-width="3"/>
+          <path d="M15 27l8 8 15-16" fill="none" stroke="#25d366" stroke-width="4"
+                stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <h4 data-i18n="okTitle"></h4>
+      <p data-i18n="okBody"></p>
+      <div class="ref" id="okRef"></div>
+      <a href="#" class="btn btn-wa btn-block" id="okWa" target="_blank">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="#04310f"><path d="M17.5 14.4c-.3-.2-1.7-.9-2-1-.3-.1-.4-.2-.6.1s-.7.9-.9 1.1c-.2.2-.3.2-.6.1-.3-.2-1.2-.5-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6l.5-.5c.1-.2.2-.3.3-.5 0-.2 0-.4 0-.5 0-.2-.6-1.5-.9-2.1-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.2.3-.9.9-.9 2.2s1 2.6 1.1 2.7c.1.2 1.9 3 4.7 4.2.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3zM12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.4 1.3 4.9L2 22l5.2-1.3c1.4.8 3 1.2 4.8 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2z"/></svg>
+        <span data-i18n="okWa"></span>
+      </a>
+      <button class="btn btn-ghost btn-block" id="okDone" style="margin-top:10px" data-i18n="okDone"></button>
+    </div>
+  </div>
+  <div class="drawer-foot" id="drawerFoot">
+    <div class="total"><span data-i18n="total"></span><b id="total">0</b></div>
+    <p class="note" data-i18n="sendNote"></p>
+    <button class="btn btn-wa btn-block" id="sendWa">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="#04310f"><path d="M17.5 14.4c-.3-.2-1.7-.9-2-1-.3-.1-.4-.2-.6.1s-.7.9-.9 1.1c-.2.2-.3.2-.6.1-.3-.2-1.2-.5-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6l.5-.5c.1-.2.2-.3.3-.5 0-.2 0-.4 0-.5 0-.2-.6-1.5-.9-2.1-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.2.3-.9.9-.9 2.2s1 2.6 1.1 2.7c.1.2 1.9 3 4.7 4.2.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3zM12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.4 1.3 4.9L2 22l5.2-1.3c1.4.8 3 1.2 4.8 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2z"/></svg>
+      <span data-i18n="sendBtn"></span>
+    </button>
+  </div>
+</aside>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ==========================================================================
+   ★★★  الإعدادات — عدّل هذا القسم فقط  /  SETTINGS — edit only this block ★★★
+   ========================================================================== */
+const CONFIG = {
+
+  brand:    { ar:"فلوران للعطور", en:"Florane Perfumes" },
+  tagline:  { ar:"عطور أصلية",    en:"Authentic Perfumes" },
+  currency: { ar:"د.ع",           en:"IQD" },
+
+  // رقم الواتساب — بصيغة دولية بدون + / WhatsApp number, international, no +
+  whatsapp: "9647508274568",
+
+  // رابط الانستغرام — اتركه "" لإخفاء الأيقونة / leave "" to hide the icon
+  instagram: "https://www.instagram.com/floran.perfume",
+
+  // ==========================================================================
+  //  المنتجات / PRODUCTS
+  //  كل عطر له اسم بالعربي والإنكليزي. إذا تركت en فارغاً يظهر العربي.
+  //  Each perfume has an Arabic and English name. Empty "en" falls back to Arabic.
+  //
+  //  image    : "images/oud.jpg"  أو  ""  لعرض القنينة الذهبية الافتراضية
+  //  oldPrice : 0 لإخفاء السعر القديم
+  //  inStock  : false إذا نفدت الكمية
+  // ==========================================================================
+  products: [
+    { id:1, inStock:true,  image:"", price:45000, oldPrice:55000, ml:100,
+      name:{ar:"عود ملكي",   en:"Royal Oud"},     cat:{ar:"شرقي",  en:"Oriental"},
+      notes:{ar:"عود · عنبر · مسك",      en:"Oud · Amber · Musk"},
+      tag:{ar:"الأكثر مبيعاً", en:"Best seller"} },
+
+    { id:2, inStock:true,  image:"", price:25000, oldPrice:0, ml:50,
+      name:{ar:"مسك أبيض",   en:"White Musk"},    cat:{ar:"شرقي",  en:"Oriental"},
+      notes:{ar:"مسك · فانيليا · خشب",   en:"Musk · Vanilla · Wood"},
+      tag:{ar:"", en:""} },
+
+    { id:3, inStock:true,  image:"", price:38000, oldPrice:0, ml:100,
+      name:{ar:"عنبر الشرق", en:"Orient Amber"},  cat:{ar:"شرقي",  en:"Oriental"},
+      notes:{ar:"عنبر · بخور · صندل",    en:"Amber · Incense · Sandalwood"},
+      tag:{ar:"جديد", en:"New"} },
+
+    { id:4, inStock:true,  image:"", price:42000, oldPrice:0, ml:75,
+      name:{ar:"ورد طائفي",  en:"Taif Rose"},     cat:{ar:"زهري",  en:"Floral"},
+      notes:{ar:"ورد · فاوانيا · مسك",   en:"Rose · Peony · Musk"},
+      tag:{ar:"", en:""} },
+
+    { id:5, inStock:true,  image:"", price:35000, oldPrice:40000, ml:100,
+      name:{ar:"بلو سيدرا",  en:"Blue Cedra"},    cat:{ar:"فرنسي", en:"French"},
+      notes:{ar:"حمضيات · أرز · عنبر",   en:"Citrus · Cedar · Amber"},
+      tag:{ar:"", en:""} },
+
+    { id:6, inStock:true,  image:"", price:48000, oldPrice:0, ml:90,
+      name:{ar:"نويرا",      en:"Noira"},         cat:{ar:"فرنسي", en:"French"},
+      notes:{ar:"ياسمين · لوز · فانيليا", en:"Jasmine · Almond · Vanilla"},
+      tag:{ar:"", en:""} },
+
+    { id:7, inStock:false, image:"", price:30000, oldPrice:0, ml:60,
+      name:{ar:"صندل هندي",  en:"Indian Sandal"}, cat:{ar:"شرقي",  en:"Oriental"},
+      notes:{ar:"صندل · جوزة الطيب",     en:"Sandalwood · Nutmeg"},
+      tag:{ar:"", en:""} },
+
+    { id:8, inStock:true,  image:"", price:33000, oldPrice:0, ml:75,
+      name:{ar:"ياسمين شامي",en:"Damask Jasmine"},cat:{ar:"زهري",  en:"Floral"},
+      notes:{ar:"ياسمين · برتقال · مسك", en:"Jasmine · Orange · Musk"},
+      tag:{ar:"", en:""} }
+  ]
+};
+/* ==========================================================================
+   ★★★  نهاية الإعدادات / END OF SETTINGS  ★★★
+   ========================================================================== */
+
+
+/* ---------- محافظات العراق الـ18 / The 18 governorates of Iraq ---------- */
+const PROVINCES = [
+  {ar:"بغداد",            en:"Baghdad"},
+  {ar:"البصرة",           en:"Basra"},
+  {ar:"نينوى",            en:"Nineveh"},
+  {ar:"أربيل",            en:"Erbil"},
+  {ar:"السليمانية",       en:"Sulaymaniyah"},
+  {ar:"دهوك",             en:"Duhok"},
+  {ar:"كركوك",            en:"Kirkuk"},
+  {ar:"الأنبار",          en:"Anbar"},
+  {ar:"بابل",             en:"Babil"},
+  {ar:"كربلاء",           en:"Karbala"},
+  {ar:"النجف",            en:"Najaf"},
+  {ar:"الديوانية",        en:"Diwaniyah"},
+  {ar:"المثنى",           en:"Muthanna"},
+  {ar:"ذي قار",           en:"Dhi Qar"},
+  {ar:"ميسان",            en:"Maysan"},
+  {ar:"واسط",             en:"Wasit"},
+  {ar:"ديالى",            en:"Diyala"},
+  {ar:"صلاح الدين",       en:"Salah al-Din"}
+];
+
+/* ---------- النصوص / Translations ---------- */
+const T = {
+  ar:{
+    topbar:"توصيل لجميع محافظات العراق · الدفع عند الاستلام",
+    navProducts:"المنتجات", navAbout:"من نحن", navContact:"تواصل معنا",
+    eyebrow:"أصلي ١٠٠٪",
+    heroLine1:"عطور تليق بك", heroLine2:"وتبقى معك طوال اليوم",
+    heroSub:"تشكيلة مختارة من العطور الشرقية والفرنسية، بثبات عالٍ وأسعار في متناول الجميع.",
+    heroBtn1:"تصفّح العطور", heroBtn2:"اسأل عن عطر معيّن",
+    f1t:"توصيل لكل المحافظات", f1s:"خلال ٢٤ إلى ٤٨ ساعة",
+    f2t:"الدفع عند الاستلام",  f2s:"تدفع بعد ما تستلم الطلب",
+    f3t:"ضمان الأصلية",        f3s:"استبدال خلال ٣ أيام",
+    prodTitle:"تشكيلة العطور",
+    prodSub:"اختر عطرك واضغط «أضف للطلب» — يوصلنا الطلب على واتساب مباشرة",
+    all:"الكل", ml:"مل",
+    addBtn:"أضف للطلب", added:"تمت الإضافة ✓", outBtn:"غير متوفر", outBadge:"نفدت الكمية",
+    aboutTitle:"لماذا تشتري منّا؟",
+    aboutP1:"نوفر عطوراً أصلية مختارة بعناية، مع إمكانية الشم والتجربة قبل الشراء عند التوصيل داخل بغداد. كل عطر يأتي بعبوته الأصلية المغلقة.",
+    aboutP2:"إذا ما عجبك العطر عند الاستلام، ترجعه بدون أي التزام — راحتك أهم من البيعة.",
+    s1n:"+٥٠٠", s1l:"زبون سعيد", s2n:"١٨", s2l:"محافظة", s3n:"٤.٩", s3l:"تقييم الزبائن",
+    footAbout:"عطور أصلية بأسعار مناسبة، توصيل لجميع محافظات العراق مع الدفع عند الاستلام.",
+    footLinks:"روابط", footOrder:"اطلب عبر واتساب", footIg:"صفحتنا على انستغرام", footHours:"أوقات الدوام",
+    hours1:"السبت — الخميس", hours2:"١٠:٠٠ صباحاً — ١٠:٠٠ مساءً", hours3:"الجمعة: ٤:٠٠ — ١٠:٠٠ مساءً",
+    rights:"جميع الحقوق محفوظة",
+    checkout:"إتمام الطلب", yourOrder:"طلبك", total:"المجموع",
+    emptyCart:"سلة الطلب فارغة", emptyHint:"اختر عطراً من التشكيلة",
+    formTitle:"بيانات التوصيل",
+    formHint:"املأ الحقول المطلوبة حتى نتمكن من توصيل طلبك",
+    lName:"الاسم الكامل", lPhone:"رقم الهاتف", lProv:"المحافظة",
+    lAddr:"العنوان بالتفصيل", lNotes:"ملاحظات (اختياري)",
+    provPick:"— اختر المحافظة —",
+    eName:"الرجاء كتابة الاسم", ePhone:"رقم غير صحيح — مثال: 07701234567",
+    eProv:"الرجاء اختيار المحافظة", eAddr:"الرجاء كتابة العنوان (أقرب نقطة دالة)",
+    sendNote:"سنتصل بك لتأكيد الطلب قبل التوصيل",
+    sendBtn:"إرسال الطلب",
+    okTitle:"تم استلام طلبك ✓",
+    okBody:"شكراً لك. سنتصل بك خلال وقت قصير لتأكيد التوصيل.",
+    okWa:"تواصل معنا على واتساب",
+    okDone:"إغلاق",
+    toastAdd:"تمت الإضافة ✓", toastFix:"أكمل البيانات المطلوبة",
+    toastFail:"تعذّر الإرسال — سنفتح واتساب بدلاً من ذلك",
+    askMsg:"مرحباً، أريد الاستفسار عن العطور المتوفرة",
+    mOrder:"طلب جديد", mCustomer:"بيانات الزبون",
+    mName:"الاسم", mPhone:"الهاتف", mProv:"المحافظة", mAddr:"العنوان", mNotes:"ملاحظات",
+    mTotal:"المجموع"
+  },
+  en:{
+    topbar:"Delivery to all Iraqi governorates · Cash on delivery",
+    navProducts:"Perfumes", navAbout:"About", navContact:"Contact",
+    eyebrow:"100% AUTHENTIC",
+    heroLine1:"Fragrance worthy of you", heroLine2:"that lasts all day",
+    heroSub:"A selected range of Oriental and French perfumes — strong lasting power, prices within everyone's reach.",
+    heroBtn1:"Browse perfumes", heroBtn2:"Ask about a perfume",
+    f1t:"Nationwide delivery", f1s:"Within 24 to 48 hours",
+    f2t:"Cash on delivery",    f2s:"Pay only when it arrives",
+    f3t:"Authenticity guarantee", f3s:"Exchange within 3 days",
+    prodTitle:"Our Collection",
+    prodSub:"Pick a perfume and tap “Add to order” — it reaches us on WhatsApp",
+    all:"All", ml:"ml",
+    addBtn:"Add to order", added:"Added ✓", outBtn:"Unavailable", outBadge:"Out of stock",
+    aboutTitle:"Why buy from us?",
+    aboutP1:"Carefully selected authentic perfumes, with the option to smell and try before you buy on delivery inside Baghdad. Every bottle arrives sealed in its original packaging.",
+    aboutP2:"If you don't like it when it arrives, send it back — no obligation. Your comfort matters more than the sale.",
+    s1n:"500+", s1l:"Happy customers", s2n:"18", s2l:"Governorates", s3n:"4.9", s3l:"Customer rating",
+    footAbout:"Authentic perfumes at fair prices, delivered across Iraq with cash on delivery.",
+    footLinks:"Links", footOrder:"Order on WhatsApp", footIg:"Our Instagram", footHours:"Opening hours",
+    hours1:"Saturday — Thursday", hours2:"10:00 AM — 10:00 PM", hours3:"Friday: 4:00 — 10:00 PM",
+    rights:"All rights reserved",
+    checkout:"Checkout", yourOrder:"Your order", total:"Total",
+    emptyCart:"Your order is empty", emptyHint:"Pick a perfume from the collection",
+    formTitle:"Delivery details",
+    formHint:"Fill in the required fields so we can deliver your order",
+    lName:"Full name", lPhone:"Phone number", lProv:"Governorate",
+    lAddr:"Full address", lNotes:"Notes (optional)",
+    provPick:"— Select governorate —",
+    eName:"Please enter your name", ePhone:"Invalid number — e.g. 07701234567",
+    eProv:"Please select a governorate", eAddr:"Please enter your address (nearest landmark)",
+    sendNote:"We'll call you to confirm your order before delivery",
+    sendBtn:"Send order",
+    okTitle:"Order received ✓",
+    okBody:"Thank you. We'll call you shortly to confirm delivery.",
+    okWa:"Chat with us on WhatsApp",
+    okDone:"Close",
+    toastAdd:"Added ✓", toastFix:"Please complete the required fields",
+    toastFail:"Couldn't send — opening WhatsApp instead",
+    askMsg:"Hello, I'd like to ask about the perfumes you have",
+    mOrder:"New order", mCustomer:"Customer details",
+    mName:"Name", mPhone:"Phone", mProv:"Governorate", mAddr:"Address", mNotes:"Notes",
+    mTotal:"Total"
+  }
+};
+
+/* ======================================================================= */
+const $ = id => document.getElementById(id);
+let lang = "ar";
+const t  = k => T[lang][k];
+const L  = o => (o && (o[lang] || o.ar)) || "";
+
+const waBase = "https://wa.me/" + CONFIG.whatsapp;
+const fmt = n => n.toLocaleString("en-US") + " " + CONFIG.currency[lang];
+
+const BOTTLE = `<svg class="bottle" viewBox="0 0 100 150" fill="none">
+  <rect x="38" y="4" width="24" height="18" rx="3" fill="#c9a227" opacity=".8"/>
+  <rect x="43" y="20" width="14" height="14" fill="#c9a227" opacity=".4"/>
+  <rect x="22" y="32" width="56" height="112" rx="12" fill="#c9a227" opacity=".14" stroke="#c9a227" stroke-opacity=".45"/>
+  <rect x="33" y="70" width="34" height="46" rx="5" fill="#c9a227" opacity=".2"/>
+</svg>`;
+
+/* ---------- الخلفية المتحركة ---------- */
+(function buildOrbs(){
+  const host = $("orbs");
+  const N = window.innerWidth < 700 ? 9 : 16;
+  let html = "";
+  for (let i = 0; i < N; i++){
+    const size  = 60 + Math.random() * 230;
+    const blur  = 22 + Math.random() * 46;
+    const dur   = 16 + Math.random() * 26;
+    const delay = -Math.random() * 26;
+    const dx    = (Math.random() * 2 - 1) * 190;
+    const dy    = (Math.random() * 2 - 1) * 170;
+    const sc    = 0.75 + Math.random() * 0.7;
+    const o1    = 0.05 + Math.random() * 0.10;
+    const o2    = 0.16 + Math.random() * 0.22;
+    html += `<span class="orb" style="
+      width:${size}px;height:${size}px;
+      top:${Math.random()*100}%;left:${Math.random()*100}%;
+      --b:${blur}px;--dur:${dur}s;--delay:${delay}s;
+      --dx:${dx}px;--dy:${dy}px;--sc:${sc};--o1:${o1};--o2:${o2};"></span>`;
+  }
+  host.innerHTML = html;
+})();
+
+/* ---------- تبديل اللغة ---------- */
+function applyLang(next){
+  lang = next;
+  document.documentElement.lang = lang;
+  document.documentElement.dir  = lang === "ar" ? "rtl" : "ltr";
+
+  document.querySelectorAll("[data-i18n]").forEach(el => {
+    el.textContent = t(el.dataset.i18n);
+  });
+
+  $("btnAr").classList.toggle("on", lang === "ar");
+  $("btnEn").classList.toggle("on", lang === "en");
+
+  const brand = L(CONFIG.brand);
+  document.title = brand + " | " + L(CONFIG.tagline);
+  $("brandName").textContent = brand;
+  $("brandSub").textContent  = L(CONFIG.tagline);
+  $("footName").textContent  = brand;
+  $("copyName").textContent  = brand;
+  $("year").textContent      = new Date().getFullYear();
+
+  const ask = waBase + "?text=" + encodeURIComponent(t("askMsg"));
+  $("heroWa").href = ask; $("footWa").href = ask; $("waIcon").href = ask;
+
+  if (CONFIG.instagram){
+    $("igIcon").href = CONFIG.instagram; $("igIcon").target = "_blank";
+    $("footIg").href = CONFIG.instagram; $("footIg").style.display = "";
+  } else {
+    $("igIcon").style.display = "none";
+    $("footIg").style.display = "none";
+  }
+
+  buildProvinces();
+  renderFilters();
+  renderGrid();
+  sync();
+}
+$("btnAr").onclick = () => applyLang("ar");
+$("btnEn").onclick = () => applyLang("en");
+
+/* ---------- المحافظات ---------- */
+function buildProvinces(){
+  const sel = $("iProv");
+  const cur = sel.value;
+  sel.innerHTML = `<option value="">${t("provPick")}</option>` +
+    PROVINCES.map((p,i) => `<option value="${i}">${L(p)}</option>`).join("");
+  if (cur) sel.value = cur;
+}
+
+/* ---------- الفلاتر ---------- */
+let activeCat = "__all__";
+function catKeys(){
+  const seen = [];
+  CONFIG.products.forEach(p => { if (!seen.includes(p.cat.ar)) seen.push(p.cat.ar); });
+  return seen;
+}
+function catLabel(key){
+  const p = CONFIG.products.find(x => x.cat.ar === key);
+  return p ? L(p.cat) : key;
+}
+function renderFilters(){
+  const keys = catKeys();
+  $("filters").innerHTML =
+    `<button class="chip${activeCat==="__all__"?" on":""}" data-cat="__all__">${t("all")}</button>` +
+    keys.map(k => `<button class="chip${activeCat===k?" on":""}" data-cat="${k}">${catLabel(k)}</button>`).join("");
+  document.querySelectorAll(".chip").forEach(b =>
+    b.onclick = () => { activeCat = b.dataset.cat; renderFilters(); renderGrid(); }
+  );
+}
+
+/* ---------- المنتجات ---------- */
+function renderGrid(){
+  const list = CONFIG.products.filter(p => activeCat === "__all__" || p.cat.ar === activeCat);
+  $("grid").innerHTML = list.map((p,i) => `
+    <article class="card reveal${i%4===1?" d1":i%4===2?" d2":i%4===3?" d3":""}">
+      <div class="card-img">
+        ${p.image ? `<img src="${p.image}" alt="${L(p.name)}" loading="lazy">` : BOTTLE}
+        ${!p.inStock ? `<span class="badge out">${t("outBadge")}</span>`
+                     : L(p.tag) ? `<span class="badge">${L(p.tag)}</span>` : ""}
+      </div>
+      <div class="card-body">
+        <h3>${L(p.name)}</h3>
+        <p class="notes">${L(p.notes)}</p>
+        <div class="card-meta">
+          <div class="price">${fmt(p.price)}${p.oldPrice?`<s>${p.oldPrice.toLocaleString("en-US")}</s>`:""}</div>
+          <span class="size">${p.ml} ${t("ml")}</span>
+        </div>
+        <button class="add" data-id="${p.id}" ${p.inStock?"":"disabled"}>
+          ${p.inStock ? t("addBtn") : t("outBtn")}
+        </button>
+      </div>
+    </article>`).join("");
+
+  document.querySelectorAll(".add").forEach(b => {
+    if (b.disabled) return;
+    b.onclick = () => {
+      add(+b.dataset.id);
+      b.textContent = t("added"); b.classList.add("added");
+      setTimeout(() => { b.textContent = t("addBtn"); b.classList.remove("added"); }, 1300);
+    };
+  });
+  observeReveals();
+}
+
+/* ---------- السلة ---------- */
+let cart = [];
+const product = id => CONFIG.products.find(p => p.id === id);
+const total   = () => cart.reduce((s,l) => s + product(l.id).price * l.qty, 0);
+const count   = () => cart.reduce((s,l) => s + l.qty, 0);
+
+function add(id){
+  const line = cart.find(l => l.id === id);
+  line ? line.qty++ : cart.push({ id, qty:1 });
+  sync(); showToast(t("toastAdd"), true);
+}
+function setQty(id, d){
+  const line = cart.find(l => l.id === id);
+  if (!line) return;
+  line.qty += d;
+  if (line.qty <= 0) cart = cart.filter(l => l.id !== id);
+  sync();
+  if (!cart.length) closeDrawer();
+}
+
+function sync(){
+  $("fabCount").textContent = count();
+  $("fab").classList.toggle("show", cart.length > 0);
+  $("total").textContent = fmt(total());
+  $("form").style.display = cart.length ? "block" : "none";
+
+  $("lines").innerHTML = cart.length ? cart.map(l => {
+    const p = product(l.id);
+    return `<div class="line">
+      <div class="line-img">${p.image?`<img src="${p.image}" alt="">`:BOTTLE.replace('class="bottle"','style="width:60%"')}</div>
+      <div class="line-info"><b>${L(p.name)}</b><small>${p.ml} ${t("ml")} · ${fmt(p.price)}</small></div>
+      <div class="qty">
+        <button data-m="${p.id}">−</button><span>${l.qty}</span><button data-p="${p.id}">+</button>
+      </div>
+    </div>`;
+  }).join("") : `<div class="empty"><div>🧴</div>${t("emptyCart")}<br><small>${t("emptyHint")}</small></div>`;
+
+  document.querySelectorAll("[data-p]").forEach(b => b.onclick = () => setQty(+b.dataset.p, 1));
+  document.querySelectorAll("[data-m]").forEach(b => b.onclick = () => setQty(+b.dataset.m, -1));
+}
+
+/* ---------- الدرج ---------- */
+function openDrawer(){ $("toast").classList.remove("show"); $("drawer").classList.add("show"); $("overlay").classList.add("show"); document.body.style.overflow="hidden"; }
+function closeDrawer(){ $("drawer").classList.remove("show"); $("overlay").classList.remove("show"); document.body.style.overflow=""; }
+$("fab").onclick = () => {
+  if ($("success").classList.contains("show")) resetDrawer();
+  openDrawer();
+};
+$("closeDrawer").onclick = closeDrawer;
+$("overlay").onclick = closeDrawer;
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeDrawer(); });
+
+/* ---------- التنبيه ---------- */
+let toastTimer;
+function showToast(msg, ok){
+  const el = $("toast");
+  el.textContent = msg;
+  el.style.background = ok ? "var(--green)" : "var(--danger)";
+  el.style.color = ok ? "#04310f" : "#fff";
+  el.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove("show"), 2200);
+}
+
+/* ---------- التحقق من البيانات ---------- */
+// يقبل 07XXXXXXXXX أو +9647XXXXXXXXX أو 009647XXXXXXXXX
+function normalisePhone(raw){
+  let d = (raw || "").replace(/\D/g, "");
+  if (d.startsWith("00964")) d = d.slice(5);
+  else if (d.startsWith("964")) d = d.slice(3);
+  if (d.startsWith("0")) d = d.slice(1);
+  return /^7\d{9}$/.test(d) ? "0" + d : null;
+}
+function mark(fieldId, bad){ $(fieldId).classList.toggle("bad", bad); }
+
+function validate(){
+  const name  = $("iName").value.trim();
+  const phone = normalisePhone($("iPhone").value);
+  const prov  = $("iProv").value;
+  const addr  = $("iAddr").value.trim();
+
+  mark("fName",  !name);
+  mark("fPhone", !phone);
+  mark("fProv",  prov === "");
+  mark("fAddr",  addr.length < 5);
+
+  if (!name || !phone || prov === "" || addr.length < 5) return null;
+  return { name, phone, prov:L(PROVINCES[+prov]), addr, notes:$("iNotes").value.trim() };
+}
+
+["iName","iPhone","iProv","iAddr"].forEach(id => {
+  $(id).addEventListener("input",  () => $(id).closest(".field").classList.remove("bad"));
+  $(id).addEventListener("change", () => $(id).closest(".field").classList.remove("bad"));
+});
+
+/* ---------- إرسال الطلب ---------- */
+// رقم مرجعي قصير لكل طلب
+function makeRef(){
+  const s = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  let r = "";
+  for (let i = 0; i < 5; i++) r += s[Math.floor(Math.random() * s.length)];
+  return "FL-" + r;
+}
+
+// نص الطلب لواتساب (يُستخدم كخطة بديلة إذا فشل الإرسال)
+function orderText(d, ref){
+  let m = `*${t("mOrder")} — ${L(CONFIG.brand)}*\n${ref}\n\n`;
+  cart.forEach(l => {
+    const p = product(l.id);
+    m += `• ${L(p.name)} (${p.ml} ${t("ml")}) × ${l.qty} — ${fmt(p.price * l.qty)}\n`;
+  });
+  m += `\n*${t("mTotal")}: ${fmt(total())}*\n`;
+  m += `\n———————————\n*${t("mCustomer")}*\n`;
+  m += `${t("mName")}: ${d.name}\n${t("mPhone")}: ${d.phone}\n`;
+  m += `${t("mProv")}: ${d.prov}\n${t("mAddr")}: ${d.addr}\n`;
+  if (d.notes) m += `${t("mNotes")}: ${d.notes}\n`;
+  return m;
+}
+
+function showSuccess(ref, d){
+  $("lines").style.display = "none";
+  $("form").style.display  = "none";
+  $("drawerFoot").classList.add("hide");
+  $("okRef").textContent = ref;
+  $("okWa").href = waBase + "?text=" +
+    encodeURIComponent(orderText(d, ref));
+  $("success").classList.add("show");
+  cart = [];
+  $("fabCount").textContent = 0;
+  $("fab").classList.remove("show");
+}
+
+function resetDrawer(){
+  $("success").classList.remove("show");
+  $("lines").style.display = "";
+  $("drawerFoot").classList.remove("hide");
+  ["iName","iPhone","iProv","iAddr","iNotes"].forEach(id => $(id).value = "");
+  document.querySelectorAll(".field.bad").forEach(f => f.classList.remove("bad"));
+  sync();
+}
+$("okDone").onclick = () => { closeDrawer(); setTimeout(resetDrawer, 400); };
+
+let sending = false;
+$("sendWa").onclick = async () => {
+  if (sending || !cart.length) return;
+
+  const d = validate();
+  if (!d){
+    showToast(t("toastFix"), false);
+    const bad = document.querySelector(".field.bad");
+    if (bad) bad.scrollIntoView({ behavior:"smooth", block:"center" });
+    return;
+  }
+
+  const ref = makeRef();
+  const btn = $("sendWa");
+  sending = true;
+  btn.classList.add("loading");
+  btn.disabled = true;
+
+  const payload = {
+    ref, lang,
+    name:d.name, phone:d.phone, province:d.prov, address:d.addr, notes:d.notes,
+    hp: $("iHp").value,
+    items: cart.map(l => {
+      const p = product(l.id);
+      return { name:L(p.name), ml:p.ml, qty:l.qty, sub:p.price * l.qty };
+    })
+  };
+
+  let ok = false;
+  try {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 12000);
+    const res = await fetch("/api/order", {
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify(payload),
+      signal: ctrl.signal
+    });
+    clearTimeout(timer);
+    ok = res.ok;
+  } catch { ok = false; }
+
+  sending = false;
+  btn.classList.remove("loading");
+  btn.disabled = false;
+
+  if (ok){
+    showSuccess(ref, d);
+  } else {
+    // الخطة البديلة: نفتح واتساب حتى لا يضيع الطلب
+    showToast(t("toastFail"), false);
+    window.open(waBase + "?text=" + encodeURIComponent(orderText(d, ref)), "_blank");
+  }
+};
+
+/* ---------- ظهور العناصر عند التمرير ---------- */
+let io;
+function observeReveals(){
+  if (!("IntersectionObserver" in window)){
+    document.querySelectorAll(".reveal").forEach(el => el.classList.add("in"));
+    return;
+  }
+  if (!io) io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target); } });
+  }, { rootMargin:"0px 0px -60px 0px", threshold:.08 });
+  document.querySelectorAll(".reveal:not(.in)").forEach(el => io.observe(el));
+}
+
+/* شبكة أمان: إذا لم تعمل حركة الظهور لأي سبب، أظهر كل شيء بعد 3 ثوانٍ */
+function revealAll(){ document.querySelectorAll(".reveal").forEach(el => el.classList.add("in")); }
+setTimeout(() => {
+  document.querySelectorAll(".reveal:not(.in)").forEach(el => {
+    const r = el.getBoundingClientRect();
+    if (r.top < window.innerHeight + 200) el.classList.add("in");
+  });
+}, 3000);
+window.addEventListener("load", () => setTimeout(observeReveals, 200));
+
+/* ---------- التشغيل ---------- */
+applyLang("ar");
+observeReveals();
+</script>
+</body>
+</html>

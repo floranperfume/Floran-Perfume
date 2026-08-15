@@ -1,0 +1,25 @@
+{
+  // اسم الـ Worker — يجب أن يطابق الاسم في Cloudflare
+  // Worker name — must match the one in Cloudflare
+  "name": "shop",
+
+  "main": "src/index.js",
+  "compatibility_date": "2026-08-01",
+
+  // ملفات الموقع
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS"
+  },
+
+  "observability": {
+    "enabled": true
+  }
+
+  // ملاحظة: TELEGRAM_TOKEN و TELEGRAM_CHAT_ID تُضاف كـ Secrets
+  // من لوحة Cloudflare — لا تكتبها هنا أبداً، هذا الملف عام على GitHub.
+  //
+  // Note: TELEGRAM_TOKEN and TELEGRAM_CHAT_ID are added as Secrets
+  // in the Cloudflare dashboard — never write them here, this file is
+  // public on GitHub.
+}
