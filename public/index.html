@@ -87,7 +87,7 @@ a{color:inherit;text-decoration:none}
 /* طبقة تعتيم فوق النقاط حتى يبقى النص واضحاً */
 #orbVeil{
   position:fixed;inset:0;z-index:0;pointer-events:none;
-  background:radial-gradient(ellipse at 50% 0%,transparent 0%,rgba(11,10,9,.55) 70%,rgba(11,10,9,.8) 100%);
+  background:radial-gradient(ellipse at 50% 0%,transparent 0%,rgba(11,10,9,.42) 70%,rgba(11,10,9,.70) 100%);
 }
 /* المحتوى فوق الخلفية المتحركة — بدون المساس بالعناصر الثابتة (الدرج/السلة) */
 .topbar,.hero,.features,section,footer{position:relative;z-index:1}
@@ -174,11 +174,15 @@ header{
    ============================================================ */
 .hero{padding:90px 0 78px;text-align:center;position:relative}
 .hero-inner>*{animation:riseIn .85s var(--ease) both}
-.hero-inner>*:nth-child(1){animation-delay:.02s}
-.hero-inner>*:nth-child(2){animation-delay:.14s}
-.hero-inner>*:nth-child(3){animation-delay:.26s}
-.hero-inner>*:nth-child(4){animation-delay:.38s}
-.hero-inner>*:nth-child(5){animation-delay:.5s}
+.hero-inner>*:nth-child(1){animation-delay:.02s}   /* الشعار */
+.hero-inner>*:nth-child(2){animation-delay:.16s}   /* أصلي ١٠٠٪ */
+.hero-inner>*:nth-child(3){animation:none}          /* العنوان — كل سطر يظهر لوحده */
+.hero-inner>*:nth-child(4){animation-delay:.94s}   /* الوصف */
+.hero-inner>*:nth-child(5){animation-delay:1.12s}  /* الأزرار */
+
+/* سطرا العنوان يظهران واحداً بعد الآخر */
+.hero h1 span{display:inline-block}
+.hero h1 .l1{animation:riseIn .8s var(--ease) .34s both}
 
 .hero-emblem{
   width:min(320px,64vw);height:auto;margin:0 auto 20px;
@@ -196,9 +200,19 @@ header{
 }
 .hero h1{font-size:clamp(2.15rem,6.4vw,3.9rem);font-weight:900;line-height:1.24;margin-bottom:16px}
 .hero h1 .g{
-  background:linear-gradient(100deg,var(--gold-soft),var(--gold) 45%,var(--gold-soft));
-  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
-  animation:glowPulse 5s ease-in-out infinite;
+  background:linear-gradient(100deg,
+    #8a6f1c 0%, var(--gold) 18%, #fff4cc 32%, var(--gold-soft) 46%,
+    var(--gold) 64%, #a8871f 82%, #8a6f1c 100%);
+  background-size:220% auto;
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;
+  filter:drop-shadow(0 0 20px rgba(201,162,39,.22));
+  animation:riseIn .8s var(--ease) .62s both,
+            shine 5.5s linear .62s infinite;
+}
+@keyframes shine{
+  from{background-position:0% 50%}
+  to{background-position:220% 50%}
 }
 .hero p{color:var(--muted);font-size:clamp(1rem,2.4vw,1.16rem);max-width:570px;margin:0 auto 34px}
 .hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
@@ -224,7 +238,7 @@ header{
    المميزات
    ============================================================ */
 .features{border-block:1px solid var(--line);background:rgba(19,17,16,.72);backdrop-filter:blur(6px)}
-.features-grid{display:grid;grid-template-columns:repeat(3,1fr)}
+.features-grid{display:grid;grid-template-columns:repeat(2,1fr)}
 .feature{padding:28px 18px;text-align:center;border-inline-start:1px solid var(--line);transition:background .3s}
 .feature:first-child{border-inline-start:none}
 .feature:hover{background:rgba(201,162,39,.04)}
@@ -353,7 +367,15 @@ section{padding:76px 0}
   display:flex;align-items:flex-start;gap:12px;
   padding:13px 0;border-bottom:1px solid var(--line);
   color:var(--muted);font-size:.97rem;line-height:1.75;
+  /* تبدأ مخفية ومزاحة، وتقفز عند التمرير */
+  opacity:0;transform:translateY(22px) scale(.97);
+  transition:opacity .6s var(--ease),transform .6s var(--ease);
 }
+.points li.in{opacity:1;transform:none}
+.points li:nth-child(1).in{transition-delay:.05s}
+.points li:nth-child(2).in{transition-delay:.19s}
+.points li:nth-child(3).in{transition-delay:.33s}
+.points li:nth-child(4).in{transition-delay:.47s}
 .points li:last-child{border-bottom:none}
 .points .dot{
   flex-shrink:0;width:9px;height:9px;border-radius:50%;margin-top:.62em;
@@ -562,7 +584,7 @@ footer{background:rgba(11,10,9,.85);border-top:1px solid var(--line);padding:50p
   <div class="wrap hero-inner">
     <img class="hero-emblem" src="images/emblem.png" alt="" width="320" height="166">
     <span class="eyebrow" data-i18n="eyebrow"></span>
-    <h1><span data-i18n="heroLine1"></span><br><span class="g" data-i18n="heroLine2"></span></h1>
+    <h1><span class="l1" data-i18n="heroLine1"></span><br><span class="g" data-i18n="heroLine2"></span></h1>
     <p data-i18n="heroSub"></p>
     <div class="hero-btns">
       <a href="#products" class="btn btn-gold" data-i18n="heroBtn1"></a>
@@ -580,10 +602,6 @@ footer{background:rgba(11,10,9,.85);border-top:1px solid var(--line);padding:50p
     <div class="feature reveal d1">
       <div class="feature-ico">💵</div>
       <b data-i18n="f2t"></b><small data-i18n="f2s"></small>
-    </div>
-    <div class="feature reveal d2">
-      <div class="feature-ico">✅</div>
-      <b data-i18n="f3t"></b><small data-i18n="f3s"></small>
     </div>
   </div>
 </div>
@@ -605,9 +623,9 @@ footer{background:rgba(11,10,9,.85);border-top:1px solid var(--line);padding:50p
       <h2 class="reveal" data-i18n="aboutTitle"></h2>
       <ul class="points">
         <li class="reveal"><span class="dot"></span><span data-i18n="pt1"></span></li>
-        <li class="reveal d1"><span class="dot"></span><span data-i18n="pt2"></span></li>
-        <li class="reveal d2"><span class="dot"></span><span data-i18n="pt3"></span></li>
-        <li class="reveal d3"><span class="dot"></span><span data-i18n="pt4"></span></li>
+        <li class="reveal"><span class="dot"></span><span data-i18n="pt2"></span></li>
+        <li class="reveal"><span class="dot"></span><span data-i18n="pt3"></span></li>
+        <li class="reveal"><span class="dot"></span><span data-i18n="pt4"></span></li>
       </ul>
     </div>
     <div class="about-visual reveal d2">
@@ -942,7 +960,6 @@ const T = {
     heroBtn1:"تصفّح العطور", heroBtn2:"اسأل عن عطر معيّن",
     f1t:"توصيل لكل المحافظات", f1s:"خلال ٢٤ إلى ٤٨ ساعة",
     f2t:"الدفع عند الاستلام",  f2s:"تدفع بعد ما تستلم الطلب",
-    f3t:"ضمان الأصلية",        f3s:"استبدال خلال ٣ أيام",
     prodTitle:"تشكيلة العطور",
     prodSub:"اختر عطرك واضغط «أضف للطلب» — يوصلنا الطلب على واتساب مباشرة",
     ml:"مل",
@@ -992,7 +1009,6 @@ const T = {
     heroBtn1:"Browse perfumes", heroBtn2:"Ask about a perfume",
     f1t:"Nationwide delivery", f1s:"Within 24 to 48 hours",
     f2t:"Cash on delivery",    f2s:"Pay only when it arrives",
-    f3t:"Authenticity guarantee", f3s:"Exchange within 3 days",
     prodTitle:"Our Collection",
     prodSub:"Pick a perfume and tap “Add to order” — it reaches us on WhatsApp",
     ml:"ml",
@@ -1064,8 +1080,8 @@ const BOTTLE = `<svg class="bottle" viewBox="0 0 100 150" fill="none">
     const dx    = (Math.random() * 2 - 1) * 190;
     const dy    = (Math.random() * 2 - 1) * 170;
     const sc    = 0.75 + Math.random() * 0.7;
-    const o1    = 0.05 + Math.random() * 0.10;
-    const o2    = 0.16 + Math.random() * 0.22;
+    const o1    = 0.10 + Math.random() * 0.13;
+    const o2    = 0.30 + Math.random() * 0.28;
     html += `<span class="orb" style="
       width:${size}px;height:${size}px;
       top:${Math.random()*100}%;left:${Math.random()*100}%;
@@ -1451,7 +1467,7 @@ function observeReveals(){
   }
   if (!io) io = new IntersectionObserver(entries => {
     entries.forEach(e => { if (e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target); } });
-  }, { rootMargin:"0px 0px -60px 0px", threshold:.08 });
+  }, { rootMargin:"0px 0px -80px 0px", threshold:.15 });
   document.querySelectorAll(".reveal:not(.in)").forEach(el => io.observe(el));
 }
 
