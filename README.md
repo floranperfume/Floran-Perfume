@@ -13,11 +13,13 @@ Orders arrive in your Telegram; WhatsApp stays as a second contact option.
 | | |
 |---|---|
 | Perfumes | Coromandel, Ombre Nomade, Bois d'Argent, Baccarat Rouge 540 |
+| Also | Discovery Set — 4 × 10 ml, 18,000 IQD |
 | Sizes | 30 ml — 15,000 IQD · 50 ml — 25,000 IQD |
 | Delivery | 6,000 IQD everywhere · **3,000 IQD to Mosul** |
 | Coverage | 18 governorates, 143 cities and districts |
 | WhatsApp | 9647508274568 |
 | Order alerts | Telegram, to two people |
+| Loyalty | 3rd order earns a free 10 ml bottle |
 | Instagram | instagram.com/floran.perfume |
 
 ---
@@ -63,6 +65,59 @@ unique `id`**. Two perfumes sharing an id will misbehave in the cart.
 
 **To mark something sold out** — `inStock:false`. The card greys out and the button
 disables. Better than deleting it, because customers see you carry it.
+
+### A product with one size only
+
+The Discovery Set has a single size, so the size buttons don't appear — a plain chip
+shows instead. The `label` replaces the automatic "10 ml" text:
+
+```js
+sizes:[ {ml:10, price:18000, label:{ ar:"٤ × ١٠ مل", en:"4 × 10 ml" }} ]
+```
+
+Use `label` on any size whose real name isn't just a number of millilitres.
+
+---
+
+## The loyalty gift
+
+The site advertises: **order 3 times, get a free 10 ml bottle of your choice.**
+
+For the counting to happen automatically you need one free Cloudflare add-on. Without
+it the offer still shows on the site and orders work exactly as normal — you'd just be
+tracking repeat customers by hand.
+
+### Turning the counter on (about 3 minutes)
+
+1. Cloudflare → **Storage & databases** → **KV** → **Create namespace**
+2. Name it `florane-orders` → Create
+3. Copy the **Namespace ID** it shows you
+4. On GitHub open `wrangler.jsonc`, find the loyalty block near the bottom, delete the
+   `/*` and `*/` lines, and paste your id in place of `PASTE_YOUR_NAMESPACE_ID_HERE`
+5. Commit
+
+From then on every Telegram order carries a line like:
+
+```
+🔁 الطلب رقم 2 لهذا الزبون
+باقي 1 طلب على الهدية
+```
+
+and on their third:
+
+```
+🔁 الطلب رقم 3 لهذا الزبون
+🎁 يستحق هدية — قنينة ١٠ مل من اختياره
+```
+
+Counting is by phone number, which is why the site tells customers to use the same
+number each time. It counts again from there — order 6 and order 9 also earn a gift.
+
+**To change how often the gift comes**, edit one line in `src/index.js`:
+
+```js
+const GIFT_EVERY = 3;
+```
 
 ---
 
@@ -145,12 +200,12 @@ image:"images/coromandel.jpg"
   data. Shrink free at [squoosh.app](https://squoosh.app)
 - **Filenames are case-sensitive** — `Oud.JPG` ≠ `oud.jpg`. Lowercase, no spaces
 
-Without photos the gold bottle placeholder shows, which looks fine but sells less.
-Real photos are the single biggest thing you can add now.
+All five products have their photos. Each bottle was cut out of its original photo and
+placed on the same gradient the cards use, which is why they sit flush with the design
+instead of looking like snapshots pasted on.
 
-Ombre Nomade already has its photo. It was cut out of its original background and
-placed on the same gradient the cards use, so it sits flush with the design. Do the
-same for the others: shoot on any background, and the cutout is what makes them match.
+If you add a perfume later, shoot it on any background at all — plain wall, table,
+anywhere. The cutout is what makes it match, not the setting you shot it in.
 
 ---
 

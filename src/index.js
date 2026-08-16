@@ -74,14 +74,15 @@ function validate(body) {
 
   const items = [];
   for (const it of body.items) {
-    const n   = clean(it && it.name, 80);
-    const qty = Number(it && it.qty);
-    const ml  = Number(it && it.ml);
-    const sub = Number(it && it.sub);
+    const n    = clean(it && it.name, 80);
+    const size = clean(it && it.size, 30);
+    const qty  = Number(it && it.qty);
+    const ml   = Number(it && it.ml);
+    const sub  = Number(it && it.sub);
     if (!n) return "items";
     if (!Number.isFinite(qty) || qty < 1 || qty > LIMITS.qty.max)   return "items";
     if (!Number.isFinite(sub) || sub < 0 || sub > LIMITS.price.max) return "items";
-    items.push({ name: n, qty, ml: Number.isFinite(ml) ? ml : 0, sub });
+    items.push({ name: n, size, qty, ml: Number.isFinite(ml) ? ml : 0, sub });
   }
 
   // المجموع يُحسب هنا من جديد، لا نثق بالرقم القادم من المتصفح
@@ -97,7 +98,31 @@ function validate(body) {
   };
 }
 
-function buildMessage(o) {
+/**
+ * كم مرة طلب هذا الرقم من قبل.
+ * يعمل فقط إذا ربطت مساحة KV باسم ORDERS — وبدونها يستمر كل شيء بشكل طبيعي.
+ *
+ * How many times this phone number has ordered before.
+ * Only runs if a KV namespace named ORDERS is bound; without it everything
+ * else still works exactly the same.
+ */
+async function countOrder(env, phone) {
+  if (!env.ORDERS) return null;
+  try {
+    const key  = "c:" + phone;
+    const prev = Number(await env.ORDERS.get(key)) || 0;
+    const n    = prev + 1;
+    await env.ORDERS.put(key, String(n));
+    return n;
+  } catch (err) {
+    console.warn("loyalty count failed:", err.message);
+    return null;
+  }
+}
+
+const GIFT_EVERY = 3;   // هدية مع كل طلب ثالث / a gift on every third order
+
+function buildMessage(o, visit) {
   const cur = o.lang === "en" ? "IQD" : "د.ع";
   const money = n => n.toLocaleString("en-US") + " " + cur;
 
@@ -106,7 +131,8 @@ function buildMessage(o) {
 
   for (const i of o.items) {
     m += `• ${esc(i.name)}`;
-    if (i.ml) m += ` (${i.ml} ml)`;
+    if (i.size)    m += ` (${esc(i.size)})`;
+    else if (i.ml) m += ` (${i.ml} ml)`;
     m += ` × ${i.qty} — ${money(i.sub)}\n`;
   }
 
@@ -119,6 +145,17 @@ function buildMessage(o) {
   m += `المحافظة: ${esc(o.province)} — ${esc(o.city)}\n`;
   m += `العنوان: ${esc(o.address)}\n`;
   if (o.notes) m += `ملاحظات: ${esc(o.notes)}\n`;
+
+  // عدّاد الولاء
+  if (visit) {
+    m += `\n🔁 <b>الطلب رقم ${visit} لهذا الزبون</b>\n`;
+    if (visit % GIFT_EVERY === 0) {
+      m += `🎁 <b>يستحق هدية — قنينة ١٠ مل من اختياره</b>\n`;
+    } else {
+      const left = GIFT_EVERY - (visit % GIFT_EVERY);
+      m += `باقي ${left} ${left === 1 ? "طلب" : "طلبات"} على الهدية\n`;
+    }
+  }
 
   // رابط يفتح محادثة واتساب مع الزبون مباشرة
   m += `\n📱 <a href="https://wa.me/964${o.phone.slice(1)}">فتح واتساب الزبون</a>`;
@@ -194,8 +231,10 @@ async function handleOrder(request, env) {
     return json({ ok: false, error: o }, 400);
   }
 
+  const visit = await countOrder(env, o.phone);
+
   try {
-    await sendTelegram(env, buildMessage(o));
+    await sendTelegram(env, buildMessage(o, visit));
   } catch (err) {
     return json({ ok: false, error: "send_failed", detail: String(err.message) }, 502);
   }

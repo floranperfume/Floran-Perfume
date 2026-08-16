@@ -16,6 +16,31 @@
     "enabled": true
   }
 
+  // ==========================================================================
+  //  عدّاد الولاء (اختياري) / LOYALTY COUNTER (optional)
+  //
+  //  يعدّ كم مرة طلب كل رقم هاتف، ويخبرك في تيليغرام متى يستحق الزبون هديته.
+  //  الموقع يعمل بدونه تماماً — هذه الميزة فقط تتوقف.
+  //
+  //  للتفعيل:
+  //   1. Cloudflare → Storage & databases → KV → Create namespace
+  //   2. سمِّها  florane-orders
+  //   3. انسخ الـ Namespace ID
+  //   4. احذف /* و */ تحت، وضع الـ ID مكان الفراغ
+  //
+  //  Counts how many times each phone number has ordered and tells you in
+  //  Telegram when a customer has earned their gift. The site works fine
+  //  without it — only this feature stops.
+  //
+  //  To enable: create a KV namespace called florane-orders, copy its id,
+  //  then uncomment the block below and paste the id in.
+  // ==========================================================================
+  /*
+  ,"kv_namespaces": [
+    { "binding": "ORDERS", "id": "PASTE_YOUR_NAMESPACE_ID_HERE" }
+  ]
+  */
+
   // ملاحظة: TELEGRAM_TOKEN و TELEGRAM_CHAT_ID تُضاف كـ Secrets
   // من لوحة Cloudflare — لا تكتبها هنا أبداً، هذا الملف عام على GitHub.
   //

@@ -97,6 +97,7 @@ a{color:inherit;text-decoration:none}
    ============================================================ */
 .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
 .reveal.in{opacity:1;transform:none}
+.card.reveal.in{transition-delay:0s}
 .reveal.d1{transition-delay:.07s}
 .reveal.d2{transition-delay:.14s}
 .reveal.d3{transition-delay:.21s}
@@ -283,6 +284,27 @@ section{padding:76px 0}
 .bottle{width:44%;max-width:118px;opacity:.9;transition:transform .5s var(--ease)}
 .card:hover .bottle{transform:translateY(-5px)}
 
+/* القنينة تخرج من العلبة عند ظهور البطاقة */
+.card-img .shot{
+  transform:translateY(34%) scale(.86);
+  opacity:0;
+  transition:transform 1.05s var(--ease),opacity .7s ease;
+}
+.card.in .card-img .shot{transform:translateY(0) scale(1);opacity:1}
+.card:hover .card-img .shot{transform:translateY(-7px) scale(1.05)}
+/* حافة داكنة أسفل الصورة — تبدو القنينة وكأنها تخرج من داخلها */
+.card-img::after{
+  content:"";position:absolute;inset-inline:0;bottom:0;height:26%;
+  background:linear-gradient(to top,#0e0c0a 8%,rgba(14,12,10,.55) 55%,transparent);
+  pointer-events:none;
+}
+.one-size{
+  display:inline-block;margin-bottom:11px;
+  font-size:.82rem;font-weight:700;color:var(--gold-soft);
+  background:rgba(201,162,39,.12);border:1px solid var(--line-2);
+  padding:4px 13px;border-radius:100px;
+}
+
 .badge{
   position:absolute;top:12px;inset-inline-start:12px;
   background:var(--gold);color:#17120a;font-size:.7rem;font-weight:900;
@@ -360,6 +382,58 @@ section{padding:76px 0}
   display:grid;place-items:center;
 }
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+
+/* عرض الولاء */
+.loyalty{padding:10px 0 76px}
+.loy-box{
+  display:flex;align-items:center;gap:28px;
+  background:linear-gradient(135deg,rgba(201,162,39,.10),rgba(25,22,20,.85) 55%);
+  border:1px solid var(--line-2);border-radius:20px;
+  padding:26px 30px;position:relative;overflow:hidden;
+}
+.loy-box::before{
+  content:"";position:absolute;inset:0;
+  background:radial-gradient(420px 200px at 12% 20%,rgba(201,162,39,.16),transparent 70%);
+  pointer-events:none;
+}
+.loy-img{
+  width:132px;height:auto;flex-shrink:0;
+  filter:drop-shadow(0 10px 26px rgba(201,162,39,.34));
+  animation:float 6s ease-in-out infinite;
+}
+.loy-text{position:relative;flex:1;min-width:0}
+.loy-badge{
+  display:inline-block;font-size:.7rem;font-weight:900;letter-spacing:1.6px;
+  color:#17120a;background:linear-gradient(135deg,var(--gold-soft),var(--gold));
+  padding:4px 13px;border-radius:100px;margin-bottom:9px;
+}
+.loy-text h2{font-size:clamp(1.3rem,3.4vw,1.75rem);font-weight:900;margin-bottom:7px}
+.loy-text p{color:var(--muted);font-size:.95rem;margin-bottom:15px}
+.loy-steps{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:11px}
+.loy-step{display:flex;align-items:center;gap:8px;font-size:.87rem;color:var(--muted)}
+.loy-step b{
+  width:27px;height:27px;border-radius:50%;flex-shrink:0;
+  display:grid;place-items:center;font-size:.82rem;
+  border:1px solid var(--line-2);color:var(--gold-soft);background:rgba(201,162,39,.08);
+}
+.loy-step.gift b{
+  background:linear-gradient(135deg,var(--gold-soft),var(--gold));color:#17120a;border-color:var(--gold);
+  animation:giftPulse 2.2s ease-in-out infinite;
+}
+.loy-step.gift span{color:var(--gold-soft);font-weight:800}
+@keyframes giftPulse{
+  0%,100%{box-shadow:0 0 0 0 rgba(201,162,39,.5)}
+  60%{box-shadow:0 0 0 11px rgba(201,162,39,0)}
+}
+.loy-arrow{color:var(--gold);opacity:.55}
+html[dir="rtl"] .loy-arrow{transform:scaleX(-1)}
+.loy-fine{color:#7d7466;font-size:.76rem}
+@media(max-width:720px){
+  .loy-box{flex-direction:column;text-align:center;gap:16px;padding:24px 20px}
+  .loy-img{width:104px}
+  .loy-steps{justify-content:center}
+  .loy-arrow{display:none}
+}
 
 /* نقاط المميزات */
 .points{list-style:none;margin-top:6px}
@@ -617,6 +691,27 @@ footer{background:rgba(11,10,9,.85);border-top:1px solid var(--line);padding:50p
   </div>
 </section>
 
+<section class="loyalty" id="loyalty">
+  <div class="wrap">
+    <div class="loy-box reveal">
+      <img class="loy-img" src="images/gift-10ml.png" alt="" width="132" height="132">
+      <div class="loy-text">
+        <span class="loy-badge" data-i18n="loyBadge"></span>
+        <h2 data-i18n="loyTitle"></h2>
+        <p data-i18n="loyBody"></p>
+        <div class="loy-steps">
+          <div class="loy-step"><b>1</b><span data-i18n="loyS1"></span></div>
+          <div class="loy-arrow">→</div>
+          <div class="loy-step"><b>2</b><span data-i18n="loyS2"></span></div>
+          <div class="loy-arrow">→</div>
+          <div class="loy-step gift"><b>3</b><span data-i18n="loyS3"></span></div>
+        </div>
+        <small class="loy-fine" data-i18n="loyFine"></small>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="about" id="about">
   <div class="wrap about-grid">
     <div>
@@ -821,7 +916,7 @@ const CONFIG = {
   //  inStock : false إذا نفدت الكمية
   // ==========================================================================
   products: [
-    { id:1, inStock:true, image:"",
+    { id:1, inStock:true, image:"images/coromandel.jpg",
       name:{ ar:"شانيل كورومندل", en:"Chanel Coromandel" },
       notes:{ ar:"باتشولي · بخور · فانيليا", en:"Patchouli · Incense · Vanilla" },
       tag:{ ar:"الأكثر مبيعاً", en:"Best seller" },
@@ -833,17 +928,27 @@ const CONFIG = {
       tag:{ ar:"", en:"" },
       sizes:[ {ml:30, price:15000}, {ml:50, price:25000} ] },
 
-    { id:3, inStock:true, image:"",
+    { id:3, inStock:true, image:"images/bois-dargent.jpg",
       name:{ ar:"ديور بوا دارجان", en:"Dior Bois d'Argent" },
       notes:{ ar:"بخور · إيريس · عسل", en:"Incense · Iris · Honey" },
       tag:{ ar:"", en:"" },
       sizes:[ {ml:30, price:15000}, {ml:50, price:25000} ] },
 
-    { id:4, inStock:true, image:"",
+    { id:4, inStock:true, image:"images/baccarat-540.jpg",
       name:{ ar:"بكارات روج 540", en:"Baccarat Rouge 540" },
       notes:{ ar:"زعفران · عنبر · خشب الأرز", en:"Saffron · Amber · Cedarwood" },
       tag:{ ar:"", en:"" },
-      sizes:[ {ml:30, price:15000}, {ml:50, price:25000} ] }
+      sizes:[ {ml:30, price:15000}, {ml:50, price:25000} ] },
+
+    // طقم التجربة — أربع قناني ١٠ مل، واحدة من كل عطر
+    // Discovery set — four 10 ml bottles, one of each perfume
+    { id:5, inStock:true, image:"images/set-10ml.jpg",
+      name:{ ar:"طقم التجربة — ٤ عطور", en:"Discovery Set — 4 Perfumes" },
+      notes:{ ar:"كورومندل · أومبر نوماد · بوا دارجان · بكارات ٥٤٠",
+              en:"Coromandel · Ombre Nomade · Bois d'Argent · Baccarat 540" },
+      tag:{ ar:"وفّر أكثر", en:"Best value" },
+      // size واحد فقط، لذلك لا تظهر أزرار الأحجام. label يستبدل نص «١٠ مل»
+      sizes:[ {ml:10, price:18000, label:{ ar:"٤ × ١٠ مل", en:"4 × 10 ml" }} ] }
   ]
 };
 /* ==========================================================================
@@ -974,6 +1079,11 @@ const T = {
     pt3:"نعتمد نسباً مرتفعة من الزيوت الطبيعية النقية، لنضمن لك فوحاناً غنياً وشذىً يدوم طويلاً.",
     pt4:"وبأسعار مناسبة في متناول الجميع.",
     vidTitle:"من داخل فلوران",
+    loyBadge:"عرض دائم",
+    loyTitle:"اطلب ٣ مرات — واختر هديتك",
+    loyBody:"مع طلبك الثالث من فلوران، نهديك قنينة ١٠ مل من أي عطر تختاره. بدون شروط وبدون بطاقات.",
+    loyS1:"طلبك الأول", loyS2:"طلبك الثاني", loyS3:"هديتك 🎁",
+    loyFine:"تُحتسب الطلبات برقم هاتفك — استخدم نفس الرقم في كل مرة.",
     footAbout:"عطور أصلية بأسعار مناسبة، توصيل لجميع محافظات العراق مع الدفع عند الاستلام.",
     footLinks:"روابط", footOrder:"اطلب عبر واتساب", footIg:"صفحتنا على انستغرام", footHours:"أوقات الدوام",
     hours1:"السبت — الخميس", hours2:"١٠:٠٠ صباحاً — ١٠:٠٠ مساءً", hours3:"الجمعة: ٤:٠٠ — ١٠:٠٠ مساءً",
@@ -1023,6 +1133,11 @@ const T = {
     pt3:"High concentrations of pure natural oils give a rich projection and a scent that lasts all day.",
     pt4:"At prices that stay within everyone's reach.",
     vidTitle:"Inside Florane",
+    loyBadge:"ALWAYS ON",
+    loyTitle:"Order 3 times — pick your gift",
+    loyBody:"On your third Florane order we send you a free 10 ml bottle of any perfume you choose. No conditions, no cards to carry.",
+    loyS1:"First order", loyS2:"Second order", loyS3:"Your gift 🎁",
+    loyFine:"Orders are counted by your phone number — use the same one each time.",
     footAbout:"Authentic perfumes at fair prices, delivered across Iraq with cash on delivery.",
     footLinks:"Links", footOrder:"Order on WhatsApp", footIg:"Our Instagram", footHours:"Opening hours",
     hours1:"Saturday — Thursday", hours2:"10:00 AM — 10:00 PM", hours3:"Friday: 4:00 — 10:00 PM",
@@ -1174,13 +1289,16 @@ const chosen = {};
 CONFIG.products.forEach(p => chosen[p.id] = p.sizes[0].ml);
 
 const sizeOf = (p, ml) => p.sizes.find(s => s.ml === ml) || p.sizes[0];
+// نص الحجم: label إن وُجد، وإلا «30 مل»
+const szText = sz => sz.label ? L(sz.label) : `${sz.ml} ${t("ml")}`;
+const szOf = (id, ml) => szText(sizeOf(product(id), ml));
 const priceOf = p => sizeOf(p, chosen[p.id]).price;
 
 function renderGrid(){
   $("grid").innerHTML = CONFIG.products.map((p,i) => `
     <article class="card reveal${i%4===1?" d1":i%4===2?" d2":i%4===3?" d3":""}" data-card="${p.id}">
       <div class="card-img">
-        ${p.image ? `<img src="${p.image}" alt="${L(p.name)}" loading="lazy">` : BOTTLE}
+        ${p.image ? `<img class="shot" src="${p.image}" alt="${L(p.name)}" loading="lazy">` : BOTTLE}
         ${!p.inStock ? `<span class="badge out">${t("outBadge")}</span>`
                      : L(p.tag) ? `<span class="badge">${L(p.tag)}</span>` : ""}
       </div>
@@ -1188,14 +1306,15 @@ function renderGrid(){
         <h3>${L(p.name)}</h3>
         <p class="notes">${L(p.notes)}</p>
 
+        ${p.sizes.length > 1 ? `
         <div class="sizes">
           ${p.sizes.map(sz => `
             <button class="size-btn${chosen[p.id]===sz.ml?" on":""}"
                     data-size="${p.id}" data-ml="${sz.ml}">
-              ${sz.ml} ${t("ml")}
+              ${szText(sz)}
               <small>${sz.price.toLocaleString("en-US")}</small>
             </button>`).join("")}
-        </div>
+        </div>` : `<div class="one-size">${szText(p.sizes[0])}</div>`}
 
         <div class="card-meta">
           <div class="price" data-price="${p.id}">${fmt(priceOf(p))}</div>
@@ -1271,7 +1390,7 @@ function sync(){
     const p = product(l.id);
     return `<div class="line">
       <div class="line-img">${p.image?`<img src="${p.image}" alt="">`:BOTTLE.replace('class="bottle"','style="width:60%"')}</div>
-      <div class="line-info"><b>${L(p.name)}</b><small>${l.ml} ${t("ml")} · ${fmt(linePrice(l))}</small></div>
+      <div class="line-info"><b>${L(p.name)}</b><small>${szOf(l.id, l.ml)} · ${fmt(linePrice(l))}</small></div>
       <div class="qty">
         <button data-m="${p.id}" data-ml="${l.ml}">−</button>
         <span>${l.qty}</span>
@@ -1363,7 +1482,7 @@ function orderText(d, ref){
   let m = `*${t("mOrder")} — ${L(CONFIG.brand)}*\n${ref}\n\n`;
   cart.forEach(l => {
     const p = product(l.id);
-    m += `• ${L(p.name)} (${l.ml} ${t("ml")}) × ${l.qty} — ${fmt(linePrice(l) * l.qty)}\n`;
+    m += `• ${L(p.name)} (${szOf(l.id, l.ml)}) × ${l.qty} — ${fmt(linePrice(l) * l.qty)}\n`;
   });
   m += `\n${t("mSub")}: ${fmt(subtotal())}\n`;
   m += `${t("mDelivery")}: ${fmt(d.fee)}\n`;
@@ -1425,6 +1544,7 @@ $("sendWa").onclick = async () => {
     hp: $("iHp").value,
     items: cart.map(l => ({
       name: L(product(l.id).name),
+      size: szOf(l.id, l.ml),
       ml:   l.ml,
       qty:  l.qty,
       sub:  linePrice(l) * l.qty
