@@ -322,8 +322,56 @@ section{padding:76px 0}
 }
 .card-meta{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:13px}
 .price{font-size:1.16rem;font-weight:900;color:var(--gold-soft);white-space:nowrap}
-.price s{font-size:.8rem;color:var(--muted);font-weight:500;margin-inline-start:7px}
+.price s{font-size:.82rem;color:#8b8172;font-weight:600;margin-inline-start:8px;text-decoration-color:#c0392b}
 .size{font-size:.78rem;color:var(--muted);border:1px solid var(--line);padding:2px 9px;border-radius:100px;white-space:nowrap;flex-shrink:0}
+
+/* شريط العرض والعدّاد */
+.sale-bar{
+  display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;
+  background:linear-gradient(120deg,rgba(201,162,39,.16),rgba(25,22,20,.9) 60%);
+  border:1px solid var(--line-2);border-radius:16px;
+  padding:15px 22px;margin-bottom:26px;position:relative;overflow:hidden;
+}
+.sale-bar::before{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(100deg,transparent 30%,rgba(255,244,204,.12) 50%,transparent 70%);
+  background-size:220% 100%;animation:shine 4.5s linear infinite;pointer-events:none;
+}
+.sale-left{display:flex;align-items:center;gap:12px;position:relative}
+.sale-badge{
+  direction:ltr;unicode-bidi:isolate;
+  background:linear-gradient(135deg,var(--gold-soft),var(--gold));color:#17120a;
+  font-weight:900;font-size:1rem;padding:6px 15px;border-radius:100px;white-space:nowrap;
+  box-shadow:0 0 20px rgba(201,162,39,.35);
+}
+.sale-txt{font-weight:700;font-size:.95rem}
+.clock{display:flex;align-items:center;gap:6px;position:relative;direction:ltr}
+.clock .unit{
+  min-width:52px;text-align:center;
+  background:rgba(11,10,9,.55);border:1px solid var(--line-2);border-radius:10px;padding:6px 4px;
+}
+.clock .unit b{display:block;font-size:1.18rem;font-weight:900;color:var(--gold-soft);line-height:1.15;
+  font-variant-numeric:tabular-nums}
+.clock .unit small{font-size:.62rem;color:var(--muted);letter-spacing:.4px}
+.clock .colon{color:var(--gold);font-weight:900;opacity:.5;padding-bottom:9px}
+@media(max-width:640px){
+  .sale-bar{flex-direction:column;align-items:stretch;gap:12px;padding:14px 16px;text-align:center}
+  .sale-left{justify-content:center}
+  .clock{justify-content:center}
+  .clock .unit{min-width:46px}
+  .sale-txt{font-size:.86rem}
+}
+
+/* ملصق نسبة الخصم */
+.badge.off{
+  direction:ltr;unicode-bidi:isolate;
+  inset-inline-start:auto;inset-inline-end:12px;
+  background:#c0392b;color:#fff;letter-spacing:.3px;
+  box-shadow:0 4px 16px rgba(192,57,43,.4);
+}
+
+/* تبديل صورة الحجم */
+.card-img .shot.swap{opacity:.15;transform:translateY(6px) scale(.97)}
 
 /* اختيار الحجم */
 .sizes{display:flex;gap:7px;margin-bottom:11px}
@@ -370,6 +418,9 @@ section{padding:76px 0}
   .size{font-size:.7rem;padding:1px 7px}
   .add{padding:9px;font-size:.85rem}
   .size-btn{font-size:.78rem;padding:6px 2px}
+  /* على الهاتف: ملصق الخصم أعلى، وملصق «الأكثر مبيعاً» أسفل حتى لا يتداخلا */
+  .card-img .badge:not(.out):not(.off){top:auto;bottom:10px;font-size:.64rem;padding:3px 9px}
+  .card-img .badge.off{font-size:.66rem;padding:3px 9px}
   .size-btn small{font-size:.66rem}
   .card-img{aspect-ratio:4/5}
 }
@@ -693,6 +744,22 @@ footer{background:rgba(11,10,9,.85);border-top:1px solid var(--line);padding:50p
       <p data-i18n="prodSub"></p>
       <div class="sec-line"></div>
     </div>
+    <div class="sale-bar reveal" id="saleBar" hidden>
+      <div class="sale-left">
+        <span class="sale-badge" id="saleBadge"></span>
+        <span class="sale-txt" data-i18n="saleTxt"></span>
+      </div>
+      <div class="clock" id="clock">
+        <div class="unit"><b id="cd">00</b><small data-i18n="cdD"></small></div>
+        <div class="colon">:</div>
+        <div class="unit"><b id="ch">00</b><small data-i18n="cdH"></small></div>
+        <div class="colon">:</div>
+        <div class="unit"><b id="cm">00</b><small data-i18n="cdM"></small></div>
+        <div class="colon">:</div>
+        <div class="unit"><b id="cs">00</b><small data-i18n="cdS"></small></div>
+      </div>
+    </div>
+
     <div class="grid" id="grid"></div>
   </div>
 </section>
@@ -901,7 +968,19 @@ const CONFIG = {
   //  الأجرة الافتراضية لكل المدن، ما عدا المدن التي لها fee خاص في قائمة المناطق
   //  Default fee for every city, except cities given their own fee in REGIONS
   // ==========================================================================
-  delivery: { default: 6000 },
+  delivery: { default: 5000 },
+
+  // ==========================================================================
+  //  عرض الخصم / DISCOUNT OFFER
+  //  until : تاريخ ووقت انتهاء العرض — غيّره لتمديد العرض
+  //          end date and time — change this to extend the offer
+  //  percent : الرقم الظاهر على الملصق فقط / the number shown on the badge only
+  //
+  //  إذا مرّ التاريخ يختفي العدّاد وحده، وتبقى الأسعار المخفّضة كما هي.
+  //  If the date passes the countdown hides itself and the discounted
+  //  prices stay exactly as they are — nothing on the page breaks.
+  // ==========================================================================
+  sale: { until: "2026-08-24T23:59:59", percent: 50 },
 
   // ==========================================================================
   //  فيديو المنتج (اختياري) / PRODUCT VIDEO (optional)
@@ -929,7 +1008,10 @@ const CONFIG = {
       desc:{ ar:"فخامة شرقية بعمق مخملي لا يُنسى.",
              en:"Oriental opulence with an unforgettable velvet depth." },
       tag:{ ar:"الأكثر مبيعاً", en:"Best seller" },
-      sizes:[ {ml:30, price:15000}, {ml:50, price:25000} ] },
+      sizes:[
+        {ml:30, price:15000, was:30000, img:"images/coromandel-30.jpg"},
+        {ml:50, price:25000, was:50000, img:"images/coromandel.jpg"}
+      ] },
 
     { id:2, inStock:true, image:"images/ombre-nomade.jpg",
       name:{ ar:"إل في أومبر نوماد", en:"LV Ombre Nomade" },
@@ -938,7 +1020,10 @@ const CONFIG = {
       desc:{ ar:"قوة داكنة بحضور ملكي جريء.",
              en:"Dark strength with a bold, regal presence." },
       tag:{ ar:"", en:"" },
-      sizes:[ {ml:30, price:15000}, {ml:50, price:25000} ] },
+      sizes:[
+        {ml:30, price:15000, was:30000, img:"images/ombre-nomade-30.jpg"},
+        {ml:50, price:25000, was:50000, img:"images/ombre-nomade.jpg"}
+      ] },
 
     { id:3, inStock:true, image:"images/bois-dargent.jpg",
       name:{ ar:"ديور بوا دارجان", en:"Dior Bois d'Argent" },
@@ -947,7 +1032,10 @@ const CONFIG = {
       desc:{ ar:"أناقة ناعمة بطابع بودري فاخر.",
              en:"Soft elegance with a luxurious powdery character." },
       tag:{ ar:"", en:"" },
-      sizes:[ {ml:30, price:15000}, {ml:50, price:25000} ] },
+      sizes:[
+        {ml:30, price:15000, was:30000, img:"images/bois-dargent-30.jpg"},
+        {ml:50, price:25000, was:50000, img:"images/bois-dargent.jpg"}
+      ] },
 
     { id:4, inStock:true, image:"images/baccarat-540.jpg",
       name:{ ar:"بكارات روج 540", en:"Baccarat Rouge 540" },
@@ -956,7 +1044,10 @@ const CONFIG = {
       desc:{ ar:"رائحة متوهّجة… حلوة، شفافة، وآسرة للحواس.",
              en:"A luminous scent — sweet, transparent, and captivating." },
       tag:{ ar:"", en:"" },
-      sizes:[ {ml:30, price:15000}, {ml:50, price:25000} ] },
+      sizes:[
+        {ml:30, price:15000, was:30000, img:"images/baccarat-540-30.jpg"},
+        {ml:50, price:25000, was:50000, img:"images/baccarat-540.jpg"}
+      ] },
 
     // طقم التجربة — أربع قناني ١٠ مل، واحدة من كل عطر
     // Discovery set — four 10 ml bottles, one of each perfume
@@ -964,11 +1055,11 @@ const CONFIG = {
       name:{ ar:"طقم التجربة — ٤ عطور", en:"Discovery Set — 4 Perfumes" },
       notes:{ ar:"كورومندل · أومبر نوماد · بوا دارجان · بكارات ٥٤٠",
               en:"Coromandel · Ombre Nomade · Bois d'Argent · Baccarat 540" },
-      desc:{ ar:"جرّب الأربعة، ثم اختر عطرك.",
-             en:"Try all four, then choose your signature." },
+      desc:{ ar:"٤٠ مل بالمجموع — جرّب الأربعة، ثم اختر عطرك.",
+             en:"40 ml in total — try all four, then choose your signature." },
       tag:{ ar:"وفّر أكثر", en:"Best value" },
       // size واحد فقط، لذلك لا تظهر أزرار الأحجام. label يستبدل نص «١٠ مل»
-      sizes:[ {ml:10, price:18000, label:{ ar:"٤ × ١٠ مل", en:"4 × 10 ml" }} ] }
+      sizes:[ {ml:10, price:20000, label:{ ar:"٤ × ١٠ مل", en:"4 × 10 ml" }} ] }
   ]
 };
 /* ==========================================================================
@@ -1099,6 +1190,7 @@ const T = {
     pt3:"نعتمد نسباً مرتفعة من الزيوت الطبيعية النقية، لنضمن لك فوحاناً غنياً وشذىً يدوم طويلاً.",
     pt4:"وبأسعار مناسبة في متناول الجميع.",
     vidTitle:"من داخل فلوران",
+    saleTxt:"ينتهي العرض بعد", cdD:"يوم", cdH:"ساعة", cdM:"دقيقة", cdS:"ثانية",
     loyBadge:"عرض دائم",
     loyTitle:"اطلب ٣ مرات — واختر هديتك",
     loyBody:"مع طلبك الثالث من فلوران، نهديك قنينة ١٠ مل من أي عطر تختاره. بدون شروط وبدون بطاقات.",
@@ -1153,6 +1245,7 @@ const T = {
     pt3:"High concentrations of pure natural oils give a rich projection and a scent that lasts all day.",
     pt4:"At prices that stay within everyone's reach.",
     vidTitle:"Inside Florane",
+    saleTxt:"Offer ends in", cdD:"DAYS", cdH:"HRS", cdM:"MIN", cdS:"SEC",
     loyBadge:"ALWAYS ON",
     loyTitle:"Order 3 times — pick your gift",
     loyBody:"On your third Florane order we send you a free 10 ml bottle of any perfume you choose. No conditions, no cards to carry.",
@@ -1306,21 +1399,32 @@ function deliveryFee(){
 /* ---------- المنتجات ---------- */
 // الحجم المختار حالياً لكل عطر / currently selected size per perfume
 const chosen = {};
-CONFIG.products.forEach(p => chosen[p.id] = p.sizes[0].ml);
+// يبدأ دائماً على الحجم الأكبر / always starts on the largest size
+CONFIG.products.forEach(p => chosen[p.id] = p.sizes.reduce((a,b) => b.ml > a.ml ? b : a).ml);
 
 const sizeOf = (p, ml) => p.sizes.find(s => s.ml === ml) || p.sizes[0];
 // نص الحجم: label إن وُجد، وإلا «30 مل»
 const szText = sz => sz.label ? L(sz.label) : `${sz.ml} ${t("ml")}`;
 const szOf = (id, ml) => szText(sizeOf(product(id), ml));
+const shotOf = (p, ml) => sizeOf(p, ml).img || p.image;      // صورة الحجم المختار
+const saleLive = () => {
+  const u = CONFIG.sale && CONFIG.sale.until ? new Date(CONFIG.sale.until) : null;
+  return u && !isNaN(u) && u.getTime() > Date.now();
+};
 const priceOf = p => sizeOf(p, chosen[p.id]).price;
+function priceHTML(p){
+  const sz = sizeOf(p, chosen[p.id]);
+  return fmt(sz.price) + (sz.was ? `<s>${sz.was.toLocaleString("en-US")}</s>` : "");
+}
 
 function renderGrid(){
   $("grid").innerHTML = CONFIG.products.map((p,i) => `
     <article class="card reveal${i%4===1?" d1":i%4===2?" d2":i%4===3?" d3":""}" data-card="${p.id}">
       <div class="card-img">
-        ${p.image ? `<img class="shot" src="${p.image}" alt="${L(p.name)}" loading="lazy">` : BOTTLE}
+        ${p.image ? `<img class="shot" data-shot="${p.id}" src="${shotOf(p, chosen[p.id])}" alt="${L(p.name)}" loading="lazy">` : BOTTLE}
         ${!p.inStock ? `<span class="badge out">${t("outBadge")}</span>`
                      : L(p.tag) ? `<span class="badge">${L(p.tag)}</span>` : ""}
+        ${p.inStock && sizeOf(p, chosen[p.id]).was ? `<span class="badge off" data-off="${p.id}">-${CONFIG.sale.percent}%</span>` : ""}
       </div>
       <div class="card-body">
         <h3>${L(p.name)}</h3>
@@ -1338,7 +1442,7 @@ function renderGrid(){
         </div>` : `<div class="one-size">${szText(p.sizes[0])}</div>`}
 
         <div class="card-meta">
-          <div class="price" data-price="${p.id}">${fmt(priceOf(p))}</div>
+          <div class="price" data-price="${p.id}">${priceHTML(p)}</div>
         </div>
 
         <button class="add" data-id="${p.id}" ${p.inStock?"":"disabled"}>
@@ -1352,11 +1456,24 @@ function renderGrid(){
     b.onclick = () => {
       const id = +b.dataset.size;
       chosen[id] = +b.dataset.ml;
+      const prod = product(id);
       const card = document.querySelector(`[data-card="${id}"]`);
       card.querySelectorAll("[data-size]").forEach(x =>
         x.classList.toggle("on", +x.dataset.ml === chosen[id]));
-      card.querySelector(`[data-price="${id}"]`).textContent =
-        fmt(priceOf(CONFIG.products.find(p => p.id === id)));
+      card.querySelector(`[data-price="${id}"]`).innerHTML = priceHTML(prod);
+
+      // بدّل الصورة — قنينة مختلفة لكل حجم
+      const shot = card.querySelector(`[data-shot="${id}"]`);
+      const next = shotOf(prod, chosen[id]);
+      if (shot && !shot.src.endsWith(next)){
+        shot.classList.add("swap");
+        const pre = new Image();
+        pre.onload = () => { shot.src = next; shot.classList.remove("swap"); };
+        pre.onerror = () => shot.classList.remove("swap");
+        pre.src = next;
+      }
+      const off = card.querySelector(`[data-off="${id}"]`);
+      if (off) off.style.display = sizeOf(prod, chosen[id]).was ? "" : "none";
     };
   });
 
@@ -1621,6 +1738,32 @@ setTimeout(() => {
   });
 }, 3000);
 window.addEventListener("load", () => setTimeout(observeReveals, 200));
+
+/* ---------- عدّاد العرض ---------- */
+let saleTimer;
+function tickSale(){
+  const bar = $("saleBar");
+  const end = CONFIG.sale && CONFIG.sale.until ? new Date(CONFIG.sale.until).getTime() : NaN;
+  if (isNaN(end)) { bar.hidden = true; return; }
+
+  let left = end - Date.now();
+  if (left <= 0){
+    // انتهى الوقت — نخفي العدّاد فقط، والأسعار المخفّضة تبقى كما هي
+    bar.hidden = true;
+    clearInterval(saleTimer);
+    return;
+  }
+  bar.hidden = false;
+  const sec = Math.floor(left/1000);
+  const pad = n => String(n).padStart(2,"0");
+  $("cd").textContent = pad(Math.floor(sec/86400));
+  $("ch").textContent = pad(Math.floor(sec/3600)%24);
+  $("cm").textContent = pad(Math.floor(sec/60)%60);
+  $("cs").textContent = pad(sec%60);
+  $("saleBadge").textContent = "-" + CONFIG.sale.percent + "%";
+}
+tickSale();
+saleTimer = setInterval(tickSale, 1000);
 
 /* ---------- الفيديو ---------- */
 if (CONFIG.video){

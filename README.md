@@ -13,9 +13,10 @@ Orders arrive in your Telegram; WhatsApp stays as a second contact option.
 | | |
 |---|---|
 | Perfumes | Coromandel, Ombre Nomade, Bois d'Argent, Baccarat Rouge 540 |
-| Also | Discovery Set — 4 × 10 ml, 18,000 IQD |
-| Sizes | 30 ml — 15,000 IQD · 50 ml — 25,000 IQD |
-| Delivery | 6,000 IQD everywhere · **3,000 IQD to Mosul** |
+| Also | Discovery Set — 4 × 10 ml (40 ml total), 20,000 IQD |
+| Sizes | 30 ml — 15,000 (was 30,000) · 50 ml — 25,000 (was 50,000) |
+| Offer | 50% off, countdown ends 24 Aug — extend in one line |
+| Delivery | 5,000 IQD everywhere · **3,000 IQD to Mosul** |
 | Coverage | 18 governorates, 143 cities and districts |
 | WhatsApp | 9647508274568 |
 | Order alerts | Telegram, to two people |
@@ -66,13 +67,48 @@ unique `id`**. Two perfumes sharing an id will misbehave in the cart.
 **To mark something sold out** — `inStock:false`. The card greys out and the button
 disables. Better than deleting it, because customers see you carry it.
 
+### Sizes, photos and the discount
+
+Each size can carry its own photo and its own "before" price:
+
+```js
+sizes:[
+  {ml:30, price:15000, was:30000, img:"images/coromandel-30.jpg"},
+  {ml:50, price:25000, was:50000, img:"images/coromandel.jpg"}
+]
+```
+
+- **`img`** — the card photo swaps when the customer switches size, because the 30 ml
+  (wooden cap) and 50 ml (crystal cap) really are different bottles. Leave it out and
+  the product's main `image` is used for that size.
+- **`was`** — shows a struck-through old price and puts a red `-50%` badge on the card.
+  Remove `was` and both disappear for that size.
+- **The largest size is selected by default** on every card. That's automatic — it
+  reads the sizes list and picks the biggest.
+
+### The countdown
+
+```js
+sale: { until: "2026-08-24T23:59:59", percent: 50 },
+```
+
+**To extend the offer**, change that date. That's the only edit.
+
+When the date passes, the countdown bar **hides itself and the discounted prices stay
+exactly as they are.** Nothing shows a broken timer and nothing jumps to 50,000 — so
+forgetting to extend for a day or two costs you nothing.
+
+One honest note, said once: a countdown that resets forever is the most widely
+recognised fake-urgency trick, and repeat customers do clock it. It works best if the
+prices genuinely move at least sometimes. Your call — the mechanism does whatever you set.
+
 ### A product with one size only
 
 The Discovery Set has a single size, so the size buttons don't appear — a plain chip
 shows instead. The `label` replaces the automatic "10 ml" text:
 
 ```js
-sizes:[ {ml:10, price:18000, label:{ ar:"٤ × ١٠ مل", en:"4 × 10 ml" }} ]
+sizes:[ {ml:10, price:20000, label:{ ar:"٤ × ١٠ مل", en:"4 × 10 ml" }} ]
 ```
 
 Use `label` on any size whose real name isn't just a number of millilitres.
@@ -126,7 +162,7 @@ const GIFT_EVERY = 3;
 The default sits in the settings block:
 
 ```js
-delivery: { default: 6000 },
+delivery: { default: 5000 },
 ```
 
 That applies to every city **except** ones given their own fee in the `REGIONS` list
@@ -200,6 +236,11 @@ image:"images/coromandel.jpg"
   data. Shrink free at [squoosh.app](https://squoosh.app)
 - **Filenames are case-sensitive** — `Oud.JPG` ≠ `oud.jpg`. Lowercase, no spaces
 
+The four 10 ml vials in the Discovery Set image are the same photo recoloured four
+times, each matched to the real liquid colour sampled from that perfume's own bottle —
+golden amber, deep orange, pale gold, near clear. If a perfume's colour changes, resample
+and regenerate rather than eyeballing it.
+
 All five products have their photos. Each bottle was cut out of its original photo and
 placed on the same gradient the cards use, which is why they sit flush with the design
 instead of looking like snapshots pasted on.
@@ -258,7 +299,7 @@ Telegram setup is in **TELEGRAM-SETUP.md**.
 - [ ] Switch a perfume between 30 and 50 ml — price should change
 - [ ] Add both sizes of the same perfume — they should be two separate lines
 - [ ] Pick نينوى → الموصل — delivery should read 3,000
-- [ ] Pick any other city — should read 6,000
+- [ ] Pick any other city — should read 5,000
 - [ ] Try sending with the form empty — should refuse and highlight fields
 - [ ] Send a real test order — check Telegram
 - [ ] Tap **EN** and read the English side
