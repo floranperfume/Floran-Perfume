@@ -339,13 +339,14 @@ section{padding:76px 0}
 }
 .sale-left{display:flex;align-items:center;gap:12px;position:relative}
 .sale-badge{
-  direction:ltr;unicode-bidi:isolate;
   background:linear-gradient(135deg,var(--gold-soft),var(--gold));color:#17120a;
   font-weight:900;font-size:1rem;padding:6px 15px;border-radius:100px;white-space:nowrap;
   box-shadow:0 0 20px rgba(201,162,39,.35);
 }
 .sale-txt{font-weight:700;font-size:.95rem}
 .clock{display:flex;align-items:center;gap:6px;position:relative;direction:ltr}
+/* يعزل الأرقام فقط حتى تُقرأ ‎-50%‎ بشكل صحيح دون التأثير على موضع الملصق */
+.num{direction:ltr;unicode-bidi:isolate;display:inline-block}
 .clock .unit{
   min-width:52px;text-align:center;
   background:rgba(11,10,9,.55);border:1px solid var(--line-2);border-radius:10px;padding:6px 4px;
@@ -364,7 +365,6 @@ section{padding:76px 0}
 
 /* ملصق نسبة الخصم */
 .badge.off{
-  direction:ltr;unicode-bidi:isolate;
   inset-inline-start:auto;inset-inline-end:12px;
   background:#c0392b;color:#fff;letter-spacing:.3px;
   box-shadow:0 4px 16px rgba(192,57,43,.4);
@@ -1424,7 +1424,7 @@ function renderGrid(){
         ${p.image ? `<img class="shot" data-shot="${p.id}" src="${shotOf(p, chosen[p.id])}" alt="${L(p.name)}" loading="lazy">` : BOTTLE}
         ${!p.inStock ? `<span class="badge out">${t("outBadge")}</span>`
                      : L(p.tag) ? `<span class="badge">${L(p.tag)}</span>` : ""}
-        ${p.inStock && sizeOf(p, chosen[p.id]).was ? `<span class="badge off" data-off="${p.id}">-${CONFIG.sale.percent}%</span>` : ""}
+        ${p.inStock && sizeOf(p, chosen[p.id]).was ? `<span class="badge off" data-off="${p.id}"><span class="num">-${CONFIG.sale.percent}%</span></span>` : ""}
       </div>
       <div class="card-body">
         <h3>${L(p.name)}</h3>
@@ -1760,7 +1760,7 @@ function tickSale(){
   $("ch").textContent = pad(Math.floor(sec/3600)%24);
   $("cm").textContent = pad(Math.floor(sec/60)%60);
   $("cs").textContent = pad(sec%60);
-  $("saleBadge").textContent = "-" + CONFIG.sale.percent + "%";
+  $("saleBadge").innerHTML = '<span class="num">-' + CONFIG.sale.percent + '%</span>';
 }
 tickSale();
 saleTimer = setInterval(tickSale, 1000);
