@@ -314,7 +314,12 @@ section{padding:76px 0}
 
 .card-body{padding:16px 16px 18px;display:flex;flex-direction:column;flex:1}
 .card-body h3{font-size:1.08rem;font-weight:800;margin-bottom:3px}
-.notes{color:var(--muted);font-size:.83rem;margin-bottom:12px;flex:1}
+.notes{color:var(--muted);font-size:.83rem;margin-bottom:7px;line-height:1.6}
+.desc{
+  color:var(--gold-soft);font-size:.79rem;line-height:1.6;
+  margin-bottom:12px;flex:1;opacity:.82;
+  padding-top:7px;border-top:1px solid var(--line);
+}
 .card-meta{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:13px}
 .price{font-size:1.16rem;font-weight:900;color:var(--gold-soft);white-space:nowrap}
 .price s{font-size:.8rem;color:var(--muted);font-weight:500;margin-inline-start:7px}
@@ -358,7 +363,8 @@ section{padding:76px 0}
   .grid{grid-template-columns:1fr 1fr;gap:13px}
   .card-body{padding:12px 12px 14px}
   .card-body h3{font-size:.95rem}
-  .notes{font-size:.74rem;margin-bottom:9px}
+  .notes{font-size:.73rem;margin-bottom:5px}
+  .desc{font-size:.7rem;margin-bottom:9px;padding-top:5px}
   .price{font-size:.98rem}
   .price s{display:block;margin:0}
   .size{font-size:.7rem;padding:1px 7px}
@@ -918,25 +924,37 @@ const CONFIG = {
   products: [
     { id:1, inStock:true, image:"images/coromandel.jpg",
       name:{ ar:"شانيل كورومندل", en:"Chanel Coromandel" },
-      notes:{ ar:"باتشولي · بخور · فانيليا", en:"Patchouli · Incense · Vanilla" },
+      notes:{ ar:"باتشولي غني · بخور دافئ · بنزوين · شوكولاتة بيضاء",
+              en:"Rich Patchouli · Warm Incense · Benzoin · White Chocolate" },
+      desc:{ ar:"فخامة شرقية بعمق مخملي لا يُنسى.",
+             en:"Oriental opulence with an unforgettable velvet depth." },
       tag:{ ar:"الأكثر مبيعاً", en:"Best seller" },
       sizes:[ {ml:30, price:15000}, {ml:50, price:25000} ] },
 
     { id:2, inStock:true, image:"images/ombre-nomade.jpg",
       name:{ ar:"إل في أومبر نوماد", en:"LV Ombre Nomade" },
-      notes:{ ar:"عود · بخور · توت", en:"Oud · Incense · Raspberry" },
+      notes:{ ar:"عود طبيعي · توت العليق · بخور · بنزوين · لمسة ورد",
+              en:"Natural Oud · Raspberry · Incense · Benzoin · Rose" },
+      desc:{ ar:"قوة داكنة بحضور ملكي جريء.",
+             en:"Dark strength with a bold, regal presence." },
       tag:{ ar:"", en:"" },
       sizes:[ {ml:30, price:15000}, {ml:50, price:25000} ] },
 
     { id:3, inStock:true, image:"images/bois-dargent.jpg",
       name:{ ar:"ديور بوا دارجان", en:"Dior Bois d'Argent" },
-      notes:{ ar:"بخور · إيريس · عسل", en:"Incense · Iris · Honey" },
+      notes:{ ar:"ورد · بخور · عسل · فانيليا · عنبر · مسك",
+              en:"Rose · Incense · Honey · Vanilla · Amber · Musk" },
+      desc:{ ar:"أناقة ناعمة بطابع بودري فاخر.",
+             en:"Soft elegance with a luxurious powdery character." },
       tag:{ ar:"", en:"" },
       sizes:[ {ml:30, price:15000}, {ml:50, price:25000} ] },
 
     { id:4, inStock:true, image:"images/baccarat-540.jpg",
       name:{ ar:"بكارات روج 540", en:"Baccarat Rouge 540" },
-      notes:{ ar:"زعفران · عنبر · خشب الأرز", en:"Saffron · Amber · Cedarwood" },
+      notes:{ ar:"زعفران · ياسمين · أمبروكسان · خشب الأرز",
+              en:"Saffron · Jasmine · Ambroxan · Cedarwood" },
+      desc:{ ar:"رائحة متوهّجة… حلوة، شفافة، وآسرة للحواس.",
+             en:"A luminous scent — sweet, transparent, and captivating." },
       tag:{ ar:"", en:"" },
       sizes:[ {ml:30, price:15000}, {ml:50, price:25000} ] },
 
@@ -946,6 +964,8 @@ const CONFIG = {
       name:{ ar:"طقم التجربة — ٤ عطور", en:"Discovery Set — 4 Perfumes" },
       notes:{ ar:"كورومندل · أومبر نوماد · بوا دارجان · بكارات ٥٤٠",
               en:"Coromandel · Ombre Nomade · Bois d'Argent · Baccarat 540" },
+      desc:{ ar:"جرّب الأربعة، ثم اختر عطرك.",
+             en:"Try all four, then choose your signature." },
       tag:{ ar:"وفّر أكثر", en:"Best value" },
       // size واحد فقط، لذلك لا تظهر أزرار الأحجام. label يستبدل نص «١٠ مل»
       sizes:[ {ml:10, price:18000, label:{ ar:"٤ × ١٠ مل", en:"4 × 10 ml" }} ] }
@@ -1305,6 +1325,7 @@ function renderGrid(){
       <div class="card-body">
         <h3>${L(p.name)}</h3>
         <p class="notes">${L(p.notes)}</p>
+        ${L(p.desc) ? `<p class="desc">${L(p.desc)}</p>` : ""}
 
         ${p.sizes.length > 1 ? `
         <div class="sizes">
