@@ -66,23 +66,26 @@ a{color:inherit;text-decoration:none}
   position:fixed;inset:0;z-index:0;
   pointer-events:none;overflow:hidden;
   contain:strict;
+  isolation:isolate;
 }
 .orb{
   position:absolute;border-radius:50%;
-  background:radial-gradient(circle at 32% 32%,var(--gold-soft),var(--gold) 42%,transparent 72%);
-  filter:blur(var(--b));
-  opacity:0;
-  will-change:transform,opacity;
-  animation:drift var(--dur) var(--ease) var(--delay) infinite alternate,
-            breathe calc(var(--dur)/1.7) ease-in-out var(--delay) infinite alternate;
+  /* The glow is baked into the gradient instead of using a live blur filter.
+     This keeps the soft look while making movement mostly a compositor-only transform. */
+  background:radial-gradient(circle at 32% 32%,
+    rgba(232,207,122,.75) 0%,
+    rgba(201,162,39,.48) 24%,
+    rgba(201,162,39,.18) 48%,
+    transparent 74%);
+  opacity:var(--o);
+  will-change:transform;
+  transform:translate3d(0,0,0);
+  animation:drift var(--dur) linear var(--delay) infinite alternate;
+  backface-visibility:hidden;
 }
 @keyframes drift{
-  from{transform:translate3d(0,0,0) scale(1)}
-  to{transform:translate3d(var(--dx),var(--dy),0) scale(var(--sc))}
-}
-@keyframes breathe{
-  from{opacity:var(--o1)}
-  to{opacity:var(--o2)}
+  from{transform:translate3d(0,0,0)}
+  to{transform:translate3d(var(--dx),var(--dy),0)}
 }
 /* طبقة تعتيم فوق النقاط حتى يبقى النص واضحاً */
 #orbVeil{
@@ -131,7 +134,7 @@ a{color:inherit;text-decoration:none}
 header{
   position:sticky;top:0;z-index:50;
   background:rgba(11,10,9,.78);
-  backdrop-filter:blur(16px);
+  backdrop-filter:blur(10px);
   border-bottom:1px solid var(--line);
 }
 .nav{display:flex;align-items:center;justify-content:space-between;height:70px;gap:14px}
@@ -187,7 +190,7 @@ header{
 
 .hero-emblem{
   width:min(320px,64vw);height:auto;margin:0 auto 20px;
-  filter:drop-shadow(0 8px 34px rgba(201,162,39,.28));
+  filter:drop-shadow(0 6px 22px rgba(201,162,39,.24));
   animation:riseIn .9s var(--ease) both,floatSlow 8s ease-in-out 1s infinite;
 }
 @keyframes floatSlow{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
@@ -238,7 +241,7 @@ header{
 /* ============================================================
    المميزات
    ============================================================ */
-.features{border-block:1px solid var(--line);background:rgba(19,17,16,.72);backdrop-filter:blur(6px)}
+.features{border-block:1px solid var(--line);background:rgba(19,17,16,.72);backdrop-filter:blur(4px);contain:paint;}
 .features-grid{display:grid;grid-template-columns:repeat(2,1fr)}
 .feature{padding:28px 18px;text-align:center;border-inline-start:1px solid var(--line);transition:background .3s}
 .feature:first-child{border-inline-start:none}
@@ -272,12 +275,13 @@ section{padding:76px 0}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:22px}
 
 .card{
-  background:rgba(25,22,20,.78);backdrop-filter:blur(6px);
+  contain:layout paint;
+  background:rgba(25,22,20,.78);backdrop-filter:blur(4px);
   border:1px solid var(--line);border-radius:var(--radius);
   overflow:hidden;display:flex;flex-direction:column;
   transition:transform .3s var(--ease),border-color .3s,box-shadow .3s;
 }
-.card:hover{transform:translateY(-6px);border-color:var(--line-2);box-shadow:0 20px 46px rgba(0,0,0,.55)}
+.card:hover{transform:translateY(-6px);border-color:var(--line-2);box-shadow:0 14px 32px rgba(0,0,0,.42)}
 .card-img{position:relative;aspect-ratio:1/1;background:linear-gradient(160deg,#241f18,#100e0c);display:grid;place-items:center;overflow:hidden}
 .card-img img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease)}
 .card:hover .card-img img{transform:scale(1.06)}
@@ -428,7 +432,7 @@ section{padding:76px 0}
 /* ============================================================
    من نحن
    ============================================================ */
-.about{background:rgba(19,17,16,.72);backdrop-filter:blur(6px);border-block:1px solid var(--line)}
+.about{background:rgba(19,17,16,.72);backdrop-filter:blur(4px);border-block:1px solid var(--line);contain:paint;}
 .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
 @media(max-width:860px){.about-grid{grid-template-columns:1fr;gap:30px}}
 .about h2{font-size:clamp(1.6rem,4.2vw,2.2rem);font-weight:900;margin-bottom:14px}
@@ -529,14 +533,14 @@ html[dir="rtl"] .loy-arrow{transform:scaleX(-1)}
   position:relative;max-width:390px;margin:0 auto;
   border-radius:var(--radius);overflow:hidden;
   border:1px solid var(--line-2);
-  box-shadow:0 22px 60px rgba(0,0,0,.6),0 0 40px rgba(201,162,39,.10);
+  box-shadow:0 16px 42px rgba(0,0,0,.48),0 0 28px rgba(201,162,39,.08);
   background:#0f0d0b;line-height:0;
 }
 .vid-box video{width:100%;height:auto;display:block}
 .vid-sound{
   position:absolute;inset-inline-end:12px;bottom:12px;
   width:40px;height:40px;border-radius:50%;
-  background:rgba(11,10,9,.62);backdrop-filter:blur(8px);
+  background:rgba(11,10,9,.62);backdrop-filter:blur(4px);
   border:1px solid var(--line-2);color:var(--gold-soft);
   display:grid;place-items:center;transition:all .25s;
 }
@@ -556,7 +560,7 @@ html[dir="rtl"] .loy-arrow{transform:scaleX(-1)}
 .cart-fab.show{transform:translateY(0)}
 .cart-count{background:#17120a;color:var(--gold-soft);min-width:23px;height:23px;border-radius:50%;display:grid;place-items:center;font-size:.8rem}
 
-.overlay{position:fixed;inset:0;z-index:70;background:rgba(0,0,0,.68);backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity .32s}
+.overlay{position:fixed;inset:0;z-index:70;background:rgba(0,0,0,.68);backdrop-filter:blur(2px);opacity:0;pointer-events:none;transition:opacity .32s}
 .overlay.show{opacity:1;pointer-events:auto}
 
 .drawer{
@@ -1081,7 +1085,7 @@ const CONFIG = {
    same stored value instead of recalculating it, so the countdown keeps going
    from where it left off rather than resetting, all the way down to zero.
    ------------------------------------------------------------------------- */
-const SALE_KEY = "florane_sale_end";
+const SALE_KEY = "florane_sale_end_v2";
 function getSaleEnd(){
   if (!CONFIG.sale || !CONFIG.sale.hours) return NaN;
   let end = NaN;
@@ -1329,23 +1333,20 @@ const BOTTLE = `<svg class="bottle" viewBox="0 0 100 150" fill="none">
 /* ---------- الخلفية المتحركة ---------- */
 (function buildOrbs(){
   const host = $("orbs");
-  const N = window.innerWidth < 700 ? 9 : 16;
+  const N = window.innerWidth < 700 ? 5 : 10;
   let html = "";
   for (let i = 0; i < N; i++){
     const size  = 60 + Math.random() * 230;
-    const blur  = 22 + Math.random() * 46;
-    const dur   = 16 + Math.random() * 26;
-    const delay = -Math.random() * 26;
+    const dur   = 18 + Math.random() * 24;
+    const delay = -Math.random() * 24;
     const dx    = (Math.random() * 2 - 1) * 190;
     const dy    = (Math.random() * 2 - 1) * 170;
-    const sc    = 0.75 + Math.random() * 0.7;
-    const o1    = 0.10 + Math.random() * 0.13;
-    const o2    = 0.30 + Math.random() * 0.28;
+    const o     = 0.16 + Math.random() * 0.16;
     html += `<span class="orb" style="
       width:${size}px;height:${size}px;
       top:${Math.random()*100}%;left:${Math.random()*100}%;
-      --b:${blur}px;--dur:${dur}s;--delay:${delay}s;
-      --dx:${dx}px;--dy:${dy}px;--sc:${sc};--o1:${o1};--o2:${o2};"></span>`;
+      --dur:${dur}s;--delay:${delay}s;
+      --dx:${dx}px;--dy:${dy}px;--o:${o};"></span>`;
   }
   host.innerHTML = html;
 })();
@@ -1449,7 +1450,7 @@ function renderGrid(){
   $("grid").innerHTML = CONFIG.products.map((p,i) => `
     <article class="card reveal${i%4===1?" d1":i%4===2?" d2":i%4===3?" d3":""}" data-card="${p.id}">
       <div class="card-img">
-        ${p.image ? `<img class="shot" data-shot="${p.id}" src="${shotOf(p, chosen[p.id])}" alt="${L(p.name)}" loading="lazy">` : BOTTLE}
+        ${p.image ? `<img class="shot" data-shot="${p.id}" src="${shotOf(p, chosen[p.id])}" alt="${L(p.name)}" loading="lazy" decoding="async">` : BOTTLE}
         ${!p.inStock ? `<span class="badge out">${t("outBadge")}</span>`
                      : L(p.tag) ? `<span class="badge">${L(p.tag)}</span>` : ""}
         ${p.inStock && sizeOf(p, chosen[p.id]).was ? `<span class="badge off" data-off="${p.id}"><span class="num">-${CONFIG.sale.percent}%</span></span>` : ""}
@@ -1555,7 +1556,7 @@ function sync(){
   $("lines").innerHTML = cart.length ? cart.map(l => {
     const p = product(l.id);
     return `<div class="line">
-      <div class="line-img">${p.image?`<img src="${p.image}" alt="">`:BOTTLE.replace('class="bottle"','style="width:60%"')}</div>
+      <div class="line-img">${p.image?`<img src="${p.image}" alt="" loading="lazy" decoding="async">`:BOTTLE.replace('class="bottle"','style="width:60%"')}</div>
       <div class="line-info"><b>${L(p.name)}</b><small>${szOf(l.id, l.ml)} · ${fmt(linePrice(l))}</small></div>
       <div class="qty">
         <button data-m="${p.id}" data-ml="${l.ml}">−</button>
