@@ -271,6 +271,9 @@ section{padding:76px 0}
 }
 .chip:hover{color:var(--gold-soft);border-color:var(--gold)}
 .chip.on{background:var(--gold);border-color:var(--gold);color:#17120a}
+.chip:focus-visible,.size-btn:focus-visible,.add:focus-visible,.btn:focus-visible,.lang button:focus-visible{
+  outline:3px solid rgba(232,207,122,.72);outline-offset:3px;
+}
 
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:22px}
 
@@ -282,8 +285,9 @@ section{padding:76px 0}
   transition:transform .3s var(--ease),border-color .3s,box-shadow .3s;
 }
 .card:hover{transform:translateY(-6px);border-color:var(--line-2);box-shadow:0 14px 32px rgba(0,0,0,.42)}
-.card-img{position:relative;aspect-ratio:1/1;background:linear-gradient(160deg,#241f18,#100e0c);display:grid;place-items:center;overflow:hidden}
-.card-img img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease)}
+.card-img{position:relative;aspect-ratio:4/5;background:linear-gradient(160deg,#2b241a,#100e0c);display:grid;place-items:center;overflow:hidden}
+.card-img::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(circle at 50% 30%,rgba(232,207,122,.17),transparent 46%),linear-gradient(to top,rgba(11,10,9,.34),transparent 45%)}
+.card-img img{width:100%;height:100%;object-fit:cover;object-position:center;transition:transform .5s var(--ease),filter .5s var(--ease);filter:saturate(1.05) contrast(1.03)}
 .card:hover .card-img img{transform:scale(1.06)}
 .bottle{width:44%;max-width:118px;opacity:.9;transition:transform .5s var(--ease)}
 .card:hover .bottle{transform:translateY(-5px)}
@@ -300,7 +304,7 @@ section{padding:76px 0}
 .card-img::after{
   content:"";position:absolute;inset-inline:0;bottom:0;height:26%;
   background:linear-gradient(to top,#0e0c0a 8%,rgba(14,12,10,.55) 55%,transparent);
-  pointer-events:none;
+  pointer-events:none;z-index:1;
 }
 .one-size{
   display:inline-block;margin-bottom:11px;
@@ -312,7 +316,7 @@ section{padding:76px 0}
 .badge{
   position:absolute;top:12px;inset-inline-start:12px;
   background:var(--gold);color:#17120a;font-size:.7rem;font-weight:900;
-  padding:4px 11px;border-radius:100px;
+  padding:4px 11px;border-radius:100px;z-index:2;
 }
 .badge.out{background:#4a4238;color:#cfc7ba}
 
@@ -427,6 +431,15 @@ section{padding:76px 0}
   .card-img .badge.off{font-size:.66rem;padding:3px 9px}
   .size-btn small{font-size:.66rem}
   .card-img{aspect-ratio:4/5}
+}
+@media(max-width:420px){
+  .grid{grid-template-columns:1fr;gap:18px}
+  .card-img{aspect-ratio:16/13}
+  .card-body{padding:16px 16px 18px}
+  .card-body h3{font-size:1.08rem}
+  .notes{font-size:.83rem}
+  .desc{font-size:.79rem}
+  .add{padding:11px;font-size:.93rem}
 }
 
 /* ============================================================
@@ -764,6 +777,7 @@ footer{background:rgba(11,10,9,.85);border-top:1px solid var(--line);padding:50p
       </div>
     </div>
 
+    <div class="filters" id="filters" aria-label="Scent family filters"></div>
     <div class="grid" id="grid"></div>
   </div>
 </section>
@@ -1011,6 +1025,7 @@ const CONFIG = {
   // ==========================================================================
   products: [
     { id:1, inStock:true, image:"images/coromandel.jpg",
+      family:"woody",
       name:{ ar:"شانيل كورومندل", en:"Chanel Coromandel" },
       notes:{ ar:"باتشولي غني · بخور دافئ · بنزوين · شوكولاتة بيضاء",
               en:"Rich Patchouli · Warm Incense · Benzoin · White Chocolate" },
@@ -1023,6 +1038,7 @@ const CONFIG = {
       ] },
 
     { id:2, inStock:true, image:"images/ombre-nomade.jpg",
+      family:"woody",
       name:{ ar:"إل في أومبر نوماد", en:"LV Ombre Nomade" },
       notes:{ ar:"عود طبيعي · توت العليق · بخور · بنزوين · لمسة ورد",
               en:"Natural Oud · Raspberry · Incense · Benzoin · Rose" },
@@ -1035,6 +1051,7 @@ const CONFIG = {
       ] },
 
     { id:3, inStock:true, image:"images/bois-dargent.jpg",
+      family:"amber",
       name:{ ar:"ديور بوا دارجان", en:"Dior Bois d'Argent" },
       notes:{ ar:"ورد · بخور · عسل · فانيليا · عنبر · مسك",
               en:"Rose · Incense · Honey · Vanilla · Amber · Musk" },
@@ -1047,6 +1064,7 @@ const CONFIG = {
       ] },
 
     { id:4, inStock:true, image:"images/baccarat-540.jpg",
+      family:"floral",
       name:{ ar:"بكارات روج 540", en:"Baccarat Rouge 540" },
       notes:{ ar:"زعفران · ياسمين · أمبروكسان · خشب الأرز",
               en:"Saffron · Jasmine · Ambroxan · Cedarwood" },
@@ -1061,6 +1079,7 @@ const CONFIG = {
     // طقم التجربة — أربع قناني ١٠ مل، واحدة من كل عطر
     // Discovery set — four 10 ml bottles, one of each perfume
     { id:5, inStock:true, image:"images/set-10ml.jpg",
+      family:"discovery",
       name:{ ar:"طقم التجربة — ٤ عطور", en:"Discovery Set — 4 Perfumes" },
       notes:{ ar:"كورومندل · أومبر نوماد · بوا دارجان · بكارات ٥٤٠",
               en:"Coromandel · Ombre Nomade · Bois d'Argent · Baccarat 540" },
@@ -1213,6 +1232,7 @@ const T = {
     f2t:"الدفع عند الاستلام",  f2s:"تدفع بعد ما تستلم الطلب",
     prodTitle:"تشكيلة العطور",
     prodSub:"اختر عطرك واضغط «أضف للطلب» — يوصلنا الطلب على واتساب مباشرة",
+    filterAll:"الكل", filterWoody:"خشبي", filterFloral:"زهري", filterAmber:"عنبر",
     ml:"مل",
     lCity:"المدينة / القضاء", eCity:"الرجاء اختيار المدينة",
     cityPick:"— اختر المدينة —", cityFirst:"— اختر المحافظة أولاً —",
@@ -1268,6 +1288,7 @@ const T = {
     f2t:"Cash on delivery",    f2s:"Pay only when it arrives",
     prodTitle:"Our Collection",
     prodSub:"Pick a perfume and tap “Add to order” — it reaches us on WhatsApp",
+    filterAll:"All", filterWoody:"Woody", filterFloral:"Floral", filterAmber:"Amber",
     ml:"ml",
     lCity:"City / District", eCity:"Please select a city",
     cityPick:"— Select city —", cityFirst:"— Select a governorate first —",
@@ -1385,6 +1406,7 @@ function applyLang(next){
 
   buildProvinces();
   buildCities();
+  renderFilters();
   renderGrid();
   sync();
 }
@@ -1441,13 +1463,36 @@ const szOf = (id, ml) => szText(sizeOf(product(id), ml));
 const shotOf = (p, ml) => sizeOf(p, ml).img || p.image;      // صورة الحجم المختار
 const saleLive = () => !isNaN(SALE_END) && SALE_END > Date.now();
 const priceOf = p => sizeOf(p, chosen[p.id]).price;
+let activeFamily = "all";
+const scentFamilies = [
+  ["all", "filterAll"],
+  ["woody", "filterWoody"],
+  ["floral", "filterFloral"],
+  ["amber", "filterAmber"]
+];
+function renderFilters(){
+  $("filters").innerHTML = scentFamilies.map(([family, label]) => `
+    <button class="chip${activeFamily === family ? " on" : ""}"
+            type="button" data-family="${family}"
+            aria-pressed="${activeFamily === family}">${t(label)}</button>`).join("");
+  document.querySelectorAll("[data-family]").forEach(button => {
+    button.onclick = () => {
+      activeFamily = button.dataset.family;
+      renderFilters();
+      renderGrid();
+    };
+  });
+}
 function priceHTML(p){
   const sz = sizeOf(p, chosen[p.id]);
   return fmt(sz.price) + (sz.was ? `<s>${sz.was.toLocaleString("en-US")}</s>` : "");
 }
 
 function renderGrid(){
-  $("grid").innerHTML = CONFIG.products.map((p,i) => `
+  const products = activeFamily === "all"
+    ? CONFIG.products
+    : CONFIG.products.filter(p => p.family === activeFamily);
+  $("grid").innerHTML = products.map((p,i) => `
     <article class="card reveal${i%4===1?" d1":i%4===2?" d2":i%4===3?" d3":""}" data-card="${p.id}">
       <div class="card-img">
         ${p.image ? `<img class="shot" data-shot="${p.id}" src="${shotOf(p, chosen[p.id])}" alt="${L(p.name)}" loading="lazy" decoding="async">` : BOTTLE}
