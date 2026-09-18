@@ -972,15 +972,20 @@ const CONFIG = {
 
   // ==========================================================================
   //  عرض الخصم / DISCOUNT OFFER
-  //  until : تاريخ ووقت انتهاء العرض — غيّره لتمديد العرض
-  //          end date and time — change this to extend the offer
+  //  hours   : مدة العدّاد بالساعات. يبدأ العدّاد لحظة دخول كل زائر للموقع
+  //            لأول مرة، ويُخزَّن وقت الانتهاء في متصفحه، لذلك لا يُعاد ضبطه
+  //            عند تحديث الصفحة أو الرجوع لاحقاً — يكمل من حيث توقف حتى الصفر.
+  //            countdown length in hours. It starts the moment each visitor
+  //            first opens the site, and the end time is saved in their
+  //            browser — so it never resets on refresh or a later visit,
+  //            it just keeps counting down from where it left off to zero.
   //  percent : الرقم الظاهر على الملصق فقط / the number shown on the badge only
   //
-  //  إذا مرّ التاريخ يختفي العدّاد وحده، وتبقى الأسعار المخفّضة كما هي.
-  //  If the date passes the countdown hides itself and the discounted
-  //  prices stay exactly as they are — nothing on the page breaks.
+  //  عند وصول العدّاد للصفر يختفي وحده، وتبقى الأسعار المخفّضة كما هي.
+  //  When the countdown reaches zero it simply hides itself, and the
+  //  discounted prices stay exactly as they are — nothing on the page breaks.
   // ==========================================================================
-  sale: { until: "2026-08-24T23:59:59", percent: 50 },
+  sale: { hours: 48, percent: 50 },
 
   // ==========================================================================
   //  فيديو المنتج (اختياري) / PRODUCT VIDEO (optional)
@@ -1065,6 +1070,32 @@ const CONFIG = {
 /* ==========================================================================
    ★★★  نهاية الإعدادات / END OF SETTINGS  ★★★
    ========================================================================== */
+
+/* ---------- وقت انتهاء العدّاد لكل زائر / per-visitor countdown end time ----------
+   عند أول دخول للزائر يُحسب وقت الانتهاء (الآن + CONFIG.sale.hours) ويُخزَّن
+   في localStorage الخاص بمتصفحه. في أي زيارة لاحقة نقرأ نفس القيمة المخزَّنة
+   بدل حسابها من جديد، فيستمر العدّاد من حيث توقف بدل أن يُعاد ضبطه، ويبقى كذلك
+   حتى يصل للصفر.
+   On a visitor's first visit we compute the end time (now + CONFIG.sale.hours)
+   and save it to their browser's localStorage. On any later visit we read that
+   same stored value instead of recalculating it, so the countdown keeps going
+   from where it left off rather than resetting, all the way down to zero.
+   ------------------------------------------------------------------------- */
+const SALE_KEY = "florane_sale_end";
+function getSaleEnd(){
+  if (!CONFIG.sale || !CONFIG.sale.hours) return NaN;
+  let end = NaN;
+  try {
+    const stored = localStorage.getItem(SALE_KEY);
+    if (stored) end = parseInt(stored, 10);
+  } catch (e) {}
+  if (!end || isNaN(end)){
+    end = Date.now() + CONFIG.sale.hours * 3600 * 1000;
+    try { localStorage.setItem(SALE_KEY, String(end)); } catch (e) {}
+  }
+  return end;
+}
+const SALE_END = getSaleEnd();
 
 
 /* ---------- محافظات ومدن العراق / Iraqi governorates and their cities ----------
@@ -1407,10 +1438,7 @@ const sizeOf = (p, ml) => p.sizes.find(s => s.ml === ml) || p.sizes[0];
 const szText = sz => sz.label ? L(sz.label) : `${sz.ml} ${t("ml")}`;
 const szOf = (id, ml) => szText(sizeOf(product(id), ml));
 const shotOf = (p, ml) => sizeOf(p, ml).img || p.image;      // صورة الحجم المختار
-const saleLive = () => {
-  const u = CONFIG.sale && CONFIG.sale.until ? new Date(CONFIG.sale.until) : null;
-  return u && !isNaN(u) && u.getTime() > Date.now();
-};
+const saleLive = () => !isNaN(SALE_END) && SALE_END > Date.now();
 const priceOf = p => sizeOf(p, chosen[p.id]).price;
 function priceHTML(p){
   const sz = sizeOf(p, chosen[p.id]);
@@ -1743,7 +1771,7 @@ window.addEventListener("load", () => setTimeout(observeReveals, 200));
 let saleTimer;
 function tickSale(){
   const bar = $("saleBar");
-  const end = CONFIG.sale && CONFIG.sale.until ? new Date(CONFIG.sale.until).getTime() : NaN;
+  const end = SALE_END;
   if (isNaN(end)) { bar.hidden = true; return; }
 
   let left = end - Date.now();
