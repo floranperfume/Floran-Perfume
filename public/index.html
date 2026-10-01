@@ -262,7 +262,66 @@
         }
 
         /* ==========================================================================
-           5. 2-COLUMN MOBILE PRODUCTS GRID
+           5. CUSTOMER REVIEWS (SOCIAL PROOF GALLERY)
+           ========================================================================== */
+        .reviews-section {
+            padding: 10px 10px 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .review-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-gold);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .review-image-wrap {
+            width: 100%;
+            background: #000;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .review-image-wrap img {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+        }
+
+        .review-meta {
+            padding: 8px;
+            background: rgba(18, 18, 18, 0.95);
+        }
+
+        .review-meta .tag {
+            font-size: 9px;
+            font-weight: 800;
+            color: var(--gold-light);
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .review-meta p {
+            font-size: 9.5px;
+            color: var(--text-muted);
+            line-height: 1.35;
+        }
+
+        /* ==========================================================================
+           6. 2-COLUMN MOBILE PRODUCTS GRID
            ========================================================================== */
         .products-section {
             padding: 6px 10px 20px;
@@ -454,7 +513,7 @@
         }
 
         /* ==========================================================================
-           6. LOCKED CART DRAWER
+           7. LOCKED CART DRAWER & GUARANTEE BANNER
            ========================================================================== */
         .drawer-backdrop {
             position: fixed;
@@ -520,6 +579,19 @@
             padding: 0 6px;
         }
 
+        .guarantee-box {
+            background: rgba(46, 204, 113, 0.1);
+            border: 1px solid rgba(46, 204, 113, 0.3);
+            border-radius: var(--radius-sm);
+            padding: 8px;
+            margin-bottom: 12px;
+            text-align: center;
+            font-size: 10px;
+            color: #2ecc71;
+            font-weight: 700;
+            line-height: 1.3;
+        }
+
         .form-group {
             margin-bottom: 10px;
         }
@@ -577,7 +649,7 @@
         }
 
         /* ==========================================================================
-           7. MOBILE STICKY BOTTOM BAR
+           8. MOBILE STICKY BOTTOM BAR
            ========================================================================== */
         .mobile-sticky-bar {
             position: fixed;
@@ -673,7 +745,39 @@
         </div>
     </div>
 
-    <!-- 6. 2-COLUMN PRODUCTS CATALOG FOR MOBILE -->
+    <!-- 6. REAL CUSTOMER REVIEWS (SOCIAL PROOF SECTION) -->
+    <section class="reviews-section">
+        <div class="section-header">
+            <h2>آراء وتقييمات عملاؤنا ⭐⭐⭐⭐⭐</h2>
+            <p>محادثات وتجارب حقيقية لزبائننا مع عطور فلوران</p>
+        </div>
+
+        <div class="reviews-grid">
+            <!-- Review 1 -->
+            <div class="review-card">
+                <div class="review-image-wrap">
+                    <img src="public/images/rev1.jpg" alt="تجربة زبون عطور فلوران" loading="lazy">
+                </div>
+                <div class="review-meta">
+                    <span class="tag">⭐ تجربة منتج حقيقي</span>
+                    <p>"طيب العطر كلش حبيته... شي مختلف عن العطور الي اعتدت عليها دائماً"</p>
+                </div>
+            </div>
+
+            <!-- Review 2 -->
+            <div class="review-card">
+                <div class="review-image-wrap">
+                    <img src="public/images/rev2.jpg" alt="تقييم ثبات عطور فلوران" loading="lazy">
+                </div>
+                <div class="review-meta">
+                    <span class="tag">⭐ رأي صريح عن الثبات</span>
+                    <p>"الثبات عالي يعني يبقى على الملابس أيام.. ميروح نهائياً يبقى موجود"</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. 2-COLUMN PRODUCTS CATALOG FOR MOBILE -->
     <section class="products-section" id="products">
         <div class="section-header">
             <h2>قائمة العطور المتاحة</h2>
@@ -805,12 +909,17 @@
         </div>
     </section>
 
-    <!-- 7. CHECKOUT DRAWER -->
+    <!-- 8. CHECKOUT DRAWER -->
     <div class="drawer-backdrop" id="drawerBackdrop" onclick="closeOrderDrawer()"></div>
     <div class="drawer" id="orderDrawer">
         <div class="drawer-header">
             <h3>تأكيد الطلب — الدفع عند الاستلام</h3>
             <button class="close-btn" onclick="closeOrderDrawer()">&times;</button>
+        </div>
+
+        <!-- Trust Guarantee Banner inside Checkout -->
+        <div class="guarantee-box">
+            🛡️ ضمان فلوران: يحق لك فتح الشحنة ومعاينة العطر مع مندوب التوصيل قبل دفع المبلغ!
         </div>
 
         <form id="orderForm" onsubmit="submitOrder(event)">
@@ -893,7 +1002,7 @@
         </form>
     </div>
 
-    <!-- 8. MOBILE STICKY BOTTOM BAR -->
+    <!-- 9. MOBILE STICKY BOTTOM BAR -->
     <div class="mobile-sticky-bar">
         <div class="sticky-info">
             <div class="sticky-title">طقم التجربة الشامل</div>
@@ -904,7 +1013,7 @@
         </button>
     </div>
 
-    <!-- 9. FRONTEND FUNCTIONALITY & API INTEGRATION -->
+    <!-- 10. FRONTEND FUNCTIONALITY & API INTEGRATION -->
     <script>
         const cardStates = {
             'card-ombre': { size: '50ml', price: 25000, ml: 50 },
@@ -929,7 +1038,7 @@
             return p;
         }
 
-        // Automatic Image Fallback Handler
+        // Automatic Image Fallback Handler for public/images and images/
         document.addEventListener("DOMContentLoaded", () => {
             document.querySelectorAll('img').forEach(img => {
                 img.onerror = function() {
