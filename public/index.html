@@ -45,7 +45,7 @@
 
         body {
             overflow-x: hidden;
-            padding-bottom: 85px; /* Space for mobile sticky CTA */
+            padding-bottom: 85px;
         }
 
         .gpu-accelerated {
@@ -248,7 +248,7 @@
         }
 
         /* ==========================================================================
-           6. PRODUCTS SECTION & SIZE SELECTOR
+           6. PRODUCTS CATALOG & IMAGES STYLING
            ========================================================================== */
         .products-section {
             padding: 10px 16px 40px;
@@ -276,21 +276,46 @@
             border: 1px solid var(--border-gold);
             border-radius: var(--radius-md);
             padding: 18px;
-            margin-bottom: 22px;
+            margin-bottom: 25px;
             position: relative;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+        }
+
+        .product-image-wrap {
+            width: 100%;
+            height: 240px;
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            margin-bottom: 15px;
+            background: #000;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .product-image-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .product-card:hover .product-image-wrap img {
+            transform: scale(1.03);
         }
 
         .product-badge {
             position: absolute;
-            top: 15px;
-            left: 15px;
+            top: 28px;
+            left: 28px;
             background: var(--gold-primary);
             color: #000;
             font-size: 11px;
             font-weight: 800;
-            padding: 4px 10px;
+            padding: 4px 12px;
             border-radius: 20px;
+            z-index: 2;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
         }
 
         .product-title {
@@ -572,7 +597,7 @@
         <p>زيوت فرنسية وسويسرية نادرة تُحاكي أشهر العطور العالمية بدقة متناهية مع ثبات وفوحان يدوم لأكثر من 24 ساعة.</p>
     </section>
 
-    <!-- 4. EMBEDDED HIGH-CONVERTING SHOWCASE VIDEO -->
+    <!-- 4. EMBEDDED SHOWCASE VIDEO -->
     <section class="video-section">
         <div class="video-card gpu-accelerated">
             <video autoplay muted loop playsinline preload="auto">
@@ -606,16 +631,19 @@
         </div>
     </div>
 
-    <!-- 6. FULL PERFUME CATALOG -->
+    <!-- 6. FULL PERFUME CATALOG WITH IMAGES -->
     <section class="products-section" id="products">
         <div class="section-header">
             <h2>قائمة العطور المتاحة</h2>
             <p>اختر حجمك المناسب (30ml أو 50ml) أو احصل على طقم التجربة الكامل</p>
         </div>
 
-        <!-- PRODUCT 0: DISCOVERY SET (Flagship High-Conversion Offer) -->
+        <!-- PRODUCT 0: DISCOVERY SET -->
         <div class="product-card" id="card-discovery">
             <span class="product-badge">الأكثر شعبية 🔥</span>
+            <div class="product-image-wrap">
+                <img src="images/discovery-set.jpg" alt="طقم فلورأن التجريبي" loading="lazy">
+            </div>
             <div class="product-title">طقم فلورأن التجريبي (4 عطور × 10مل)</div>
             <div class="product-desc">
                 يحتوي على 4 زجاجات تجريبية (Ombre Nomade, Baccarat Rouge 540, Coromandel, Bois d'Argent). خيارك الأنسب لاكتشاف عطرك المفضل قبل الشراء الكلي.
@@ -638,6 +666,9 @@
 
         <!-- PRODUCT 1: Ombre Nomade -->
         <div class="product-card" id="card-ombre">
+            <div class="product-image-wrap">
+                <img src="images/ombre-nomade.jpg" alt="فلورأن Ombre Nomade" loading="lazy">
+            </div>
             <div class="product-title">فلورأن — Ombre Nomade</div>
             <div class="product-desc">
                 مستوحى من أومبر نوماد الفاخر. توليفة ملكية تجمع العود النقي، البخور الشفاف، ونفحات الورد العربي.
@@ -661,6 +692,9 @@
 
         <!-- PRODUCT 2: Baccarat Rouge 540 -->
         <div class="product-card" id="card-baccarat">
+            <div class="product-image-wrap">
+                <img src="images/baccarat-rouge.jpg" alt="فلورأن Baccarat Rouge 540" loading="lazy">
+            </div>
             <div class="product-title">فلورأن — Baccarat Rouge 540</div>
             <div class="product-desc">
                 مستوحى من باقارات روج 540 الشهير. مزيج ساحر من الياسمين، العنبر الكريستالي، والأخشاب الدافئة.
@@ -684,6 +718,9 @@
 
         <!-- PRODUCT 3: Coromandel -->
         <div class="product-card" id="card-coromandel">
+            <div class="product-image-wrap">
+                <img src="images/coromandel.jpg" alt="فلورأن Coromandel" loading="lazy">
+            </div>
             <div class="product-title">فلورأن — Coromandel</div>
             <div class="product-desc">
                 مستوحى من كورومانديل الفخم. عطر شرقي غني بلمسات الباتشولي، الشوكولاتة الداكنة، واللبان الفاخر.
@@ -707,6 +744,9 @@
 
         <!-- PRODUCT 4: Bois d'Argent -->
         <div class="product-card" id="card-bois">
+            <div class="product-image-wrap">
+                <img src="images/bois-dargent.jpg" alt="فلورأن Bois d'Argent" loading="lazy">
+            </div>
             <div class="product-title">فلورأن — Bois d'Argent</div>
             <div class="product-desc">
                 مستوحى من بوا دأرجان الأنيق. عطر السوسن الأسطوري مع نفحات خشبية وبخور هادئ وجذاب.
@@ -822,7 +862,6 @@
 
     <!-- 9. DYNAMIC SIZE & ORDER LOGIC -->
     <script>
-        // Track state for each perfume card
         const cardStates = {
             'card-ombre': { size: '50ml', price: 25000 },
             'card-baccarat': { size: '50ml', price: 25000 },
@@ -837,16 +876,12 @@
         };
 
         function updateCardSize(btnElement, cardId, size, price) {
-            // Update selected button styling
             const card = document.getElementById(cardId);
             const buttons = card.querySelectorAll('.size-btn');
             buttons.forEach(b => b.classList.remove('active'));
             btnElement.classList.add('active');
 
-            // Update card state
             cardStates[cardId] = { size: size, price: price };
-
-            // Update displayed price
             document.getElementById(cardId + '-price').textContent = price.toLocaleString() + ' د.ع';
         }
 
