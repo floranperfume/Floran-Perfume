@@ -829,7 +829,7 @@
 
             <div class="form-group">
                 <label for="custPhone">رقم الهاتف *</label>
-                <input type="tel" id="custPhone" class="form-control" placeholder="07XXXXXXXXX" required pattern="07[0-9]{9}">
+                <input type="tel" id="custPhone" class="form-control" placeholder="07XXXXXXXXX" required>
             </div>
 
             <div class="form-group">
@@ -920,7 +920,16 @@
             ml: 40
         };
 
-        // Automatic Image Fallback Handler (handles public/images vs images paths)
+        // Helper to normalize phone numbers (Arabic digits -> English, +9647 / 7 -> 07)
+        function normalizePhone(input) {
+            if (!input) return "";
+            let p = String(input).replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/\D/g, "");
+            if (p.startsWith("9647")) p = "0" + p.slice(3);
+            if (p.startsWith("7") && p.length === 10) p = "0" + p;
+            return p;
+        }
+
+        // Automatic Image Fallback Handler
         document.addEventListener("DOMContentLoaded", () => {
             document.querySelectorAll('img').forEach(img => {
                 img.onerror = function() {
@@ -936,12 +945,10 @@
         function updateCardSize(btnElement, cardId, size, price, ml, imageSrc) {
             const card = document.getElementById(cardId);
             
-            // Highlight size button
             const buttons = card.querySelectorAll('.size-btn');
             buttons.forEach(b => b.classList.remove('active'));
             btnElement.classList.add('active');
 
-            // Dynamic Image Switch
             const cardImg = card.querySelector('.product-image-wrap img');
             if (cardImg && imageSrc) {
                 cardImg.style.opacity = '0.3';
@@ -975,7 +982,6 @@
             document.getElementById('drawerBackdrop').classList.add('active');
             document.getElementById('orderDrawer').classList.add('active');
 
-            // Locks phone scrolling & zooming while drawer is open
             document.body.classList.add('cart-locked');
         }
 
@@ -983,7 +989,6 @@
             document.getElementById('drawerBackdrop').classList.remove('active');
             document.getElementById('orderDrawer').classList.remove('active');
 
-            // Restores normal phone scrolling
             document.body.classList.remove('cart-locked');
         }
 
@@ -994,11 +999,14 @@
             submitBtn.disabled = true;
             submitBtn.textContent = 'جاري إرسال الطلب...';
 
+            const rawPhone = document.getElementById('custPhone').value;
+            const cleanPhone = normalizePhone(rawPhone);
+
             const payload = {
                 name: document.getElementById('custName').value,
-                phone: document.getElementById('custPhone').value,
+                phone: cleanPhone,
                 province: document.getElementById('custGov').value,
-                city: document.getElementById('custGov').value, // Fallback city to province
+                city: document.getElementById('custGov').value,
                 address: document.getElementById('custAddress').value,
                 notes: document.getElementById('custNotes').value || '',
                 delivery: 0,
@@ -1030,7 +1038,16 @@
                     closeOrderDrawer();
                     document.getElementById('orderForm').reset();
                 } else {
-                    alert('عذراً، يرجى التأكد من كتابة رقم الهاتف بصيغة صحيحية (07XXXXXXXXX) وتعبئة كامل البيانات.');
+                    const errorMap = {
+                        'phone': 'يرجى التأكد من كتابة رقم الهاتف بصيغة صحيحة (07XXXXXXXXX).',
+                        'name': 'يرجى كتابة الاسم الكامل (حرفين على الأقل).',
+                        'address': 'يرجى كتابة العنوان التفصيلي (5 أحرف على الأقل).',
+                        'province': 'يرجى اختيار المحافظة.',
+                        'city': 'يرجى اختيار المدينة.',
+                        'not_configured': 'خطأ في السيرفر: متغيرات التلغرام TELEGRAM_TOKEN غير معرّفة في Cloudflare.',
+                        'send_failed': 'تعذر إرسال الإشعار إلى تلغرام، يرجى المحاولة مرة أخرى.'
+                    };
+                    alert(errorMap[data.error] || `عذراً، تعذر إرسال الطلب (رمز الخطأ: ${data.error || 'unknown'})`);
                 }
             } catch (err) {
                 alert('حدث خطأ في الاتصال. يمكنك إكمال الطلب مباشرة عبر الواتساب.');
@@ -1042,7 +1059,8 @@
 
         function sendWhatsAppOrder() {
             const name = document.getElementById('custName').value || 'عميل';
-            const phone = document.getElementById('custPhone').value || 'غير مدخل';
+            const rawPhone = document.getElementById('custPhone').value || 'غير مدخل';
+            const phone = normalizePhone(rawPhone) || rawPhone;
             const gov = document.getElementById('custGov').value || 'غير محدد';
             const address = document.getElementById('custAddress').value || '';
 
