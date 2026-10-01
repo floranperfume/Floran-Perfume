@@ -43,7 +43,13 @@ function validate(body) {
   const notes    = clean(body.notes, LIMITS.notes.max);
   const prov     = clean(body.province, 40);
   const city     = clean(body.city, 60) || prov; // Fallback city to province if empty
-  const phoneD   = String(body.phone || "").replace(/\D/g, "");
+  
+  // Normalize Eastern Arabic numerals (٠-٩) and formats (+9647..., 9647..., 7...)
+  let rawPhone = String(body.phone || "").replace(/[٠-٩]/g, d => "٠١٢٣٥٦٧٨٩".indexOf(d));
+  let phoneD   = rawPhone.replace(/\D/g, "");
+  if (phoneD.startsWith("9647")) phoneD = "0" + phoneD.slice(3);
+  if (phoneD.startsWith("7") && phoneD.length === 10) phoneD = "0" + phoneD;
+
   const delivery = Number(body.delivery) || 0;
 
   if (name.length    < LIMITS.name.min)    return "name";
