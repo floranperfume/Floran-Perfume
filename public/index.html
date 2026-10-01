@@ -2,9 +2,9 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <!-- Prevent user zooming on touch devices -->
+    <!-- Locks zooming on mobile touch devices -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>فلوران للعطور | Florane Perfumes - الفخامة والأناقة في كل قطرة</title>
+    <title>فلوران للعطور | Florane Parfums</title>
     
     <!-- Meta & OpenGraph -->
     <meta property="og:title" content="فلوران للعطور - Florane Perfumes">
@@ -16,7 +16,7 @@
     <link rel="apple-touch-icon" href="public/images/apple-touch-icon.png">
     <link rel="shortcut icon" href="public/images/favicon.ico">
 
-    <!-- Google Fonts & Resource Preloads -->
+    <!-- Google Fonts & Preloads -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -24,7 +24,7 @@
 
     <style>
         /* ==========================================================================
-           1. CORE & MOBILE OPTIMIZATIONS
+           1. CORE & MOBILE OVERRIDE
            ========================================================================== */
         :root {
             --bg-dark: #0a0a0a;
@@ -45,7 +45,7 @@
             padding: 0;
             font-family: 'Cairo', system-ui, -apple-system, sans-serif;
             -webkit-tap-highlight-color: transparent;
-            touch-action: manipulation; /* Prevents double-tap zoom on phones */
+            touch-action: manipulation;
         }
 
         html, body {
@@ -56,24 +56,25 @@
         }
 
         body {
-            padding-bottom: 80px;
+            padding-bottom: 75px;
         }
 
-        .gpu-accelerated {
-            transform: translateZ(0);
-            will-change: transform;
+        /* Prevents body scroll when cart drawer is active */
+        body.cart-locked {
+            overflow: hidden !important;
+            touch-action: none !important;
         }
 
         /* ==========================================================================
-           2. FREE SHIPPING TOP BANNER
+           2. TOP BANNER & HEADER
            ========================================================================== */
         .top-banner {
             background: linear-gradient(90deg, #8a6d1c, #d4af37, #ffd700, #d4af37, #8a6d1c);
             background-size: 200% auto;
             color: #000;
             text-align: center;
-            padding: 8px 10px;
-            font-size: 12px;
+            padding: 7px 10px;
+            font-size: 11.5px;
             font-weight: 800;
             position: sticky;
             top: 0;
@@ -86,11 +87,8 @@
             to { background-position: 200% center; }
         }
 
-        /* ==========================================================================
-           3. HEADER & BRAND EMBLEM
-           ========================================================================== */
         header {
-            padding: 15px 12px 12px;
+            padding: 14px 12px 10px;
             text-align: center;
             border-bottom: 1px solid var(--border-gold);
             background: rgba(10, 10, 10, 0.9);
@@ -98,14 +96,14 @@
         }
 
         .header-emblem {
-            width: 100px;
+            width: 85px;
             height: auto;
             margin-bottom: 4px;
             filter: drop-shadow(0 2px 6px rgba(212, 175, 55, 0.3));
         }
 
         .brand-logo {
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 900;
             background: var(--gold-gradient);
             -webkit-background-clip: text;
@@ -114,14 +112,17 @@
         }
 
         .brand-subtitle {
-            font-size: 10px;
+            font-size: 9.5px;
             color: var(--text-muted);
             margin-top: 1px;
             letter-spacing: 2px;
         }
 
+        /* ==========================================================================
+           3. HERO & VIDEO
+           ========================================================================== */
         .hero {
-            padding: 18px 12px 10px;
+            padding: 16px 12px 10px;
             text-align: center;
         }
 
@@ -130,40 +131,37 @@
             background: rgba(212, 175, 55, 0.15);
             border: 1px solid var(--gold-primary);
             color: var(--gold-light);
-            padding: 3px 10px;
+            padding: 2px 10px;
             border-radius: 20px;
-            font-size: 11px;
+            font-size: 10.5px;
             font-weight: 700;
-            margin-bottom: 8px;
-        }
-
-        .hero h1 {
-            font-size: 20px;
-            font-weight: 800;
-            line-height: 1.3;
             margin-bottom: 6px;
         }
 
+        .hero h1 {
+            font-size: 19px;
+            font-weight: 800;
+            line-height: 1.3;
+            margin-bottom: 4px;
+        }
+
         .hero p {
-            font-size: 12px;
+            font-size: 11.5px;
             color: var(--text-muted);
             max-width: 450px;
-            margin: 0 auto 10px;
+            margin: 0 auto;
             line-height: 1.4;
         }
 
-        /* ==========================================================================
-           4. SHOWCASE VIDEO
-           ========================================================================== */
         .video-section {
-            padding: 8px 12px 20px;
+            padding: 10px 12px 16px;
             max-width: 500px;
             margin: 0 auto;
         }
 
         .video-card {
             position: relative;
-            border-radius: 16px;
+            border-radius: 14px;
             overflow: hidden;
             border: 1px solid var(--border-gold);
             background: #000;
@@ -172,7 +170,7 @@
         .video-card video {
             width: 100%;
             height: auto;
-            max-height: 400px;
+            max-height: 380px;
             object-fit: cover;
             display: block;
         }
@@ -182,7 +180,7 @@
             bottom: 0;
             left: 0;
             right: 0;
-            padding: 20px 12px 14px;
+            padding: 16px 12px 12px;
             background: linear-gradient(to top, rgba(0,0,0,0.95) 30%, rgba(0,0,0,0.4) 80%, transparent);
             text-align: center;
         }
@@ -190,24 +188,24 @@
         .video-overlay .tag {
             background: #e63946;
             color: #fff;
-            font-size: 10px;
+            font-size: 9.5px;
             font-weight: 800;
             padding: 2px 8px;
             border-radius: 10px;
             display: inline-block;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
         }
 
         .video-overlay h3 {
-            font-size: 17px;
+            font-size: 16px;
             color: var(--gold-light);
             margin-bottom: 2px;
         }
 
         .video-overlay p {
-            font-size: 11px;
+            font-size: 10.5px;
             color: #ddd;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
         .btn-gold {
@@ -215,9 +213,9 @@
             width: 100%;
             background: var(--gold-gradient);
             color: #000;
-            padding: 10px 14px;
+            padding: 9px 12px;
             border-radius: 25px;
-            font-size: 13px;
+            font-size: 12.5px;
             font-weight: 800;
             border: none;
             cursor: pointer;
@@ -231,13 +229,13 @@
         }
 
         /* ==========================================================================
-           5. TRUST BADGES
+           4. TRUST BADGES
            ========================================================================== */
         .trust-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 6px;
-            padding: 0 12px 20px;
+            padding: 0 10px 16px;
             max-width: 600px;
             margin: 0 auto;
         }
@@ -251,80 +249,80 @@
         }
 
         .trust-item span {
-            font-size: 16px;
+            font-size: 15px;
             display: block;
             margin-bottom: 2px;
         }
 
         .trust-item p {
-            font-size: 9.5px;
+            font-size: 9px;
             font-weight: 700;
             color: var(--text-main);
             line-height: 1.2;
         }
 
         /* ==========================================================================
-           6. PRODUCTS CATALOG (2 PER ROW ON PHONES)
+           5. 2-COLUMN MOBILE PRODUCTS GRID
            ========================================================================== */
         .products-section {
-            padding: 10px 10px 30px;
+            padding: 6px 10px 20px;
             max-width: 800px;
             margin: 0 auto;
         }
 
         .section-header {
             text-align: center;
-            margin-bottom: 18px;
+            margin-bottom: 14px;
         }
 
         .section-header h2 {
-            font-size: 19px;
+            font-size: 18px;
             color: var(--gold-light);
         }
 
         .section-header p {
-            font-size: 11.5px;
+            font-size: 11px;
             color: var(--text-muted);
         }
 
-        /* Responsive 2-Column Grid for Mobile Phones */
+        /* Strict 2-Column Mobile Grid */
         .products-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
+            gap: 8px;
         }
 
         .product-card {
             background: var(--bg-card);
             border: 1px solid var(--border-gold);
             border-radius: var(--radius-md);
-            padding: 10px;
+            padding: 8px;
             position: relative;
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
         }
 
-        /* Discovery set spans full-width at top */
+        /* Full width for Discovery Set banner */
         .product-card.full-width {
             grid-column: 1 / -1;
-            padding: 14px;
+            padding: 12px;
         }
 
         .product-image-wrap {
             width: 100%;
-            height: 140px;
+            height: 130px;
             border-radius: var(--radius-sm);
             overflow: hidden;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             background: #000;
             border: 1px solid rgba(255, 255, 255, 0.08);
             position: relative;
         }
 
         .full-width .product-image-wrap {
-            height: 180px;
+            height: 170px;
         }
 
         .product-image-wrap img {
@@ -337,30 +335,30 @@
 
         .product-badge {
             position: absolute;
-            top: 8px;
-            left: 8px;
+            top: 6px;
+            left: 6px;
             background: var(--gold-primary);
             color: #000;
-            font-size: 9.5px;
+            font-size: 9px;
             font-weight: 800;
-            padding: 2px 8px;
-            border-radius: 12px;
+            padding: 2px 7px;
+            border-radius: 10px;
             z-index: 2;
         }
 
         .product-title {
-            font-size: 13.5px;
+            font-size: 12.5px;
             font-weight: 800;
-            margin-bottom: 4px;
+            margin-bottom: 3px;
             line-height: 1.25;
             color: #fff;
         }
 
         .product-desc {
-            font-size: 10.5px;
+            font-size: 10px;
             color: var(--text-muted);
-            line-height: 1.35;
-            margin-bottom: 8px;
+            line-height: 1.3;
+            margin-bottom: 6px;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
@@ -369,12 +367,11 @@
 
         .full-width .product-desc {
             -webkit-line-clamp: 3;
-            font-size: 11.5px;
+            font-size: 11px;
         }
 
-        /* Compact Size Selector for 2-column layout */
         .size-selector-label {
-            font-size: 10px;
+            font-size: 9.5px;
             font-weight: 700;
             color: var(--gold-light);
             margin-bottom: 4px;
@@ -384,17 +381,17 @@
         .size-options {
             display: flex;
             gap: 4px;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
 
         .size-btn {
             flex: 1;
-            padding: 6px 2px;
+            padding: 5px 2px;
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: var(--radius-sm);
             color: #fff;
-            font-size: 10px;
+            font-size: 9.5px;
             font-weight: 700;
             cursor: pointer;
             text-align: center;
@@ -411,33 +408,33 @@
             align-items: center;
             justify-content: space-between;
             background: rgba(0,0,0,0.5);
-            padding: 6px 8px;
+            padding: 5px 6px;
             border-radius: var(--radius-sm);
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
 
         .price-row .price {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 900;
             color: var(--gold-light);
         }
 
         .price-row .shipping-tag {
             color: #2ecc71;
-            font-size: 9.5px;
+            font-size: 9px;
             font-weight: 700;
         }
 
         .urgency-box {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 5px;
             background: rgba(230, 57, 70, 0.1);
             border: 1px dashed rgba(230, 57, 70, 0.4);
-            padding: 6px 8px;
+            padding: 5px 8px;
             border-radius: var(--radius-sm);
-            margin-bottom: 8px;
-            font-size: 10px;
+            margin-bottom: 6px;
+            font-size: 9.5px;
             color: #ff6b6b;
         }
 
@@ -457,7 +454,7 @@
         }
 
         /* ==========================================================================
-           7. MOBILE LOCKED CART DRAWER
+           6. LOCKED CART DRAWER
            ========================================================================== */
         .drawer-backdrop {
             position: fixed;
@@ -487,7 +484,7 @@
             background: #121212;
             border-top: 2px solid var(--gold-primary);
             border-radius: 20px 20px 0 0;
-            padding: 18px 16px 24px;
+            padding: 16px 14px 20px;
             z-index: 2001;
             transform: translateY(100%);
             transition: transform 0.3s cubic-bezier(0.1, 0.9, 0.2, 1);
@@ -504,13 +501,13 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 14px;
+            margin-bottom: 12px;
             border-bottom: 1px solid rgba(255,255,255,0.1);
-            padding-bottom: 10px;
+            padding-bottom: 8px;
         }
 
         .drawer-header h3 {
-            font-size: 16px;
+            font-size: 15px;
             color: var(--gold-light);
         }
 
@@ -520,7 +517,7 @@
             color: #fff;
             font-size: 22px;
             cursor: pointer;
-            padding: 0 8px;
+            padding: 0 6px;
         }
 
         .form-group {
@@ -529,10 +526,10 @@
 
         .form-group label {
             display: block;
-            font-size: 11px;
+            font-size: 10.5px;
             font-weight: 700;
             color: var(--text-muted);
-            margin-bottom: 4px;
+            margin-bottom: 3px;
         }
 
         .form-control {
@@ -540,9 +537,9 @@
             background: #1e1e1e;
             border: 1px solid rgba(255,255,255,0.15);
             border-radius: var(--radius-sm);
-            padding: 10px 12px;
+            padding: 9px 10px;
             color: #fff;
-            font-size: 13px;
+            font-size: 12.5px;
             outline: none;
         }
 
@@ -553,29 +550,34 @@
         .summary-box {
             background: rgba(212, 175, 55, 0.08);
             border: 1px solid var(--border-gold);
-            padding: 10px;
+            padding: 8px 10px;
             border-radius: var(--radius-sm);
-            margin: 14px 0;
+            margin: 12px 0;
         }
 
         .summary-line {
             display: flex;
             justify-content: space-between;
-            font-size: 12px;
-            margin-bottom: 4px;
+            font-size: 11.5px;
+            margin-bottom: 3px;
         }
 
         .summary-line.total {
             border-top: 1px solid rgba(212, 175, 55, 0.2);
-            padding-top: 6px;
+            padding-top: 5px;
             margin-bottom: 0;
             font-weight: 800;
-            font-size: 14px;
+            font-size: 13.5px;
             color: var(--gold-light);
         }
 
+        /* Honeypot field (hidden from real users) */
+        .hp-field {
+            display: none !important;
+        }
+
         /* ==========================================================================
-           8. MOBILE STICKY BOTTOM QUICK CTA
+           7. MOBILE STICKY BOTTOM BAR
            ========================================================================== */
         .mobile-sticky-bar {
             position: fixed;
@@ -585,7 +587,7 @@
             background: rgba(15, 15, 15, 0.95);
             backdrop-filter: blur(10px);
             border-top: 1px solid var(--border-gold);
-            padding: 8px 14px;
+            padding: 8px 12px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -594,13 +596,13 @@
         }
 
         .sticky-info .sticky-title {
-            font-size: 11.5px;
+            font-size: 11px;
             font-weight: 700;
             color: #fff;
         }
 
         .sticky-info .sticky-price {
-            font-size: 13px;
+            font-size: 12.5px;
             font-weight: 900;
             color: var(--gold-light);
         }
@@ -609,18 +611,18 @@
             background: var(--gold-gradient);
             color: #000;
             border: none;
-            padding: 8px 18px;
+            padding: 7px 16px;
             border-radius: 20px;
             font-weight: 800;
-            font-size: 12.5px;
+            font-size: 12px;
             cursor: pointer;
         }
     </style>
 </head>
 <body>
 
-    <!-- 1. FREE DELIVERY STICKY TOP BANNER -->
-    <div class="top-banner gpu-accelerated">
+    <!-- 1. TOP STICKY BANNER -->
+    <div class="top-banner">
         🚚 عرض حصري: التوصيل <strong>مجاني بالكامل</strong> لجميع المحافظات!
     </div>
 
@@ -638,9 +640,9 @@
         <p>زيوت فرنسية وسويسرية نادرة تُحاكي أشهر العطور العالمية بدقة متناهية مع ثبات يدوم 24+ ساعة.</p>
     </section>
 
-    <!-- 4. EMBEDDED SHOWCASE VIDEO -->
+    <!-- 4. SHOWCASE VIDEO -->
     <section class="video-section">
-        <div class="video-card gpu-accelerated">
+        <div class="video-card">
             <video autoplay muted loop playsinline preload="auto">
                 <source src="showcase.mp4" type="video/mp4">
             </video>
@@ -648,7 +650,7 @@
                 <span class="tag">العطر الأكثر مبيعاً 🔥</span>
                 <h3>فلوران — Ombre Nomade</h3>
                 <p>سحر العود الملكي مع الورد النادر • فوحان مبهر وثبات أسطوري</p>
-                <button onclick="openOrderDrawer('فلوران - Ombre Nomade', '50ml', 25000)" class="btn-gold">
+                <button onclick="openOrderDrawer('فلوران - Ombre Nomade', '50ml', 25000, 50)" class="btn-gold">
                     اطلب الآن — توصيل مجاني
                 </button>
             </div>
@@ -671,7 +673,7 @@
         </div>
     </div>
 
-    <!-- 6. FULL PERFUME CATALOG (2 PER ROW ON MOBILE) -->
+    <!-- 6. 2-COLUMN PRODUCTS CATALOG FOR MOBILE -->
     <section class="products-section" id="products">
         <div class="section-header">
             <h2>قائمة العطور المتاحة</h2>
@@ -679,7 +681,7 @@
         </div>
 
         <div class="products-grid">
-            <!-- PRODUCT 0: DISCOVERY SET (Full Width Banner) -->
+            <!-- PRODUCT 0: DISCOVERY SET (Full Width) -->
             <div class="product-card full-width" id="card-discovery">
                 <span class="product-badge">الأكثر شعبية 🔥</span>
                 <div class="product-image-wrap">
@@ -700,7 +702,7 @@
                     <span class="shipping-tag">✓ التوصيل مجاني</span>
                 </div>
 
-                <button onclick="openOrderDrawer('طقم فلوران التجريبي (4 × 10ml)', '10ml x 4', 20000)" class="btn-gold">
+                <button onclick="openOrderDrawer('طقم فلوران التجريبي (4 × 10ml)', '10ml x 4', 20000, 40)" class="btn-gold">
                     اطلب طقم التجربة الآن
                 </button>
             </div>
@@ -715,8 +717,8 @@
 
                 <span class="size-selector-label">اختر الحجم:</span>
                 <div class="size-options">
-                    <button class="size-btn" onclick="updateCardSize(this, 'card-ombre', '30ml', 15000, 'public/images/ombre-nomade-30.jpg')">30ml (15k)</button>
-                    <button class="size-btn active" onclick="updateCardSize(this, 'card-ombre', '50ml', 25000, 'public/images/ombre-nomade.jpg')">50ml (25k)</button>
+                    <button class="size-btn" onclick="updateCardSize(this, 'card-ombre', '30ml', 15000, 30, 'public/images/ombre-nomade-30.jpg')">30ml (15k)</button>
+                    <button class="size-btn active" onclick="updateCardSize(this, 'card-ombre', '50ml', 25000, 50, 'public/images/ombre-nomade.jpg')">50ml (25k)</button>
                 </div>
 
                 <div class="price-row">
@@ -739,8 +741,8 @@
 
                 <span class="size-selector-label">اختر الحجم:</span>
                 <div class="size-options">
-                    <button class="size-btn" onclick="updateCardSize(this, 'card-baccarat', '30ml', 15000, 'public/images/baccarat-540-30.jpg')">30ml (15k)</button>
-                    <button class="size-btn active" onclick="updateCardSize(this, 'card-baccarat', '50ml', 25000, 'public/images/baccarat-540.jpg')">50ml (25k)</button>
+                    <button class="size-btn" onclick="updateCardSize(this, 'card-baccarat', '30ml', 15000, 30, 'public/images/baccarat-540-30.jpg')">30ml (15k)</button>
+                    <button class="size-btn active" onclick="updateCardSize(this, 'card-baccarat', '50ml', 25000, 50, 'public/images/baccarat-540.jpg')">50ml (25k)</button>
                 </div>
 
                 <div class="price-row">
@@ -763,8 +765,8 @@
 
                 <span class="size-selector-label">اختر الحجم:</span>
                 <div class="size-options">
-                    <button class="size-btn" onclick="updateCardSize(this, 'card-coromandel', '30ml', 15000, 'public/images/coromandel-30.jpg')">30ml (15k)</button>
-                    <button class="size-btn active" onclick="updateCardSize(this, 'card-coromandel', '50ml', 25000, 'public/images/coromandel.jpg')">50ml (25k)</button>
+                    <button class="size-btn" onclick="updateCardSize(this, 'card-coromandel', '30ml', 15000, 30, 'public/images/coromandel-30.jpg')">30ml (15k)</button>
+                    <button class="size-btn active" onclick="updateCardSize(this, 'card-coromandel', '50ml', 25000, 50, 'public/images/coromandel.jpg')">50ml (25k)</button>
                 </div>
 
                 <div class="price-row">
@@ -787,8 +789,8 @@
 
                 <span class="size-selector-label">اختر الحجم:</span>
                 <div class="size-options">
-                    <button class="size-btn" onclick="updateCardSize(this, 'card-bois', '30ml', 15000, 'public/images/bois-dargent-30.jpg')">30ml (15k)</button>
-                    <button class="size-btn active" onclick="updateCardSize(this, 'card-bois', '50ml', 25000, 'public/images/bois-dargent.jpg')">50ml (25k)</button>
+                    <button class="size-btn" onclick="updateCardSize(this, 'card-bois', '30ml', 15000, 30, 'public/images/bois-dargent-30.jpg')">30ml (15k)</button>
+                    <button class="size-btn active" onclick="updateCardSize(this, 'card-bois', '50ml', 25000, 50, 'public/images/bois-dargent.jpg')">50ml (25k)</button>
                 </div>
 
                 <div class="price-row">
@@ -803,7 +805,7 @@
         </div>
     </section>
 
-    <!-- 7. LOCKED CHECKOUT DRAWER (MOBILE OPTIMIZED) -->
+    <!-- 7. CHECKOUT DRAWER -->
     <div class="drawer-backdrop" id="drawerBackdrop" onclick="closeOrderDrawer()"></div>
     <div class="drawer" id="orderDrawer">
         <div class="drawer-header">
@@ -812,6 +814,9 @@
         </div>
 
         <form id="orderForm" onsubmit="submitOrder(event)">
+            <!-- Anti-Spam Honeypot Field -->
+            <input type="text" name="hp" id="hpField" class="hp-field" tabindex="-1" autocomplete="off">
+
             <div class="form-group">
                 <label>المنتج والحجم المحدد:</label>
                 <input type="text" id="selectedProductInput" class="form-control" readonly style="color: var(--gold-light); font-weight: 700;">
@@ -819,12 +824,12 @@
 
             <div class="form-group">
                 <label for="custName">الاسم الكامل *</label>
-                <input type="text" id="custName" class="form-control" placeholder="أدخل اسمك الكريم" required>
+                <input type="text" id="custName" class="form-control" placeholder="أدخل اسمك الكريم" required minlength="2" maxlength="80">
             </div>
 
             <div class="form-group">
                 <label for="custPhone">رقم الهاتف *</label>
-                <input type="tel" id="custPhone" class="form-control" placeholder="07XXXXXXXXX" required pattern="[0-9]{10,11}">
+                <input type="tel" id="custPhone" class="form-control" placeholder="07XXXXXXXXX" required pattern="07[0-9]{9}">
             </div>
 
             <div class="form-group">
@@ -832,29 +837,34 @@
                 <select id="custGov" class="form-control" required>
                     <option value="" disabled selected>اختر المحافظة...</option>
                     <option value="بغداد">بغداد</option>
-                    <option value="نينوى">نينوى / الموصل</option>
                     <option value="البصرة">البصرة</option>
+                    <option value="نينوى">نينوى</option>
                     <option value="أربيل">أربيل</option>
-                    <option value="النجف">النجف</option>
-                    <option value="كربلاء">كربلاء</option>
-                    <option value="كركوك">كركوك</option>
-                    <option value="بابل">بابل</option>
                     <option value="السليمانية">السليمانية</option>
-                    <option value="ذي قار">ذي قار</option>
-                    <option value="الانبار">الانبار</option>
-                    <option value="صلاح الدين">صلاح الدين</option>
-                    <option value="القادسية">القادسية</option>
-                    <option value="المثنى">المثنى</option>
-                    <option value="واسط">واسط</option>
-                    <option value="ميسان">ميسان</option>
                     <option value="دهوك">دهوك</option>
+                    <option value="كركوك">كركوك</option>
+                    <option value="الأنبار">الأنبار</option>
+                    <option value="بابل">بابل</option>
+                    <option value="كربلاء">كربلاء</option>
+                    <option value="النجف">النجف</option>
+                    <option value="الديوانية">الديوانية</option>
+                    <option value="المثنى">المثنى</option>
+                    <option value="ذي قار">ذي قار</option>
+                    <option value="ميسان">ميسان</option>
+                    <option value="واسط">واسط</option>
                     <option value="ديالى">ديالى</option>
+                    <option value="صلاح الدين">صلاح الدين</option>
                 </select>
             </div>
 
             <div class="form-group">
-                <label for="custAddress">المنطقة / العنوان التفصيلي *</label>
-                <input type="text" id="custAddress" class="form-control" placeholder="اسم الحي / الشارع / نقطة دالة" required>
+                <label for="custAddress">العنوان التفصيلي / المنطقة *</label>
+                <input type="text" id="custAddress" class="form-control" placeholder="اسم الحي / الشارع / أقرب نقطة دالة" required minlength="5" maxlength="300">
+            </div>
+
+            <div class="form-group">
+                <label for="custNotes">ملاحظات إضافية (اختياري)</label>
+                <input type="text" id="custNotes" class="form-control" placeholder="أي ملاحظات خاصة بالموعد أو العنوان" maxlength="400">
             </div>
 
             <!-- Price Breakdown Summary -->
@@ -873,7 +883,7 @@
                 </div>
             </div>
 
-            <button type="submit" class="btn-gold" style="font-size: 15px; margin-bottom: 8px;">
+            <button type="submit" id="submitBtn" class="btn-gold" style="font-size: 14px; margin-bottom: 8px;">
                 تأكيد الطلب الآن ⚡
             </button>
             
@@ -883,30 +893,31 @@
         </form>
     </div>
 
-    <!-- 8. MOBILE STICKY BOTTOM QUICK CTA -->
-    <div class="mobile-sticky-bar gpu-accelerated">
+    <!-- 8. MOBILE STICKY BOTTOM BAR -->
+    <div class="mobile-sticky-bar">
         <div class="sticky-info">
             <div class="sticky-title">طقم التجربة الشامل</div>
             <div class="sticky-price">20,000 د.ع <small style="color: #2ecc71;">(مجاني)</small></div>
         </div>
-        <button onclick="openOrderDrawer('طقم فلوران التجريبي', '4 × 10ml', 20000)" class="sticky-btn">
+        <button onclick="openOrderDrawer('طقم فلوران التجريبي', '4 × 10ml', 20000, 40)" class="sticky-btn">
             اطلب الآن ⚡
         </button>
     </div>
 
-    <!-- 9. DYNAMIC SIZE, IMAGE FALLBACK & LOCKING LOGIC -->
+    <!-- 9. FRONTEND FUNCTIONALITY & API INTEGRATION -->
     <script>
         const cardStates = {
-            'card-ombre': { size: '50ml', price: 25000 },
-            'card-baccarat': { size: '50ml', price: 25000 },
-            'card-coromandel': { size: '50ml', price: 25000 },
-            'card-bois': { size: '50ml', price: 25000 }
+            'card-ombre': { size: '50ml', price: 25000, ml: 50 },
+            'card-baccarat': { size: '50ml', price: 25000, ml: 50 },
+            'card-coromandel': { size: '50ml', price: 25000, ml: 50 },
+            'card-bois': { size: '50ml', price: 25000, ml: 50 }
         };
 
         let activeOrder = {
             title: "طقم فلوران التجريبي",
             size: "4 × 10ml",
-            price: 20000
+            price: 20000,
+            ml: 40
         };
 
         // Automatic Image Fallback Handler (handles public/images vs images paths)
@@ -922,15 +933,15 @@
             });
         });
 
-        function updateCardSize(btnElement, cardId, size, price, imageSrc) {
+        function updateCardSize(btnElement, cardId, size, price, ml, imageSrc) {
             const card = document.getElementById(cardId);
             
-            // Highlight active size button
+            // Highlight size button
             const buttons = card.querySelectorAll('.size-btn');
             buttons.forEach(b => b.classList.remove('active'));
             btnElement.classList.add('active');
 
-            // Dynamic Image Switch with Fallback
+            // Dynamic Image Switch
             const cardImg = card.querySelector('.product-image-wrap img');
             if (cardImg && imageSrc) {
                 cardImg.style.opacity = '0.3';
@@ -945,45 +956,88 @@
                 }, 150);
             }
 
-            // Update State
-            cardStates[cardId] = { size: size, price: price };
-            document.getElementById(cardId + '-price').textContent = price.toLocaleString() + ' د.ع';
+            cardStates[cardId] = { size: size, price: price, ml: ml };
+            document.getElementById(cardId + '-price').textContent = price.toLocaleString('en-US') + ' د.ع';
         }
 
         function orderCurrentCard(cardId, perfumeName) {
             const state = cardStates[cardId];
-            openOrderDrawer(perfumeName, state.size, state.price);
+            openOrderDrawer(perfumeName, state.size, state.price, state.ml);
         }
 
-        function openOrderDrawer(title, size, price) {
-            activeOrder = { title, size, price };
+        function openOrderDrawer(title, size, price, ml) {
+            activeOrder = { title, size, price, ml };
             
             document.getElementById('selectedProductInput').value = `${title} (${size})`;
-            document.getElementById('summaryProductPrice').textContent = price.toLocaleString() + ' د.ع';
-            document.getElementById('summaryTotalPrice').textContent = price.toLocaleString() + ' د.ع';
+            document.getElementById('summaryProductPrice').textContent = price.toLocaleString('en-US') + ' د.ع';
+            document.getElementById('summaryTotalPrice').textContent = price.toLocaleString('en-US') + ' د.ع';
 
             document.getElementById('drawerBackdrop').classList.add('active');
             document.getElementById('orderDrawer').classList.add('active');
 
-            // Prevent zoom/scroll on phone background while cart drawer is open
-            document.body.style.overflow = 'hidden';
-            document.body.style.touchAction = 'none';
+            // Locks phone scrolling & zooming while drawer is open
+            document.body.classList.add('cart-locked');
         }
 
         function closeOrderDrawer() {
             document.getElementById('drawerBackdrop').classList.remove('active');
             document.getElementById('orderDrawer').classList.remove('active');
 
-            // Restore normal scrolling on phone
-            document.body.style.overflow = '';
-            document.body.style.touchAction = '';
+            // Restores normal phone scrolling
+            document.body.classList.remove('cart-locked');
         }
 
-        function submitOrder(event) {
+        async function submitOrder(event) {
             event.preventDefault();
-            const name = document.getElementById('custName').value;
-            alert(`شكراً لك ${name}! تم استلام طلبك لـ (${activeOrder.title} - ${activeOrder.size}) بنجاح. سيتم التواصل معك للتوصيل المجاني.`);
-            closeOrderDrawer();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'جاري إرسال الطلب...';
+
+            const payload = {
+                name: document.getElementById('custName').value,
+                phone: document.getElementById('custPhone').value,
+                province: document.getElementById('custGov').value,
+                city: document.getElementById('custGov').value, // Fallback city to province
+                address: document.getElementById('custAddress').value,
+                notes: document.getElementById('custNotes').value || '',
+                delivery: 0,
+                ref: 'FL-' + Math.floor(100000 + Math.random() * 900000),
+                lang: 'ar',
+                hp: document.getElementById('hpField').value,
+                items: [
+                    {
+                        name: activeOrder.title,
+                        size: activeOrder.size,
+                        ml: activeOrder.ml,
+                        qty: 1,
+                        sub: activeOrder.price
+                    }
+                ]
+            };
+
+            try {
+                const response = await fetch('/api/order', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+
+                if (data.ok) {
+                    alert(`شكراً لك ${payload.name}! تم استلام طلبك بنجاح. رقم المرجعية: ${data.ref}`);
+                    closeOrderDrawer();
+                    document.getElementById('orderForm').reset();
+                } else {
+                    alert('عذراً، يرجى التأكد من كتابة رقم الهاتف بصيغة صحيحية (07XXXXXXXXX) وتعبئة كامل البيانات.');
+                }
+            } catch (err) {
+                alert('حدث خطأ في الاتصال. يمكنك إكمال الطلب مباشرة عبر الواتساب.');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'تأكيد الطلب الآن ⚡';
+            }
         }
 
         function sendWhatsAppOrder() {
@@ -994,7 +1048,7 @@
 
             const message = `مرحباً فلوران، أود تأكيد الطلب التالي:\n\n` +
                             `📦 *المنتج:* ${activeOrder.title} (${activeOrder.size})\n` +
-                            `💰 *السعر:* ${activeOrder.price.toLocaleString()} د.ع (توصيل مجاني)\n` +
+                            `💰 *السعر:* ${activeOrder.price.toLocaleString('en-US')} د.ع (توصيل مجاني)\n` +
                             `👤 *الاسم:* ${name}\n` +
                             `📞 *الهاتف:* ${phone}\n` +
                             `📍 *العنوان:* ${gov} - ${address}`;
