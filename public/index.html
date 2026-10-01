@@ -45,10 +45,9 @@
 
         body {
             overflow-x: hidden;
-            padding-bottom: 80px; /* Space for mobile sticky CTA */
+            padding-bottom: 85px; /* Space for mobile sticky CTA */
         }
 
-        /* Hardware acceleration layer */
         .gpu-accelerated {
             transform: translateZ(0);
             will-change: transform;
@@ -77,12 +76,6 @@
             to { background-position: 200% center; }
         }
 
-        .top-banner span {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
-
         /* ==========================================================================
            3. HEADER & HERO SECTION
            ========================================================================== */
@@ -90,7 +83,7 @@
             padding: 20px 15px 10px;
             text-align: center;
             border-bottom: 1px solid var(--border-gold);
-            background: rgba(10, 10, 10, 0.8);
+            background: rgba(10, 10, 10, 0.85);
             backdrop-filter: blur(12px);
         }
 
@@ -104,14 +97,14 @@
         }
 
         .brand-subtitle {
-            font-size: 12px;
+            font-size: 11px;
             color: var(--text-muted);
             margin-top: 2px;
             letter-spacing: 2px;
         }
 
         .hero {
-            padding: 30px 16px 20px;
+            padding: 25px 16px 15px;
             text-align: center;
             background: radial-gradient(circle at center, rgba(212, 175, 55, 0.08) 0%, transparent 70%);
         }
@@ -125,29 +118,29 @@
             border-radius: 30px;
             font-size: 12px;
             font-weight: 700;
-            margin-bottom: 12px;
-        }
-
-        .hero h1 {
-            font-size: 26px;
-            font-weight: 800;
-            line-height: 1.3;
             margin-bottom: 10px;
         }
 
+        .hero h1 {
+            font-size: 24px;
+            font-weight: 800;
+            line-height: 1.3;
+            margin-bottom: 8px;
+        }
+
         .hero p {
-            font-size: 14px;
+            font-size: 13.5px;
             color: var(--text-muted);
             max-width: 500px;
-            margin: 0 auto 20px;
-            line-height: 1.6;
+            margin: 0 auto 15px;
+            line-height: 1.5;
         }
 
         /* ==========================================================================
-           4. SHOWCASE VIDEO SECTION (High Conversion)
+           4. SHOWCASE VIDEO SECTION
            ========================================================================== */
         .video-section {
-            padding: 10px 16px 30px;
+            padding: 10px 16px 25px;
             max-width: 600px;
             margin: 0 auto;
         }
@@ -164,7 +157,7 @@
         .video-card video {
             width: 100%;
             height: auto;
-            max-height: 520px;
+            max-height: 500px;
             object-fit: cover;
             display: block;
         }
@@ -175,7 +168,7 @@
             left: 0;
             right: 0;
             padding: 30px 18px 20px;
-            background: linear-gradient(to top, rgba(0,0,0,0.95) 20%, rgba(0,0,0,0.5) 70%, transparent);
+            background: linear-gradient(to top, rgba(0,0,0,0.95) 25%, rgba(0,0,0,0.5) 75%, transparent);
             text-align: center;
         }
 
@@ -207,7 +200,7 @@
             width: 100%;
             background: var(--gold-gradient);
             color: #000;
-            padding: 14px 24px;
+            padding: 13px 24px;
             border-radius: 30px;
             font-size: 15px;
             font-weight: 800;
@@ -255,10 +248,10 @@
         }
 
         /* ==========================================================================
-           6. PRODUCTS SECTION
+           6. PRODUCTS SECTION & SIZE SELECTOR
            ========================================================================== */
         .products-section {
-            padding: 20px 16px 40px;
+            padding: 10px 16px 40px;
             max-width: 700px;
             margin: 0 auto;
         }
@@ -283,7 +276,7 @@
             border: 1px solid var(--border-gold);
             border-radius: var(--radius-md);
             padding: 18px;
-            margin-bottom: 20px;
+            margin-bottom: 22px;
             position: relative;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
         }
@@ -291,7 +284,7 @@
         .product-badge {
             position: absolute;
             top: 15px;
-            right: 15px;
+            left: 15px;
             background: var(--gold-primary);
             color: #000;
             font-size: 11px;
@@ -301,10 +294,9 @@
         }
 
         .product-title {
-            font-size: 18px;
+            font-size: 19px;
             font-weight: 800;
-            margin-top: 10px;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
         }
 
         .product-desc {
@@ -312,6 +304,42 @@
             color: var(--text-muted);
             line-height: 1.5;
             margin-bottom: 14px;
+        }
+
+        /* Size Selector Component */
+        .size-selector-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--gold-light);
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .size-options {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .size-btn {
+            flex: 1;
+            padding: 10px 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: var(--radius-sm);
+            color: #fff;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+
+        .size-btn.active {
+            background: rgba(212, 175, 55, 0.2);
+            border-color: var(--gold-primary);
+            color: var(--gold-light);
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
         }
 
         .price-row {
@@ -325,7 +353,7 @@
         }
 
         .price-row .price {
-            font-size: 20px;
+            font-size: 21px;
             font-weight: 900;
             color: var(--gold-light);
         }
@@ -334,12 +362,8 @@
             color: #2ecc71;
             font-size: 12px;
             font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 4px;
         }
 
-        /* Urgency Ticker inside Product Card */
         .urgency-box {
             display: flex;
             align-items: center;
@@ -377,7 +401,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.85);
             backdrop-filter: blur(5px);
             z-index: 2000;
             display: none;
@@ -402,7 +426,7 @@
             z-index: 2001;
             transform: translateY(100%);
             transition: transform 0.3s cubic-bezier(0.1, 0.9, 0.2, 1);
-            max-height: 90vh;
+            max-height: 92vh;
             overflow-y: auto;
         }
 
@@ -532,7 +556,7 @@
 
     <!-- 1. FREE DELIVERY STICKY TOP BANNER -->
     <div class="top-banner gpu-accelerated">
-        <span>🚚 عرض خاص: التوصيل <strong>مجاني بالكامل</strong> لجميع محافظة العراق اليوم!</span>
+        🚚 عرض حصري: التوصيل <strong>مجاني بالكامل</strong> لجميع محافظات العراق عند الطلب اليوم!
     </div>
 
     <!-- 2. BRAND HEADER -->
@@ -543,24 +567,24 @@
 
     <!-- 3. HERO INTRO -->
     <section class="hero">
-        <span class="hero-badge">عطور مستوحاة بتركيز عالي (Extrait de Parfum)</span>
-        <h1>فخامة العطور العالمية<br>بأسعار تناسب تطلعاتك</h1>
-        <p>استمتع بتركيبة زيتية سويسرية/فرنسية فاخرة تعكس نفس الروائح العالمية الأصيلة وثبات يدوم لأكثر من 24 ساعة.</p>
+        <span class="hero-badge">عطور مستوحاة بتركيز عالي جداً (Extrait)</span>
+        <h1>الفخامة العالمية في متناول يدك</h1>
+        <p>زيوت فرنسية وسويسرية نادرة تُحاكي أشهر العطور العالمية بدقة متناهية مع ثبات وفوحان يدوم لأكثر من 24 ساعة.</p>
     </section>
 
     <!-- 4. EMBEDDED HIGH-CONVERTING SHOWCASE VIDEO -->
     <section class="video-section">
         <div class="video-card gpu-accelerated">
-            <video autoplay muted loop playsinline preload="auto" poster="images/poster.jpg">
+            <video autoplay muted loop playsinline preload="auto">
                 <source src="showcase.mp4" type="video/mp4">
                 متصفحك لا يدعم تشغيل الفيديو.
             </video>
             <div class="video-overlay">
-                <span class="tag">الأكثر طلباً في العراق 🔥</span>
-                <h3>عطر فلورأن — Ombre Nomade</h3>
-                <p>سحر العود والورد الملوكي • فوحان قوي وثبات أسطوري</p>
-                <button onclick="openOrderDrawer('عطر فلورأن - Ombre Nomade (50ml)', 25000)" class="btn-gold">
-                    اطلب الآن — 25,000 د.ع (توصيل مجاني)
+                <span class="tag">العطر الأكثر مبيعاً 🔥</span>
+                <h3>فلورأن — Ombre Nomade</h3>
+                <p>سحر العود الملكي مع الورد النادر • فوحان مبهر وثبات أسطوري</p>
+                <button onclick="openOrderDrawer('فلورأن - Ombre Nomade', '50ml', 25000)" class="btn-gold">
+                    اطلب العطر الآن — توصيل مجاني
                 </button>
             </div>
         </div>
@@ -574,71 +598,138 @@
         </div>
         <div class="trust-item">
             <span>🚚</span>
-            <p>توصيل مجاني لجميع المحافظات</p>
+            <p>توصيل مجاني لكل العراق</p>
         </div>
         <div class="trust-item">
-            <span>⏳</span>
+            <span>💎</span>
             <p>ثبات واستقرار يدوم 24+ ساعة</p>
         </div>
     </div>
 
-    <!-- 6. PRODUCTS CATALOG -->
+    <!-- 6. FULL PERFUME CATALOG -->
     <section class="products-section" id="products">
         <div class="section-header">
-            <h2>تشكيلة العطور الأكثر مبيعاً</h2>
-            <p>اختر عطرك المفضل أو احصل على طقم التجربة الشامل</p>
+            <h2>قائمة العطور المتاحة</h2>
+            <p>اختر حجمك المناسب (30ml أو 50ml) أو احصل على طقم التجربة الكامل</p>
         </div>
 
-        <!-- Product 1: Discovery Set (High Conversion) -->
-        <div class="product-card">
-            <span class="product-badge">الأكثر موصى به 🔥</span>
-            <div class="product-title">طقم فلورأن التجريبي (4 عطور × 10 مل)</div>
+        <!-- PRODUCT 0: DISCOVERY SET (Flagship High-Conversion Offer) -->
+        <div class="product-card" id="card-discovery">
+            <span class="product-badge">الأكثر شعبية 🔥</span>
+            <div class="product-title">طقم فلورأن التجريبي (4 عطور × 10مل)</div>
             <div class="product-desc">
-                مجموعة تشمل 4 من أرقى العطور المستوحاة (Ombre Nomade, Baccarat Rouge, Coromandel, Bois d'Argent). خيارك المثالي لتجربة جميع الروائح قبل التبديل للعلب الكبيرة.
+                يحتوي على 4 زجاجات تجريبية (Ombre Nomade, Baccarat Rouge 540, Coromandel, Bois d'Argent). خيارك الأنسب لاكتشاف عطرك المفضل قبل الشراء الكلي.
             </div>
 
             <div class="urgency-box">
                 <div class="pulse-dot"></div>
-                <span>متبقي <strong>7 أطقم فقط</strong> شاملة العرض والتوصيل المجاني اليوم!</span>
+                <span>متبقي <strong>6 أطقم فقط</strong> بخصم العرض والتوصيل المجاني!</span>
             </div>
 
             <div class="price-row">
-                <div>
-                    <span class="price">20,000 د.ع</span>
-                </div>
-                <div class="shipping-tag">
-                    ✓ التوصيل مجاني (0 د.ع)
-                </div>
+                <span class="price">20,000 د.ع</span>
+                <span class="shipping-tag">✓ التوصيل مجاني (0 د.ع)</span>
             </div>
 
-            <button onclick="openOrderDrawer('طقم التجربة (4 عطور × 10مل)', 20000)" class="btn-gold">
+            <button onclick="openOrderDrawer('طقم فلورأن التجريبي (4 × 10ml)', '10ml x 4', 20000)" class="btn-gold">
                 اطلب طقم التجربة الآن
             </button>
         </div>
 
-        <!-- Product 2: Single Bottle Ombre Nomade -->
-        <div class="product-card">
-            <div class="product-title">فلورأن — Ombre Nomade (50ml)</div>
+        <!-- PRODUCT 1: Ombre Nomade -->
+        <div class="product-card" id="card-ombre">
+            <div class="product-title">فلورأن — Ombre Nomade</div>
             <div class="product-desc">
-                عطر فاخر يجمع بين البخور، العود، ونفحات الورد النادرة. تركيز عالي وفوحان ملموس يملأ المكان.
+                مستوحى من أومبر نوماد الفاخر. توليفة ملكية تجمع العود النقي، البخور الشفاف، ونفحات الورد العربي.
+            </div>
+
+            <span class="size-selector-label">اختر الحجم المطلوب:</span>
+            <div class="size-options">
+                <button class="size-btn" onclick="updateCardSize(this, 'card-ombre', '30ml', 18000)">30 مل — 18,000 د.ع</button>
+                <button class="size-btn active" onclick="updateCardSize(this, 'card-ombre', '50ml', 25000)">50 مل — 25,000 د.ع</button>
             </div>
 
             <div class="price-row">
-                <div>
-                    <span class="price">25,000 د.ع</span>
-                </div>
-                <div class="shipping-tag">
-                    ✓ التوصيل مجاني (0 د.ع)
-                </div>
+                <span class="price" id="card-ombre-price">25,000 د.ع</span>
+                <span class="shipping-tag">✓ التوصيل مجاني</span>
             </div>
 
-            <button onclick="openOrderDrawer('فلورأن - Ombre Nomade (50ml)', 25000)" class="btn-gold">
-                اطلب العطر الآن
+            <button onclick="orderCurrentCard('card-ombre', 'فلورأن - Ombre Nomade')" class="btn-gold">
+                اطلب هذا العطر
+            </button>
+        </div>
+
+        <!-- PRODUCT 2: Baccarat Rouge 540 -->
+        <div class="product-card" id="card-baccarat">
+            <div class="product-title">فلورأن — Baccarat Rouge 540</div>
+            <div class="product-desc">
+                مستوحى من باقارات روج 540 الشهير. مزيج ساحر من الياسمين، العنبر الكريستالي، والأخشاب الدافئة.
+            </div>
+
+            <span class="size-selector-label">اختر الحجم المطلوب:</span>
+            <div class="size-options">
+                <button class="size-btn" onclick="updateCardSize(this, 'card-baccarat', '30ml', 18000)">30 مل — 18,000 د.ع</button>
+                <button class="size-btn active" onclick="updateCardSize(this, 'card-baccarat', '50ml', 25000)">50 مل — 25,000 د.ع</button>
+            </div>
+
+            <div class="price-row">
+                <span class="price" id="card-baccarat-price">25,000 د.ع</span>
+                <span class="shipping-tag">✓ التوصيل مجاني</span>
+            </div>
+
+            <button onclick="orderCurrentCard('card-baccarat', 'فلورأن - Baccarat Rouge 540')" class="btn-gold">
+                اطلب هذا العطر
+            </button>
+        </div>
+
+        <!-- PRODUCT 3: Coromandel -->
+        <div class="product-card" id="card-coromandel">
+            <div class="product-title">فلورأن — Coromandel</div>
+            <div class="product-desc">
+                مستوحى من كورومانديل الفخم. عطر شرقي غني بلمسات الباتشولي، الشوكولاتة الداكنة، واللبان الفاخر.
+            </div>
+
+            <span class="size-selector-label">اختر الحجم المطلوب:</span>
+            <div class="size-options">
+                <button class="size-btn" onclick="updateCardSize(this, 'card-coromandel', '30ml', 18000)">30 مل — 18,000 د.ع</button>
+                <button class="size-btn active" onclick="updateCardSize(this, 'card-coromandel', '50ml', 25000)">50 مل — 25,000 د.ع</button>
+            </div>
+
+            <div class="price-row">
+                <span class="price" id="card-coromandel-price">25,000 د.ع</span>
+                <span class="shipping-tag">✓ التوصيل مجاني</span>
+            </div>
+
+            <button onclick="orderCurrentCard('card-coromandel', 'فلورأن - Coromandel')" class="btn-gold">
+                اطلب هذا العطر
+            </button>
+        </div>
+
+        <!-- PRODUCT 4: Bois d'Argent -->
+        <div class="product-card" id="card-bois">
+            <div class="product-title">فلورأن — Bois d'Argent</div>
+            <div class="product-desc">
+                مستوحى من بوا دأرجان الأنيق. عطر السوسن الأسطوري مع نفحات خشبية وبخور هادئ وجذاب.
+            </div>
+
+            <span class="size-selector-label">اختر الحجم المطلوب:</span>
+            <div class="size-options">
+                <button class="size-btn" onclick="updateCardSize(this, 'card-bois', '30ml', 18000)">30 مل — 18,000 د.ع</button>
+                <button class="size-btn active" onclick="updateCardSize(this, 'card-bois', '50ml', 25000)">50 مل — 25,000 د.ع</button>
+            </div>
+
+            <div class="price-row">
+                <span class="price" id="card-bois-price">25,000 د.ع</span>
+                <span class="shipping-tag">✓ التوصيل مجاني</span>
+            </div>
+
+            <button onclick="orderCurrentCard('card-bois', 'فلورأن - Bois d\'Argent')" class="btn-gold">
+                اطلب هذا العطر
             </button>
         </div>
     </section>
 
-    <!-- 7. ORDER DRAWER / CHECKOUT MODAL -->
+    <!-- 7. CHECKOUT DRAWER -->
     <div class="drawer-backdrop" id="drawerBackdrop" onclick="closeOrderDrawer()"></div>
     <div class="drawer" id="orderDrawer">
         <div class="drawer-header">
@@ -648,7 +739,7 @@
 
         <form id="orderForm" onsubmit="submitOrder(event)">
             <div class="form-group">
-                <label>المنتج المحدد:</label>
+                <label>المنتج والحجم المحدد:</label>
                 <input type="text" id="selectedProductInput" class="form-control" readonly style="color: var(--gold-light); font-weight: 700;">
             </div>
 
@@ -689,22 +780,22 @@
 
             <div class="form-group">
                 <label for="custAddress">المنطقة / العنوان التفصيلي *</label>
-                <input type="text" id="custAddress" class="form-control" placeholder="اسم الحي / الشارع / قرب نقطة دالة" required>
+                <input type="text" id="custAddress" class="form-control" placeholder="اسم الحي / الشارع / نقطة دالة" required>
             </div>
 
             <!-- Price Breakdown Summary -->
             <div class="summary-box">
                 <div class="summary-line">
-                    <span>سعر العطر:</span>
-                    <span id="summaryProductPrice">20,000 د.ع</span>
+                    <span>قيمة الطلب:</span>
+                    <span id="summaryProductPrice">25,000 د.ع</span>
                 </div>
                 <div class="summary-line">
                     <span>أجور التوصيل:</span>
-                    <span style="color: #2ecc71; font-weight: 700;">مجاناً بالكامل</span>
+                    <span style="color: #2ecc71; font-weight: 700;">مجاناً (0 د.ع)</span>
                 </div>
                 <div class="summary-line total">
-                    <span>المبلغ الإجمالي عند الاستلام:</span>
-                    <span id="summaryTotalPrice">20,000 د.ع</span>
+                    <span>المبلغ الكلي عند الاستلام:</span>
+                    <span id="summaryTotalPrice">25,000 د.ع</span>
                 </div>
             </div>
 
@@ -724,24 +815,52 @@
             <div class="sticky-title">طقم التجربة الشامل</div>
             <div class="sticky-price">20,000 د.ع <small style="color: #2ecc71;">(توصيل مجاني)</small></div>
         </div>
-        <button onclick="openOrderDrawer('طقم التجربة (4 عطور × 10مل)', 20000)" class="sticky-btn">
+        <button onclick="openOrderDrawer('طقم فلورأن التجريبي', '4 × 10ml', 20000)" class="sticky-btn">
             اطلب الآن ⚡
         </button>
     </div>
 
-    <!-- 9. JAVASCRIPT FOR FAST INTERACTION & CONVERSION LOGIC -->
+    <!-- 9. DYNAMIC SIZE & ORDER LOGIC -->
     <script>
-        let currentProduct = { title: "طقم التجربة (4 عطور × 10مل)", price: 20000 };
+        // Track state for each perfume card
+        const cardStates = {
+            'card-ombre': { size: '50ml', price: 25000 },
+            'card-baccarat': { size: '50ml', price: 25000 },
+            'card-coromandel': { size: '50ml', price: 25000 },
+            'card-bois': { size: '50ml', price: 25000 }
+        };
 
-        function openOrderDrawer(title, price) {
-            if (title && price) {
-                currentProduct.title = title;
-                currentProduct.price = price;
-            }
+        let activeOrder = {
+            title: "طقم فلورأن التجريبي",
+            size: "4 × 10ml",
+            price: 20000
+        };
+
+        function updateCardSize(btnElement, cardId, size, price) {
+            // Update selected button styling
+            const card = document.getElementById(cardId);
+            const buttons = card.querySelectorAll('.size-btn');
+            buttons.forEach(b => b.classList.remove('active'));
+            btnElement.classList.add('active');
+
+            // Update card state
+            cardStates[cardId] = { size: size, price: price };
+
+            // Update displayed price
+            document.getElementById(cardId + '-price').textContent = price.toLocaleString() + ' د.ع';
+        }
+
+        function orderCurrentCard(cardId, perfumeName) {
+            const state = cardStates[cardId];
+            openOrderDrawer(perfumeName, state.size, state.price);
+        }
+
+        function openOrderDrawer(title, size, price) {
+            activeOrder = { title, size, price };
             
-            document.getElementById('selectedProductInput').value = currentProduct.title;
-            document.getElementById('summaryProductPrice').textContent = currentProduct.price.toLocaleString() + ' د.ع';
-            document.getElementById('summaryTotalPrice').textContent = currentProduct.price.toLocaleString() + ' د.ع';
+            document.getElementById('selectedProductInput').value = `${title} (${size})`;
+            document.getElementById('summaryProductPrice').textContent = price.toLocaleString() + ' د.ع';
+            document.getElementById('summaryTotalPrice').textContent = price.toLocaleString() + ' د.ع';
 
             document.getElementById('drawerBackdrop').classList.add('active');
             document.getElementById('orderDrawer').classList.add('active');
@@ -756,29 +875,24 @@
             event.preventDefault();
             
             const name = document.getElementById('custName').value;
-            const phone = document.getElementById('custPhone').value;
-            const gov = document.getElementById('custGov').value;
-            const address = document.getElementById('custAddress').value;
-
-            alert(`شكراً لك ${name}! تم استلام طلبك لـ (${currentProduct.title}) بنجاح. سيتم الاتصال بك قريباً للتأكيد. التوصيل مجاني!`);
+            alert(`شكراً لك ${name}! تم استلام طلبك لـ (${activeOrder.title} - ${activeOrder.size}) بنجاح. سيتم التواصل معك للتوصيل المجاني.`);
             closeOrderDrawer();
         }
 
         function sendWhatsAppOrder() {
             const name = document.getElementById('custName').value || 'عميل';
             const phone = document.getElementById('custPhone').value || 'غير مدخل';
-            const gov = document.getElementById('custGov').value || 'غير حدد';
+            const gov = document.getElementById('custGov').value || 'غير محدد';
             const address = document.getElementById('custAddress').value || '';
 
             const message = `مرحباً فلورأن، أود تأكيد الطلب التالي:\n\n` +
-                            `📦 *المنتج:* ${currentProduct.title}\n` +
-                            `💰 *السعر:* ${currentProduct.price.toLocaleString()} د.ع (توصيل مجاني)\n` +
+                            `📦 *المنتج:* ${activeOrder.title} (${activeOrder.size})\n` +
+                            `💰 *السعر:* ${activeOrder.price.toLocaleString()} د.ع (توصيل مجاني)\n` +
                             `👤 *الاسم:* ${name}\n` +
                             `📞 *الهاتف:* ${phone}\n` +
                             `📍 *العنوان:* ${gov} - ${address}`;
 
             const encodedMessage = encodeURIComponent(message);
-            // Replace with your business WhatsApp phone number
             window.open(`https://wa.me/9647700000000?text=${encodedMessage}`, '_blank');
         }
     </script>
