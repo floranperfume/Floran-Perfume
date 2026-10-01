@@ -1,30 +1,16 @@
 /**
- * Florane — order backend
- * ------------------------------------------------------------------
- * Serves the website, and receives orders at POST /api/order.
- * Orders are forwarded to Telegram.
- *
- * Two secrets must be set in Cloudflare (Worker → Settings → Variables
- * and Secrets). They are NEVER written in this file or in the website:
- *
- *   TELEGRAM_TOKEN     the token BotFather gave you
- *   TELEGRAM_CHAT_ID   first person who gets the orders
- *   TELEGRAM_CHAT_ID2  second person (optional)
- *   TELEGRAM_CHAT_ID3  third person (optional)
- *
- * Everyone listed must press START on the bot, or Telegram refuses to
- * deliver to them.
- * ------------------------------------------------------------------
+ * Florane — Cloudflare Worker Order Backend
+ * Handles POST /api/order and forwards notifications directly to Telegram.
  */
 
 const LIMITS = {
-  name:    { min: 2,  max: 80  },
-  address: { min: 5,  max: 300 },
-  notes:   { min: 0,  max: 400 },
-  items:   { max: 40 },
-  qty:     { max: 99 },
-  price:   { max: 100000000 },
-  delivery:{ max: 50000 }
+  name:     { min: 2,  max: 80  },
+  address:  { min: 5,  max: 300 },
+  notes:    { min: 0,  max: 400 },
+  items:    { max: 40 },
+  qty:      { max: 99 },
+  price:    { max: 100000000 },
+  delivery: { max: 50000 }
 };
 
 const PROVINCES = [
@@ -40,7 +26,6 @@ const json = (obj, status = 200) =>
     headers: { "Content-Type": "application/json; charset=utf-8" }
   });
 
-/* يمنع الحروف الخاصة من كسر رسالة تيليغرام */
 const esc = s => String(s)
   .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
@@ -50,16 +35,16 @@ const clean = (v, max) =>
 function validate(body) {
   if (!body || typeof body !== "object") return "bad payload";
 
-  // فخ للبوتات: حقل مخفي يجب أن يبقى فارغاً
+  // Anti-Spam Honeypot Check
   if (body.hp) return "spam";
 
-  const name    = clean(body.name, LIMITS.name.max);
-  const address = clean(body.address, LIMITS.address.max);
-  const notes   = clean(body.notes, LIMITS.notes.max);
-  const prov    = clean(body.province, 40);
-  const city    = clean(body.city, 60);
-  const phoneD  = String(body.phone || "").replace(/\D/g, "");
-  const delivery = Number(body.delivery);
+  const name     = clean(body.name, LIMITS.name.max);
+  const address  = clean(body.address, LIMITS.address.max);
+  const notes    = clean(body.notes, LIMITS.notes.max);
+  const prov     = clean(body.province, 40);
+  const city     = clean(body.city, 60) || prov; // Fallback city to province if empty
+  const phoneD   = String(body.phone || "").replace(/\D/g, "");
+  const delivery = Number(body.delivery) || 0;
 
   if (name.length    < LIMITS.name.min)    return "name";
   if (address.length < LIMITS.address.min) return "address";
@@ -85,7 +70,6 @@ function validate(body) {
     items.push({ name: n, size, qty, ml: Number.isFinite(ml) ? ml : 0, sub });
   }
 
-  // المجموع يُحسب هنا من جديد، لا نثق بالرقم القادم من المتصفح
   const sub   = items.reduce((s, i) => s + i.sub, 0);
   const total = sub + delivery;
 
@@ -98,14 +82,6 @@ function validate(body) {
   };
 }
 
-/**
- * كم مرة طلب هذا الرقم من قبل.
- * يعمل فقط إذا ربطت مساحة KV باسم ORDERS — وبدونها يستمر كل شيء بشكل طبيعي.
- *
- * How many times this phone number has ordered before.
- * Only runs if a KV namespace named ORDERS is bound; without it everything
- * else still works exactly the same.
- */
 async function countOrder(env, phone) {
   if (!env.ORDERS) return null;
   try {
@@ -120,7 +96,7 @@ async function countOrder(env, phone) {
   }
 }
 
-const GIFT_EVERY = 3;   // هدية مع كل طلب ثالث / a gift on every third order
+const GIFT_EVERY = 3;
 
 function buildMessage(o, visit) {
   const cur = o.lang === "en" ? "IQD" : "د.ع";
@@ -142,11 +118,10 @@ function buildMessage(o, visit) {
   m += `\n👤 <b>الزبون</b>\n`;
   m += `الاسم: ${esc(o.name)}\n`;
   m += `الهاتف: <code>${esc(o.phone)}</code>\n`;
-  m += `المحافظة: ${esc(o.province)} — ${esc(o.city)}\n`;
+  m += `المحافظة: ${esc(o.province)}${o.city !== o.province ? ' — ' + esc(o.city) : ''}\n`;
   m += `العنوان: ${esc(o.address)}\n`;
   if (o.notes) m += `ملاحظات: ${esc(o.notes)}\n`;
 
-  // عدّاد الولاء
   if (visit) {
     m += `\n🔁 <b>الطلب رقم ${visit} لهذا الزبون</b>\n`;
     if (visit % GIFT_EVERY === 0) {
@@ -157,13 +132,10 @@ function buildMessage(o, visit) {
     }
   }
 
-  // رابط يفتح محادثة واتساب مع الزبون مباشرة
   m += `\n📱 <a href="https://wa.me/964${o.phone.slice(1)}">فتح واتساب الزبون</a>`;
   return m;
 }
 
-/* كل من يستلم الطلب — أضف TELEGRAM_CHAT_ID3 وهكذا إذا احتجت المزيد
-   Everyone who receives the order — add TELEGRAM_CHAT_ID3 etc. if you need more */
 const recipients = env =>
   [env.TELEGRAM_CHAT_ID, env.TELEGRAM_CHAT_ID2, env.TELEGRAM_CHAT_ID3]
     .filter(id => id && String(id).trim());
@@ -188,13 +160,6 @@ async function sendToChat(env, chatId, text) {
   }
 }
 
-/**
- * يُرسل لكل الأرقام. ينجح إذا وصل لواحد على الأقل، حتى لا يضيع الطلب
- * لو كان أحد المستلمين لم يضغط START على البوت.
- *
- * Sends to everyone. Succeeds if at least one delivery works, so an order is
- * never lost just because one recipient hasn't pressed START on the bot.
- */
 async function sendTelegram(env, text) {
   const ids = recipients(env);
   const results = await Promise.allSettled(
@@ -206,7 +171,6 @@ async function sendTelegram(env, text) {
     throw new Error(failed.map(f => f.reason.message).join(" | "));
   }
   if (failed.length) {
-    // وصل لواحد على الأقل — نسجّل الباقي في سجل Cloudflare فقط
     console.warn("partial delivery:", failed.map(f => f.reason.message).join(" | "));
   }
   return { sent: ids.length - failed.length, total: ids.length };
@@ -226,7 +190,6 @@ async function handleOrder(request, env) {
 
   const o = validate(body);
   if (typeof o === "string") {
-    // الفخ يرد بنجاح كاذب حتى لا يعرف البوت أنه انكشف
     if (o === "spam") return json({ ok: true, ref: body.ref || "" });
     return json({ ok: false, error: o }, 400);
   }
@@ -251,7 +214,6 @@ export default {
       return json({ ok: false, error: "method" }, 405);
     }
 
-    // كل شيء آخر: الموقع نفسه
     return env.ASSETS.fetch(request);
   }
 };
