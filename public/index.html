@@ -3,8 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>فلورأن | Floran Parfums - الفخامة والأناقة في كل قطرة</title>
+    <title>فلوران للعطور | Florane Perfumes - الفخامة والأناقة في كل قطرة</title>
     
+    <!-- Meta & OpenGraph (Social Media Preview) -->
+    <meta property="og:title" content="فلوران للعطور - Florane Perfumes">
+    <meta property="og:description" content="عطور مستوحاة بتركيز عالي جداً مع ثبات وفوحان يدوم لأكثر من 24 ساعة.">
+    <meta property="og:image" content="images/og.jpg">
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/png" sizes="64x64" href="images/favicon-64.png">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="shortcut icon" href="images/favicon.ico">
+
     <!-- Google Fonts & Resource Preloads -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -77,18 +87,25 @@
         }
 
         /* ==========================================================================
-           3. HEADER & HERO SECTION
+           3. HEADER & BRAND EMBLEM
            ========================================================================== */
         header {
-            padding: 20px 15px 10px;
+            padding: 20px 15px 15px;
             text-align: center;
             border-bottom: 1px solid var(--border-gold);
             background: rgba(10, 10, 10, 0.85);
             backdrop-filter: blur(12px);
         }
 
+        .header-emblem {
+            width: 140px;
+            height: auto;
+            margin-bottom: 6px;
+            filter: drop-shadow(0 2px 8px rgba(212, 175, 55, 0.3));
+        }
+
         .brand-logo {
-            font-size: 28px;
+            font-size: 26px;
             font-weight: 900;
             background: var(--gold-gradient);
             -webkit-background-clip: text;
@@ -284,7 +301,7 @@
 
         .product-image-wrap {
             width: 100%;
-            height: 240px;
+            height: 260px;
             border-radius: var(--radius-sm);
             overflow: hidden;
             margin-bottom: 15px;
@@ -297,7 +314,7 @@
             height: 100%;
             object-fit: cover;
             display: block;
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, opacity 0.2s ease;
         }
 
         .product-card:hover .product-image-wrap img {
@@ -584,9 +601,10 @@
         🚚 عرض حصري: التوصيل <strong>مجاني بالكامل</strong> لجميع محافظات العراق عند الطلب اليوم!
     </div>
 
-    <!-- 2. BRAND HEADER -->
+    <!-- 2. BRAND HEADER WITH EMBLEM LOGO -->
     <header>
-        <div class="brand-logo">فلورأن FLORAN</div>
+        <img src="images/emblem.png" alt="شعار فلوران للعطور" class="header-emblem">
+        <div class="brand-logo">فلوران FLORANE</div>
         <div class="brand-subtitle">PARFUMS DE LUXE</div>
     </header>
 
@@ -606,9 +624,9 @@
             </video>
             <div class="video-overlay">
                 <span class="tag">العطر الأكثر مبيعاً 🔥</span>
-                <h3>فلورأن — Ombre Nomade</h3>
+                <h3>فلوران — Ombre Nomade</h3>
                 <p>سحر العود الملكي مع الورد النادر • فوحان مبهر وثبات أسطوري</p>
-                <button onclick="openOrderDrawer('فلورأن - Ombre Nomade', '50ml', 25000)" class="btn-gold">
+                <button onclick="openOrderDrawer('فلوران - Ombre Nomade', '50ml', 25000)" class="btn-gold">
                     اطلب العطر الآن — توصيل مجاني
                 </button>
             </div>
@@ -631,7 +649,7 @@
         </div>
     </div>
 
-    <!-- 6. FULL PERFUME CATALOG WITH IMAGES -->
+    <!-- 6. FULL PERFUME CATALOG WITH DYNAMIC IMAGES -->
     <section class="products-section" id="products">
         <div class="section-header">
             <h2>قائمة العطور المتاحة</h2>
@@ -642,9 +660,9 @@
         <div class="product-card" id="card-discovery">
             <span class="product-badge">الأكثر شعبية 🔥</span>
             <div class="product-image-wrap">
-                <img src="images/discovery-set.jpg" alt="طقم فلورأن التجريبي" loading="lazy">
+                <img src="images/set-10ml.jpg" id="img-discovery" alt="طقم فلوران التجريبي" loading="lazy">
             </div>
-            <div class="product-title">طقم فلورأن التجريبي (4 عطور × 10مل)</div>
+            <div class="product-title">طقم فلوران التجريبي (4 عطور × 10مل)</div>
             <div class="product-desc">
                 يحتوي على 4 زجاجات تجريبية (Ombre Nomade, Baccarat Rouge 540, Coromandel, Bois d'Argent). خيارك الأنسب لاكتشاف عطرك المفضل قبل الشراء الكلي.
             </div>
@@ -659,7 +677,7 @@
                 <span class="shipping-tag">✓ التوصيل مجاني (0 د.ع)</span>
             </div>
 
-            <button onclick="openOrderDrawer('طقم فلورأن التجريبي (4 × 10ml)', '10ml x 4', 20000)" class="btn-gold">
+            <button onclick="openOrderDrawer('طقم فلوران التجريبي (4 × 10ml)', '10ml x 4', 20000)" class="btn-gold">
                 اطلب طقم التجربة الآن
             </button>
         </div>
@@ -667,17 +685,17 @@
         <!-- PRODUCT 1: Ombre Nomade -->
         <div class="product-card" id="card-ombre">
             <div class="product-image-wrap">
-                <img src="images/ombre-nomade.jpg" alt="فلورأن Ombre Nomade" loading="lazy">
+                <img src="images/ombre-nomade.jpg" id="img-ombre" alt="فلوران Ombre Nomade" loading="lazy">
             </div>
-            <div class="product-title">فلورأن — Ombre Nomade</div>
+            <div class="product-title">فلوران — Ombre Nomade</div>
             <div class="product-desc">
                 مستوحى من أومبر نوماد الفاخر. توليفة ملكية تجمع العود النقي، البخور الشفاف، ونفحات الورد العربي.
             </div>
 
             <span class="size-selector-label">اختر الحجم المطلوب:</span>
             <div class="size-options">
-                <button class="size-btn" onclick="updateCardSize(this, 'card-ombre', '30ml', 18000)">30 مل — 18,000 د.ع</button>
-                <button class="size-btn active" onclick="updateCardSize(this, 'card-ombre', '50ml', 25000)">50 مل — 25,000 د.ع</button>
+                <button class="size-btn" onclick="updateCardSize(this, 'card-ombre', '30ml', 18000, 'images/ombre-nomade-30.jpg')">30 مل — 18,000 د.ع</button>
+                <button class="size-btn active" onclick="updateCardSize(this, 'card-ombre', '50ml', 25000, 'images/ombre-nomade.jpg')">50 مل — 25,000 د.ع</button>
             </div>
 
             <div class="price-row">
@@ -685,7 +703,7 @@
                 <span class="shipping-tag">✓ التوصيل مجاني</span>
             </div>
 
-            <button onclick="orderCurrentCard('card-ombre', 'فلورأن - Ombre Nomade')" class="btn-gold">
+            <button onclick="orderCurrentCard('card-ombre', 'فلوران - Ombre Nomade')" class="btn-gold">
                 اطلب هذا العطر
             </button>
         </div>
@@ -693,17 +711,17 @@
         <!-- PRODUCT 2: Baccarat Rouge 540 -->
         <div class="product-card" id="card-baccarat">
             <div class="product-image-wrap">
-                <img src="images/baccarat-rouge.jpg" alt="فلورأن Baccarat Rouge 540" loading="lazy">
+                <img src="images/baccarat-540.jpg" id="img-baccarat" alt="فلوران Baccarat Rouge 540" loading="lazy">
             </div>
-            <div class="product-title">فلورأن — Baccarat Rouge 540</div>
+            <div class="product-title">فلوران — Baccarat Rouge 540</div>
             <div class="product-desc">
                 مستوحى من باقارات روج 540 الشهير. مزيج ساحر من الياسمين، العنبر الكريستالي، والأخشاب الدافئة.
             </div>
 
             <span class="size-selector-label">اختر الحجم المطلوب:</span>
             <div class="size-options">
-                <button class="size-btn" onclick="updateCardSize(this, 'card-baccarat', '30ml', 18000)">30 مل — 18,000 د.ع</button>
-                <button class="size-btn active" onclick="updateCardSize(this, 'card-baccarat', '50ml', 25000)">50 مل — 25,000 د.ع</button>
+                <button class="size-btn" onclick="updateCardSize(this, 'card-baccarat', '30ml', 18000, 'images/baccarat-540-30.jpg')">30 مل — 18,000 د.ع</button>
+                <button class="size-btn active" onclick="updateCardSize(this, 'card-baccarat', '50ml', 25000, 'images/baccarat-540.jpg')">50 مل — 25,000 د.ع</button>
             </div>
 
             <div class="price-row">
@@ -711,7 +729,7 @@
                 <span class="shipping-tag">✓ التوصيل مجاني</span>
             </div>
 
-            <button onclick="orderCurrentCard('card-baccarat', 'فلورأن - Baccarat Rouge 540')" class="btn-gold">
+            <button onclick="orderCurrentCard('card-baccarat', 'فلوران - Baccarat Rouge 540')" class="btn-gold">
                 اطلب هذا العطر
             </button>
         </div>
@@ -719,17 +737,17 @@
         <!-- PRODUCT 3: Coromandel -->
         <div class="product-card" id="card-coromandel">
             <div class="product-image-wrap">
-                <img src="images/coromandel.jpg" alt="فلورأن Coromandel" loading="lazy">
+                <img src="images/coromandel.jpg" id="img-coromandel" alt="فلوران Coromandel" loading="lazy">
             </div>
-            <div class="product-title">فلورأن — Coromandel</div>
+            <div class="product-title">فلوران — Coromandel</div>
             <div class="product-desc">
                 مستوحى من كورومانديل الفخم. عطر شرقي غني بلمسات الباتشولي، الشوكولاتة الداكنة، واللبان الفاخر.
             </div>
 
             <span class="size-selector-label">اختر الحجم المطلوب:</span>
             <div class="size-options">
-                <button class="size-btn" onclick="updateCardSize(this, 'card-coromandel', '30ml', 18000)">30 مل — 18,000 د.ع</button>
-                <button class="size-btn active" onclick="updateCardSize(this, 'card-coromandel', '50ml', 25000)">50 مل — 25,000 د.ع</button>
+                <button class="size-btn" onclick="updateCardSize(this, 'card-coromandel', '30ml', 18000, 'images/coromandel-30.jpg')">30 مل — 18,000 د.ع</button>
+                <button class="size-btn active" onclick="updateCardSize(this, 'card-coromandel', '50ml', 25000, 'images/coromandel.jpg')">50 مل — 25,000 د.ع</button>
             </div>
 
             <div class="price-row">
@@ -737,7 +755,7 @@
                 <span class="shipping-tag">✓ التوصيل مجاني</span>
             </div>
 
-            <button onclick="orderCurrentCard('card-coromandel', 'فلورأن - Coromandel')" class="btn-gold">
+            <button onclick="orderCurrentCard('card-coromandel', 'فلوران - Coromandel')" class="btn-gold">
                 اطلب هذا العطر
             </button>
         </div>
@@ -745,17 +763,17 @@
         <!-- PRODUCT 4: Bois d'Argent -->
         <div class="product-card" id="card-bois">
             <div class="product-image-wrap">
-                <img src="images/bois-dargent.jpg" alt="فلورأن Bois d'Argent" loading="lazy">
+                <img src="images/bois-dargent.jpg" id="img-bois" alt="فلوران Bois d'Argent" loading="lazy">
             </div>
-            <div class="product-title">فلورأن — Bois d'Argent</div>
+            <div class="product-title">فلوران — Bois d'Argent</div>
             <div class="product-desc">
                 مستوحى من بوا دأرجان الأنيق. عطر السوسن الأسطوري مع نفحات خشبية وبخور هادئ وجذاب.
             </div>
 
             <span class="size-selector-label">اختر الحجم المطلوب:</span>
             <div class="size-options">
-                <button class="size-btn" onclick="updateCardSize(this, 'card-bois', '30ml', 18000)">30 مل — 18,000 د.ع</button>
-                <button class="size-btn active" onclick="updateCardSize(this, 'card-bois', '50ml', 25000)">50 مل — 25,000 د.ع</button>
+                <button class="size-btn" onclick="updateCardSize(this, 'card-bois', '30ml', 18000, 'images/bois-dargent-30.jpg')">30 مل — 18,000 د.ع</button>
+                <button class="size-btn active" onclick="updateCardSize(this, 'card-bois', '50ml', 25000, 'images/bois-dargent.jpg')">50 مل — 25,000 د.ع</button>
             </div>
 
             <div class="price-row">
@@ -763,7 +781,7 @@
                 <span class="shipping-tag">✓ التوصيل مجاني</span>
             </div>
 
-            <button onclick="orderCurrentCard('card-bois', 'فلورأن - Bois d\'Argent')" class="btn-gold">
+            <button onclick="orderCurrentCard('card-bois', 'فلوران - Bois d\'Argent')" class="btn-gold">
                 اطلب هذا العطر
             </button>
         </div>
@@ -855,7 +873,7 @@
             <div class="sticky-title">طقم التجربة الشامل</div>
             <div class="sticky-price">20,000 د.ع <small style="color: #2ecc71;">(توصيل مجاني)</small></div>
         </div>
-        <button onclick="openOrderDrawer('طقم فلورأن التجريبي', '4 × 10ml', 20000)" class="sticky-btn">
+        <button onclick="openOrderDrawer('طقم فلوران التجريبي', '4 × 10ml', 20000)" class="sticky-btn">
             اطلب الآن ⚡
         </button>
     </div>
@@ -870,17 +888,30 @@
         };
 
         let activeOrder = {
-            title: "طقم فلورأن التجريبي",
+            title: "طقم فلوران التجريبي",
             size: "4 × 10ml",
             price: 20000
         };
 
-        function updateCardSize(btnElement, cardId, size, price) {
+        function updateCardSize(btnElement, cardId, size, price, imageSrc) {
             const card = document.getElementById(cardId);
+            
+            // Highlight button
             const buttons = card.querySelectorAll('.size-btn');
             buttons.forEach(b => b.classList.remove('active'));
             btnElement.classList.add('active');
 
+            // Dynamic Image Switch with Smooth Transition
+            const cardImg = card.querySelector('.product-image-wrap img');
+            if (cardImg && imageSrc) {
+                cardImg.style.opacity = '0.3';
+                setTimeout(() => {
+                    cardImg.src = imageSrc;
+                    cardImg.style.opacity = '1';
+                }, 150);
+            }
+
+            // Update State
             cardStates[cardId] = { size: size, price: price };
             document.getElementById(cardId + '-price').textContent = price.toLocaleString() + ' د.ع';
         }
@@ -920,7 +951,7 @@
             const gov = document.getElementById('custGov').value || 'غير محدد';
             const address = document.getElementById('custAddress').value || '';
 
-            const message = `مرحباً فلورأن، أود تأكيد الطلب التالي:\n\n` +
+            const message = `مرحباً فلوران، أود تأكيد الطلب التالي:\n\n` +
                             `📦 *المنتج:* ${activeOrder.title} (${activeOrder.size})\n` +
                             `💰 *السعر:* ${activeOrder.price.toLocaleString()} د.ع (توصيل مجاني)\n` +
                             `👤 *الاسم:* ${name}\n` +
